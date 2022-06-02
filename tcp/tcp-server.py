@@ -1,7 +1,7 @@
 import socket
 
-server_ip = "127.0.0.1"
-server_port = 8080
+server_ip = "192.168.11.7"
+server_port = 7777
 listen_num = 5
 buffer_size = 1024
 
@@ -18,14 +18,19 @@ tcp_server.listen(listen_num)
 while True:
     # 5.クライアントと接続する
     client,address = tcp_server.accept()
-    print("[*] Connected!! [ Source : {}]".format(address))
+    print("- Connected! [{}]".format(address))
 
-    # 6.データを受信する
-    data = client.recv(buffer_size)
-    print("[*] Received Data : {}".format(data))
+    data = None
+    while data != 'fin':
 
-    # 7.クライアントへデータを返す
-    client.send(b"ACK!!")
+        # 6.データを受信する
+        data = client.recv(buffer_size)
+        print(f' < {data.decode()}')
+
+        # 7.クライアントへデータを返す
+        # data = input('> ')
+        data = 'hi'
+        client.send(data.encode())
 
     # 8.接続を終了させる
     client.close()
