@@ -25,13 +25,11 @@ def recv_client(sock: socket.socket, addr: tuple[str]) -> None:
     sock.shutdown(socket.SHUT_RDWR)
     sock.close()
 
-i: int = 1
+
 # クライアント接続ループ
 while True:
     # クライアントの接続受付
     sock_cl, addr = sock_sv.accept()
 
-    executor = ThreadPoolExecutor(max_workers=i)
+    executor = ThreadPoolExecutor(max_workers=1)
     executor.submit(recv_client, sock_cl, addr)
-    
-    i += 1
