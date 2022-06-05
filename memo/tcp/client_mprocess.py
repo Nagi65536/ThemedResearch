@@ -1,7 +1,7 @@
 import socket
 
 IPADDR = "127.0.0.1"
-PORT = 7777
+PORT = 7776
 
 sock: socket.socket = socket.socket(socket.AF_INET)
 sock.connect((IPADDR, PORT))
