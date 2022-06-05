@@ -1,21 +1,24 @@
 import socket
 
-target_ip = "192.168.11.7"
-target_port = 7777
-buffer_size = 4096
+IPADDR = "127.0.0.1"
+PORT = 7777
 
-# 1.ソケットオブジェクトの作成
-tcp_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock: socket.socket = socket.socket(socket.AF_INET)
+sock.connect((IPADDR, PORT))
 
-# 2.サーバに接続
-tcp_client.connect((target_ip,target_port))
+while True:
+    # 任意の文字を入力
+    data: str = input("> ")
+    # exitを切断用コマンドとしておく
+    if data == "exit":
+        break
+    else:
+        try:
+            sock.send(data.encode("utf-8"))
+        except ConnectionResetError:
+            break
 
-data = None
-while data != 'fin':
-    # 3.サーバにデータを送信
-    data = input('> ')
-    tcp_client.send(data.encode())
-
-    # 4.サーバからのレスポンスを受信
-    response = tcp_client.recv(buffer_size)
-    print(f' < {response.decode()}')
+# 送受信の切断
+sock.shutdown(socket.SHUT_RDWR)
+# ソケットクローズ
+sock.close()

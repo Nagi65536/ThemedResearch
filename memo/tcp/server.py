@@ -1,7 +1,7 @@
 import socket
 import json
 
-server_ip: str = "192.168.11.7"
+server_ip: str = "127.0.0.1"
 server_port: int = 7776
 listen_num: int = 5
 buffer_size: int = 1024
@@ -22,18 +22,18 @@ while True:
     print("- Connected! [{}]".format(address))
 
     decode_data: str = ''
-    while decode_data != 'fin':
+    while not('fin' in decode_data):
 
         # 6.データを受信する
         data: bytes = client.recv(buffer_size)
-        decode_data = data.decode()
+        decode_data = json.loads(data.decode())
 
-        for d in decode_data:
-            print(f' < {d}')
+        print(f' < {decode_data}')
 
         # 7.クライアントへデータを返す
         send_data: str = 'ok'
         client.send(send_data.encode())
 
     # 8.接続を終了させる
+    print('close')
     client.close()

@@ -1,7 +1,7 @@
 import socket
 import json
 
-target_ip: str = "192.168.11.7"
+target_ip: str = "127.0.0.1"
 target_port: int = 7776
 buffer_size: int = 4096
 id: int = 115291
