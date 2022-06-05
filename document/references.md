@@ -12,7 +12,8 @@
 
 [TCP RC793](https://datatracker.ietf.org/doc/html/rfc793)
 
-[TCP通信 サーバー側Python](https://qiita.com/keiusukematsuda/items/aacded313fdb6c08f410)
+[TCP通信 サーバー側(Python)](https://qiita.com/keiusukematsuda/items/aacded313fdb6c08f410)
 
-[TCP通信 クライアント側Python](https://qiita.com/keiusukematsuda/items/362450fda4beca76c030)
+[TCP通信 クライアント側(Python)](https://qiita.com/keiusukematsuda/items/362450fda4beca76c030)
 
+[TCP通信 1:N](https://nayutari.com/python-socket)
