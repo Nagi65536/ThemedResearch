@@ -1,4 +1,4 @@
-import concurrent.futures
+from concurrent.futures import ThreadPoolExecutor
 import time
 
 
@@ -20,7 +20,7 @@ def print_B():
 
 
 if __name__ == '__main__':
-    executor = concurrent.futures.ThreadPoolExecutor(max_workers=2)
+    executor = ThreadPoolExecutor(max_workers=2)
     executor.submit(print_A)
     time.sleep(1)
     executor.submit(print_B)
