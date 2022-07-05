@@ -8,7 +8,7 @@
 説明 : 交差点の座標保存
 （交差点名, x座標, y座標）
 
-テーブル名 : rord_connection
+テーブル名 : road_connection
 要素 : cross_name, x, y
 説明 : 交差点の座標保存
 （交差点名, x座標, y座標）
