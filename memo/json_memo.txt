@@ -1,0 +1,62 @@
+// 最短経路取得時（車->webAPI）
+{
+    carid : 'CAR_ID',
+    start : 'START_TAG_ID',
+    goal : 'GOAL_TAG_ID',
+    disable : ['CROSS_ID_0', 'CROSS_ID_1', 'CROSS_ID_2']
+}
+
+// 最短経路取得時（webAPI->車）
+{
+    carid : 'CAR_ID',
+    start : 'START_TAG_ID',
+    goal : 'GOAL_TAG_ID',
+    routes : [
+        ['cross_id_0', 'tag_id_0A', 'tag_id_0B', 'tag_id_0C', 'tag_id_0D'],
+        ['cross_id_1', 'tag_id_1A', 'tag_id_1B', 'tag_id_1C', 'tag_id_1D'],
+        ['cross_id_2', 'tag_id_2A', 'tag_id_2B', 'tag_id_2C', 'tag_id_2D']
+    ]
+}
+
+
+// 交差点接続（車->Socketサーバ）
+{
+    carid : 'CAR_ID',
+    condition : 'connect',
+    tag_id : 'TAG_ID',
+    destination : 'TURN_DIRECTION'
+}
+
+// 交差点停止（車->Socketサーバ）
+{
+    carid : 'CAR_ID',
+    condition : 'sop',
+    tag_id : 'TAG_ID'
+}
+
+// 交差点進入（車->Socketサーバ）
+{
+    carid : 'CAR_ID',
+    condition : 'entry',
+    tag_id : 'TAG_ID'
+}
+
+// 交差点通過済（車->Socketサーバ）
+{
+    carid : 'CAR_ID',
+    condition : 'passed',
+    tag_id : 'TAG_ID'
+}
+
+
+// 接続後停止指示（Socketサーバ->車）
+{
+    carid : 'CAR_ID',
+    operate : 'stop'
+}
+
+// 接続後進行指示（Socketサーバ->車）
+{
+    carid : 'CAR_ID',
+    operate : 'entry'
+}
