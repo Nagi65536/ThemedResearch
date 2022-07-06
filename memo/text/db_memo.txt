@@ -1,19 +1,57 @@
+--------テーブル構成-------
+
 テーブル名 : tag_info
-要素 : tag_name, tag_id, cross_name
+要素 : tag_id, tag_name, cross_name
 説明 : タグの名前（指定）と所属交差点名（指定）保存
 （名称, タグid, 所属交差点名）
+
 
 テーブル名 : cross_position
 要素 : cross_name, x, y
 説明 : 交差点の座標保存
 （交差点名, x座標, y座標）
 
-テーブル名 : road_connection
-要素 : cross_name, x, y
-説明 : 交差点の座標保存
-（交差点名, x座標, y座標）
 
-テーブル名 : 
+テーブル名 : road_info
+要素 : cross_name_1, cross_name_2, dist, oneway
+説明 : 交差点間の距離と通行方向
+（交差点名1, 交差点名2, 距離, 通行方向）
+
+
+テーブル名 : control
 要素 : cross_name, car_id, tag_id, destination, status, time
 説明 : 交差点での車の状態管理
 （交差点名, 車ID, 接続したタグID, 行き先, 車の状態, 時間）
+
+
+--------規則一覧--------
+
+[通行方向] oneway
+    0: 双方向
+    1: 交差点1 -> 交差点2
+    2: 交差点2 -> 交差点1
+
+[行き先]　destination
+    straight: 直進
+    right   : 右折
+    left    : 左折
+
+[状態] status
+    connect : 接続開始
+    stop    : 停止
+    entry   : 進入中
+    passed  : 通過済
+
+[交差点名] cross_name
+cross_(nnn)
+
+[タグ名] tag_name
+tag_(nnn)
+
+[距離] dist
+単位     : cm
+有効桁数　: 小数点第2位
+
+[座標] x, y
+単位     : cm
+有効桁数　: 小数点第2位
