@@ -22,7 +22,7 @@
 // 交差点接続（車->Socketサーバ）
 {
     carid : 'CAR_ID',
-    condition : 'connect',
+    status : 'connect',
     tag_id : 'TAG_ID',
     destination : 'TURN_DIRECTION'
 }
@@ -30,21 +30,21 @@
 // 交差点停止（車->Socketサーバ）
 {
     carid : 'CAR_ID',
-    condition : 'sop',
+    status : 'sop',
     tag_id : 'TAG_ID'
 }
 
 // 交差点進入（車->Socketサーバ）
 {
     carid : 'CAR_ID',
-    condition : 'entry',
+    status : 'entry',
     tag_id : 'TAG_ID'
 }
 
 // 交差点通過済（車->Socketサーバ）
 {
     carid : 'CAR_ID',
-    condition : 'passed',
+    status : 'passed',
     tag_id : 'TAG_ID'
 }
 
