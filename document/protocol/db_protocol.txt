@@ -46,7 +46,7 @@
 cross_(nnn)
 
 [タグ名] tag_name
-tag_(nnn)
+tag_(direction)_(status)_(nnn)
 
 [距離] dist
 単位     : cm
