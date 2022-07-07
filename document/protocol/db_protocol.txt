@@ -1,8 +1,8 @@
 --------テーブル構成-------
 
 テーブル名 : tag_info
-要素 : tag_id, tag_name, cross_name
-説明 : タグの名前（指定）と所属交差点名（指定）保存
+要素 : tag_id, tag_name, cross_name, status, direction
+説明 : タグのIDと名前および所属交差点名、タグの表す状態、方角を保存
 （名称, タグid, 所属交差点名）
 
 
@@ -58,3 +58,9 @@ tag_(direction)_(status)_(nnn)_id
 [座標] x, y
 単位     : cm
 有効桁数　: 小数点第2位
+
+[方角] direction
+n : 北
+e : 東
+s : 南
+w : 西

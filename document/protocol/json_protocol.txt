@@ -19,7 +19,7 @@
 }
 
 
-// 交差点接続（車->Socketサーバ）
+// 交差点接続, 停止, 進入, 通過済（車->Socketサーバ）
 {
     carid : 'CAR_ID',
     status : 'connect',
@@ -27,26 +27,15 @@
     destination : 'TURN_DIRECTION'
 }
 
-// 交差点停止（車->Socketサーバ）
-{
-    carid : 'CAR_ID',
-    status : 'sop',
-    tag_id : 'TAG_ID'
-}
+[状態] status
+stop : 停止
+entry : 進入
+passed : 通過済
 
-// 交差点進入（車->Socketサーバ）
-{
-    carid : 'CAR_ID',
-    status : 'entry',
-    tag_id : 'TAG_ID'
-}
-
-// 交差点通過済（車->Socketサーバ）
-{
-    carid : 'CAR_ID',
-    status : 'passed',
-    tag_id : 'TAG_ID'
-}
+[曲がる方向] destination
+0 : 直進
+1 : 右折
+2 : 左折
 
 
 // 接続後停止指示（Socketサーバ->車）
@@ -55,8 +44,6 @@
     operate : 'stop'
 }
 
-// 接続後進行指示（Socketサーバ->車）
-{
-    carid : 'CAR_ID',
-    operate : 'entry'
-}
+[指示] operate
+stop : 停止
+entry : 進入
