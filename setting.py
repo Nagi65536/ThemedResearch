@@ -7,21 +7,23 @@ cur = conn.cursor()
 
 def main():
     create_table()
+    register()
 
 
 def register():
     data = []
 
     direction = ['n', 'e', 's', 'w']
-    variable = ['connect_', 'stop_', 'passed_']
+    status = ['connect', 'stop', 'passed']
 
-    data.append(input('交差点ID > '))
-    for d in direction:
-        for v in variable:
-            data.append(f'{v}{d}')
-
-    cur.execute(
-        f'INSERT INTO cross_tag VALUES("{data[0]}", "{data[1]}", "{data[2]}", "{data[3]}", "{data[4]}", "{data[5]}", "{data[6]}", "{data[7]}", "{data[8]}", "{data[9]}", "{data[10]}", "{data[11]}", "{data[12]}")')
+    for i in range(10):
+        i_str = str(i)
+        for s in status:
+            for d in direction:
+                tag_id = f'tag_{d}_{s}_{i_str.zfill(3)}_id'
+                tag_name = f'tag_{d}_{s}_{i_str.zfill(3)}'
+                cross_name = f'cross_{i_str.zfill(3)}'
+                cur.execute(f'INSERT INTO tag_info VALUES("{tag_id}", "{tag_name}", "{cross_name}")')
 
 
 def create_table():
@@ -39,7 +41,7 @@ def create_table():
         tag_id      TEXT,
         destination TEXT,
         status      TEXT, 
-        time        TEXT
+        time        INTEGER
     )''')
 
     cur.execute(f'''
@@ -50,7 +52,11 @@ def create_table():
     )''')
 
     cur.execute(f'''
-    CREATE TABLE IF NOT EXISTS road_connection(
+    CREATE TABLE IF NOT EXISTS road_info(
+        cross_name_1 TEXT,
+        cross_name_2 TEXT,
+        dist         REAL,
+        oneway       INTEGER
     )''')
 
 
