@@ -48,6 +48,9 @@ cross_(nnn)
 [タグ名] tag_name
 tag_(direction)_(status)_(nnn)
 
+[タグID] tag_id
+tag_(direction)_(status)_(nnn)_id
+
 [距離] dist
 単位     : cm
 有効桁数　: 小数点第2位
