@@ -29,7 +29,6 @@
 
 [状態] status
 stop : 停止
-entry : 進入
 passed : 通過済
 
 [曲がる方向] destination
@@ -40,7 +39,6 @@ passed : 通過済
 
 // 接続後停止指示（Socketサーバ->車）
 {
-    carid : 'CAR_ID',
     operate : 'stop'
 }
 
