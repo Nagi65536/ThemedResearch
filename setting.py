@@ -19,11 +19,11 @@ def register():
     for i in range(10):
         i_str = str(i)
         for s in status:
-            for d in direction:
+            for n, d in enumerate(direction):
                 tag_id = f'tag_{d}_{s}_{i_str.zfill(3)}_id'
                 tag_name = f'tag_{d}_{s}_{i_str.zfill(3)}'
                 cross_name = f'cross_{i_str.zfill(3)}'
-                cur.execute(f'INSERT INTO tag_info VALUES("{tag_id}", "{tag_name}", "{cross_name}")')
+                cur.execute(f'INSERT INTO tag_info VALUES("{tag_id}", "{tag_name}", "{cross_name}", "{s}", "{n}")')
 
 
 def create_table():
@@ -31,7 +31,9 @@ def create_table():
     CREATE TABLE IF NOT EXISTS tag_info(
         tag_id     TEXT PRIMARY KEY,
         tag_name   TEXT,
-        cross_name TEXT
+        cross_name TEXT,
+        status     TEXT,
+        direction  INTEGER
     )''')
 
     cur.execute(f'''
