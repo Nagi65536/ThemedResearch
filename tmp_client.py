@@ -8,7 +8,7 @@ IPADDR: str = "127.0.0.1"
 PORT: int = 65530
 CAR_ID = 'car_' + str(random.randint(10000, 99999))
 
-sock: socket.socket = socket.socket(socket.AF_INET)
+sock = socket.socket(socket.AF_INET)
 sock.connect((IPADDR, PORT))
 
 
@@ -40,8 +40,8 @@ def exchange():
 
 
 
-def get_encode_to_send(condition, tag_id, destination):
-    data = {'carid': str(CAR_ID), 'condition': condition, 'tagId': tag_id, 'destination': destination}
+def get_encode_to_send(status, tag_id, destination):
+    data = {'car_id': str(CAR_ID), 'status': status, 'tag_id': tag_id, 'destination': destination}
     data_json: str = json.dumps(data)
     data_encode: bytes = data_json.encode('utf-8')
 

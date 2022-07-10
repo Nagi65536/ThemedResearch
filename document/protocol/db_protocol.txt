@@ -19,7 +19,7 @@
 
 
 テーブル名 : control
-要素 : cross_name, car_id, tag_id, destination, status, time
+要素 : car_id, cross_name, tag_id, destination, status, time
 説明 : 交差点での車の状態管理
 （交差点名, 車ID, 接続したタグID, 行き先, 車の状態, 時間）
 

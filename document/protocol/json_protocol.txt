@@ -1,6 +1,6 @@
 // 最短経路取得時（車->webAPI）
 {
-    carid : 'CAR_ID',
+    car_id : 'CAR_ID',
     start : 'START_TAG_ID',
     goal : 'GOAL_TAG_ID',
     disable : ['CROSS_ID_0', 'CROSS_ID_1', 'CROSS_ID_2']
@@ -8,7 +8,7 @@
 
 // 最短経路取得時（webAPI->車）
 {
-    carid : 'CAR_ID',
+    car_id : 'CAR_ID',
     start : 'START_TAG_ID',
     goal : 'GOAL_TAG_ID',
     routes : [
@@ -21,7 +21,7 @@
 
 // 交差点接続, 停止, 進入, 通過済（車->Socketサーバ）
 {
-    carid : 'CAR_ID',
+    car_id : 'CAR_ID',
     status : 'connect',
     tag_id : 'TAG_ID',
     destination : 'TURN_DIRECTION'
