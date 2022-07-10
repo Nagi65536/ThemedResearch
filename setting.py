@@ -41,7 +41,8 @@ def create_table():
         car_id      TEXT PRIMARY KEY,
         cross_name  TEXT,
         tag_id      TEXT,
-        destination TEXT,
+        origin      INTEGER,
+        destination INTEGER,
         status      TEXT, 
         time        INTEGER
     )''')

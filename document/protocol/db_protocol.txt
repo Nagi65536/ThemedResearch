@@ -19,9 +19,9 @@
 
 
 テーブル名 : control
-要素 : car_id, cross_name, tag_id, destination, status, time
+要素 : car_id, cross_name, tag_id ,origin, destination, status, time
 説明 : 交差点での車の状態管理
-（交差点名, 車ID, 接続したタグID, 行き先, 車の状態, 時間）
+（交差点名, 車ID, 接続したタグID, 来し方, 行き先, 車の状態, 時間）
 
 
 --------規則一覧--------
@@ -31,10 +31,17 @@
     1: 交差点1 -> 交差点2
     2: 交差点2 -> 交差点1
 
-[行き先]　destination
-    straight: 直進
-    right   : 右折
-    left    : 左折
+[来し方] origin
+    0: 北
+    1: 東
+    2: 南
+    3: 西
+
+[行き先] destination
+    0: 北
+    1: 東
+    2: 南
+    3: 西
 
 [状態] status
     connect : 接続開始

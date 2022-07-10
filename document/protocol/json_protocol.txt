@@ -22,7 +22,7 @@
 // 交差点接続, 停止, 進入, 通過済（車->Socketサーバ）
 {
     car_id : 'CAR_ID',
-    status : 'connect',
+    status : 'STATUS',
     tag_id : 'TAG_ID',
     destination : 'TURN_DIRECTION'
 }
@@ -32,9 +32,10 @@ stop : 停止
 passed : 通過済
 
 [曲がる方向] destination
-0 : 直進
-1 : 右折
-2 : 左折
+0 : Uターン
+1 : 左折
+2 : 直進
+3 : 右折
 
 
 // 接続後停止指示（Socketサーバ->車）

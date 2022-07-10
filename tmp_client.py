@@ -12,15 +12,27 @@ sock = socket.socket(socket.AF_INET)
 sock.connect((IPADDR, PORT))
 
 
-def main():
-    exchange()
+def get_encode_to_send(status, tag_id, destination):
+    data = {'car_id': str(CAR_ID), 'status': status, 'tag_id': tag_id, 'destination': destination}
+    data_json: str = json.dumps(data)
+    data_encode: bytes = data_json.encode('utf-8')
+
+    return data_encode
+
+communication
+def get_decode_data(data):
+    data_decode: str = data.decode('utf-8')
+    data_py_obj = json.loads(data_decode)
+
+    return data_py_obj
 
 
-def exchange():
+
+def communication():
     input('Please push ENTER to send "connect".')
 
     # 接続報告-送信
-    send_data = get_encode_to_send('connect', 'tag_n_connect_000_id', 0)
+    send_data = get_encode_to_send('connect', 'tag_n_connect_000_id', 1)
     sock.send(send_data)
 
     # 指示-受信
@@ -35,24 +47,12 @@ def exchange():
     input('Please push ENTER to send "passed".')
 
     # 通過済報告-送信
-    send_data = get_encode_to_send('passed', 'tag_s_connect_000_id', 0)
+    send_data = get_encode_to_send('passed', 'tag_s_connect_000_id', 1)
     sock.send(send_data)
 
 
-
-def get_encode_to_send(status, tag_id, destination):
-    data = {'car_id': str(CAR_ID), 'status': status, 'tag_id': tag_id, 'destination': destination}
-    data_json: str = json.dumps(data)
-    data_encode: bytes = data_json.encode('utf-8')
-
-    return data_encode
-
-
-def get_decode_data(data):
-    data_decode: str = data.decode('utf-8')
-    data_py_obj = json.loads(data_decode)
-
-    return data_py_obj
+def main():
+    communication()
 
 
 if __name__ == '__main__':
