@@ -4,7 +4,7 @@
 ## ドキュメント
 [研究内容の説明](/document/explanation.md)  
 [プログラムの説明](/document/program_desc.md)  
-[研究結果の記録](/document/record.md)  
+[調査結果の記録](/document/record.md)  
 [重要単語の説明](/document/words_desc.md)  
 [参考文献](/document/references.md)  
 
