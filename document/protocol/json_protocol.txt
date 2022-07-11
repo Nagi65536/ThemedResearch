@@ -28,6 +28,7 @@
 }
 
 [状態] status
+connect : 接続
 stop : 停止
 passed : 通過済
 
@@ -40,6 +41,7 @@ passed : 通過済
 
 // 接続後停止指示（Socketサーバ->車）
 {
+    car_id : 'CAR_ID',
     operate : 'stop'
 }
 
