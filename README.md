@@ -10,7 +10,7 @@
 
 ## プロトコル
 [DB構造の取り決め](/document/protocol/db_protocol.txt)  
-[jsonデータ内容の取り決め](/document/protocol/json_protocol.txt)  
+[通信内容(json)の取り決め](/document/protocol/json_protocol.txt)  
 
 ## 主なプログラム
 ### [control.py](/control.py)
