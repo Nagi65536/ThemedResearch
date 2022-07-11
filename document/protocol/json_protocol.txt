@@ -12,9 +12,9 @@
     start : 'START_TAG_ID',
     goal : 'GOAL_TAG_ID',
     routes : [
-        ['cross_id_0', 'tag_id_0A', 'tag_id_0B', 'tag_id_0C', 'tag_id_0D'],
-        ['cross_id_1', 'tag_id_1A', 'tag_id_1B', 'tag_id_1C', 'tag_id_1D'],
-        ['cross_id_2', 'tag_id_2A', 'tag_id_2B', 'tag_id_2C', 'tag_id_2D']
+        ['cross_name_0', 'tag_id_0A', 'tag_id_0B', 'tag_id_0C', 'tag_id_0D'],
+        ['cross_name_1', 'tag_id_1A', 'tag_id_1B', 'tag_id_1C', 'tag_id_1D'],
+        ['cross_name_2', 'tag_id_2A', 'tag_id_2B', 'tag_id_2C', 'tag_id_2D']
     ]
 }
 
