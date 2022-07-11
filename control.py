@@ -33,6 +33,43 @@ def get_decode_data(data) -> dict:
     return data_py_obj
 
 
+def check_can_entry(cross_name):
+    # TODO conn,cur を global でグローバル化する
+    conn = sqlite3.connect('./db/main.db', isolation_level=None)
+    cur = conn.cursor()
+    cur.execute(f'SELECT * FROM control WHERE cross_name = "{cross_name}"')
+    control_data = cur.fetchall()
+    control_data = sorted(control_data, reverse=False, key=lambda x: x[5])
+    entry_list = [c for c in control_data if c[4]=='entry']
+
+    def check_entry_list(origin_dir: int, dest_dir: int):
+        can_entry = False
+
+        for el in entry_list:
+            if (el[3] == origin_dir) and (el[4] == dest_dir):
+                can_entry = True
+                break
+                
+        return can_entry
+
+    # TODO
+    for c in control_data:
+        # print(c)
+        # match-case文にしたい
+        origin = c[3]
+        if c[4] == 0:
+            print('Uターン')
+        elif c[4] == 1:
+            print('左折')
+        elif c[4] == 2:
+            print('直進')
+            check_entry_list(origin+1, )
+            # TODO
+
+        elif c[4] == 3:
+            print('右折')
+
+
 def remove_db_control(car_id: str) -> None:
     conn = sqlite3.connect(DB_PATH, isolation_level=None)
     cur = conn.cursor()
@@ -108,6 +145,41 @@ def communication(sock: socket.socket, addr: tuple) -> None:
     sock.close()
 
 
+def check_can_entry(cross_name) -> None:
+    # TODO conn,cur を global でグローバル化する
+    conn = sqlite3.connect('./db/main.db', isolation_level=None)
+    cur = conn.cursor()
+    cur.execute(f'SELECT * FROM control WHERE cross_name = "{cross_name}"')
+    control_data = cur.fetchall()
+    control_data = sorted(control_data, reverse=False, key=lambda x: x[5])
+    entry_list = [c for c in control_data if c[4]=='entry']
+
+    def check_entry_list(origin_dir: int, dest_dir: int):
+        can_entry = False
+
+        for el in entry_list:
+            if (el[3] == origin_dir) and (el[4] == dest_dir):
+                can_entry = True
+                break
+                
+        return can_entry
+    # TODO
+    for c in control_data:
+        # print(c)
+        # match-case文にしたい
+        origin = c[3]
+        if c[4] == 0:
+            print('Uターン')
+        elif c[4] == 1:
+            print('左折')
+        elif c[4] == 2:
+            print('直進')
+            if origin + 1
+
+        elif c[4] == 3:
+            print('右折')
+
+
 def control() -> None:
     conn = sqlite3.connect('./db/main.db', isolation_level=None)
     cur = conn.cursor()
@@ -130,6 +202,7 @@ def control() -> None:
             for c in control_data:
                 # print(c)
                 pass
+            check_can_entry(cross)
             
         time.sleep(2)
 
