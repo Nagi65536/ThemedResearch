@@ -33,45 +33,8 @@ def get_decode_data(data) -> dict:
     return data_py_obj
 
 
-def check_can_entry(cross_name):
-    # TODO conn,cur を global でグローバル化する
-    conn = sqlite3.connect('./db/main.db', isolation_level=None)
-    cur = conn.cursor()
-    cur.execute(f'SELECT * FROM control WHERE cross_name = "{cross_name}"')
-    control_data = cur.fetchall()
-    control_data = sorted(control_data, reverse=False, key=lambda x: x[5])
-    entry_list = [c for c in control_data if c[4]=='entry']
-
-    def check_entry_list(origin_dir: int, dest_dir: int):
-        can_entry = False
-
-        for el in entry_list:
-            if (el[3] == origin_dir) and (el[4] == dest_dir):
-                can_entry = True
-                break
-                
-        return can_entry
-
-    # TODO
-    for c in control_data:
-        # print(c)
-        # match-case文にしたい
-        origin = c[3]
-        if c[4] == 0:
-            print('Uターン')
-        elif c[4] == 1:
-            print('左折')
-        elif c[4] == 2:
-            print('直進')
-            check_entry_list(origin+1, )
-            # TODO
-
-        elif c[4] == 3:
-            print('右折')
-
-
 def remove_db_control(car_id: str) -> None:
-    conn = sqlite3.connect(DB_PATH, isolation_level=None)
+    conn = sqlite3.connect('./db/main.db', isolation_level=None)
     cur = conn.cursor()
 
     cur.execute(f'DELETE FROM control WHERE car_id="{car_id}"')
@@ -84,18 +47,18 @@ def add_db_control(data: dict) -> str:
     car_id: str = data['car_id']
     tag_id: str = data['tag_id']
     destination: int = data['destination']
+    status: str = data['status']
     time_: float = time.time()
-
     cur.execute(f'SELECT cross_name, direction FROM tag_info WHERE tag_id = "{tag_id}"')
     get_db_data: dict = cur.fetchone()
     cross_name: str = get_db_data[0]
     origin: int = get_db_data[1]
-    dest_direction: int = origin + destination
 
     cur.execute(f'''
     REPLACE INTO control VALUES (
-        "{car_id}", "{cross_name}", "{tag_id}", "{origin}", "{destination}", "{status}", {time_}
+        "{car_id}", "{cross_name}", "{tag_id}", {origin}, {direction}, "{status}", {time_}
     )''')
+    print('OK')
 
     return cross_name
 
@@ -135,8 +98,8 @@ def communication(sock: socket.socket, addr: tuple) -> None:
         get_data: dict = get_decode_data(sock.recv(1024))
         print(get_data)
 
-    except ConnectionResetError as e:
-        print(e)
+    except:
+        print('-communication エラー')
 
     print(f'【切断】{addr}')
     # クライアントをクローズ処理
@@ -150,34 +113,36 @@ def check_can_entry(cross_name) -> None:
     conn = sqlite3.connect('./db/main.db', isolation_level=None)
     cur = conn.cursor()
     cur.execute(f'SELECT * FROM control WHERE cross_name = "{cross_name}"')
-    control_data = cur.fetchall()
-    control_data = sorted(control_data, reverse=False, key=lambda x: x[5])
-    entry_list = [c for c in control_data if c[4]=='entry']
+    control_db_data = cur.fetchall()
+    control_db_data = sorted(control_db_data, reverse=False, key=lambda x: x[5])
 
-    def check_entry_list(origin_dir: int, dest_dir: int):
-        can_entry = False
+    entry_list = [c for c in control_db_data if c[4]=='entry']
+    # 待機車があるレーン, 進入予定レーン
+    wait_lane = [True, True, True, True]
+    destination_lane = [True, True, True, True]
 
-        for el in entry_list:
-            if (el[3] == origin_dir) and (el[4] == dest_dir):
-                can_entry = True
-                break
-                
-        return can_entry
-    # TODO
-    for c in control_data:
-        # print(c)
-        # match-case文にしたい
-        origin = c[3]
-        if c[4] == 0:
-            print('Uターン')
-        elif c[4] == 1:
-            print('左折')
-        elif c[4] == 2:
-            print('直進')
-            if origin + 1
+    def can_entry_check(data, origin, dest_dir):
+        # TODO
+        print('判断するよ')
 
-        elif c[4] == 3:
-            print('右折')
+    for data in control_db_data:
+        car_id = data[0]
+        origin = data[3]
+        destination = data[4]
+        dest_dir = (origin + destination) % 4
+
+        # 既に同じレーンで待機していない & 同じ行き先にいかない
+        if wait_lane[origin] and destination_lane[dest_dir]:
+            if destination == 1:
+                print('左折')
+                entry_list.append(car_id)
+                cur.execute(f'UPDATE control SET status="entry" WHERE car_id="{car_id}"')
+
+            elif destination == 2:
+                print('直進')
+
+            elif destination == 3:
+                print('右折')
 
 
 def control() -> None:
@@ -190,18 +155,8 @@ def control() -> None:
         cur.execute('SELECT cross_name FROM control')
         crosses = [c[0] for c in cur.fetchall()]
         crosses = set(crosses)
-        # print(crosses)
 
         for cross in crosses:
-            cur.execute(f'SELECT * FROM control WHERE cross_name = "{cross}"')
-            control_data = cur.fetchall()
-            control_data = sorted(control_data, reverse=False, key=lambda x: x[5])
-            entry_list = [c for c in control_data if c[4]=='entry']
-
-            # TODO
-            for c in control_data:
-                # print(c)
-                pass
             check_can_entry(cross)
             
         time.sleep(2)
