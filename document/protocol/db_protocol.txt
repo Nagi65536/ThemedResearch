@@ -43,6 +43,12 @@
     2: 直進
     3: 右折
 
+[方角] direction
+    0 : 北
+    1 : 東
+    2 : 南
+    3 : 西
+
 [状態] status
     connect : 接続開始
     stop    : 停止
@@ -65,9 +71,3 @@ tag_(direction)_(status)_(nnn)_id
 [座標] x, y
 単位     : cm
 有効桁数　: 小数点第2位
-
-[方角] direction
-n : 北
-e : 東
-s : 南
-w : 西
