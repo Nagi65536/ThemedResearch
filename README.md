@@ -25,12 +25,16 @@ python3 control.py
 ```
 ```bash
 [ターミナル 2,3...]
-python3 tmp_client.py
+python3 tmp_client.py [タグID] [進む方向]
 ```
+[タグID] setting.py 実行後、/db/main.db を見てください
+[進む方向] 1:左折, 2:直進, 3:右折
+（指定しなかった場合はデフォルトの値がはいります）
+
 
 > OSError: [Errno 48] Address already in use  
 
-と出る場合は `control.py line:12`, `tmp_client.py line:9` のポート番号を変更してください。
+と出る場合は `control.py line:12`, `tmp_client.py line:9` のポート番号を変更してください
 
 ## プロトコル
 [DB構造の取り決め](/document/protocol/db_protocol.txt)  
