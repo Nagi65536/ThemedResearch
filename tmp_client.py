@@ -3,13 +3,15 @@
 import json
 import socket
 import random
+import sys
 
 IPADDR: str = "127.0.0.1"
-PORT: int = 65530
+PORT: int = 65531
 CAR_ID = 'car_' + str(random.randint(10000, 99999))
 
 sock = socket.socket(socket.AF_INET)
 sock.connect((IPADDR, PORT))
+args = sys.argv
 
 
 def get_encode_to_send(status, tag_id, destination) -> bytes:
