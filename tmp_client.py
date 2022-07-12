@@ -30,9 +30,9 @@ def get_decode_data(data) -> dict:
 
 
 def communication() -> None:
-    if len(args) == 2:
-        tag_id = args[0]
-        destination = args[1]
+    if len(args) == 3:
+        tag_id = args[1]
+        destination = args[2]
     else:
         tag_id = 'tag_n_connect_000_id'
         destination = 1

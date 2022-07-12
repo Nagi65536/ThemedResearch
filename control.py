@@ -67,6 +67,7 @@ def communication(sock: socket.socket, addr: tuple) -> None:
     try:
         # 接続報告-受信
         get_data: dict = get_decode_data(sock.recv(1024))
+        print()
         print('*connect', get_data)
 
         # 制御関数の代用
@@ -81,6 +82,8 @@ def communication(sock: socket.socket, addr: tuple) -> None:
         # 進行可能まで待機
         while not (get_data['car_id'] in can_entry_list):
             time.sleep(0.5)
+
+        can_entry_list.remove(get_data['car_id'])
         time.sleep(1)
         # 進入指示-送信
         send_data: bytes = get_encode_to_send('entry')
@@ -88,14 +91,15 @@ def communication(sock: socket.socket, addr: tuple) -> None:
 
         # 通過済報告-受信
         get_data: dict = get_decode_data(sock.recv(1024))
+        print()
         print('*passed', get_data)
+        remove_db_control(get_data['car_id'])
 
     except:
         print('-communication エラー')
 
     print(f'【切断】{addr}')
     # クライアントをクローズ処理
-    remove_db_control(get_data['car_id'])
     sock.shutdown(socket.SHUT_RDWR)
     sock.close()
 
@@ -116,8 +120,8 @@ def check_can_entry(cross_name) -> None:
     destination_lane = [True, True, True, True]
 
     for data in entry_list:
-        destination = data[4]
-        destination_lane[destination] = False
+        dest_dir = (data[3] + data[4]) % 4
+        destination_lane[dest_dir] = False
 
     for data in check_list:
         car_id = data[0]
@@ -127,22 +131,26 @@ def check_can_entry(cross_name) -> None:
         can_entry = False
 
         # TODO 同じレーンの進入中の車は無視するようにする
-        if wait_lane[origin] and destination_lane[dest_dir]:
+        if wait_lane[origin] or destination_lane[dest_dir]:
             if destination == 1:
                 print('左折')
                 can_entry = True
 
             elif destination == 2:
                 print('直進')
+                can_entry = True
                 entry_origin_list = [e[3] for e in entry_list]
                 entry_dest_list = [e[4] for e in entry_list]
-                if not (origin + 1 in entry_list) and (origin + 1 in entry_dest_list):
-                    can_entry = True
+
+                if origin + 1 in entry_origin_list:
+                    can_entry = False
+                elif origin + 1 in entry_dest_list:
+                    can_entry = False
 
             elif destination == 3:
                 print('右折')
                 can_entry = True
-                # 左方向から右折しない
+
                 for e in entry_list:
                     if e[3] == (origin + 1) % 4 and e[4] == origin:
                         can_entry = False
@@ -159,7 +167,6 @@ def check_can_entry(cross_name) -> None:
         else:
             print('大元ブロック!')
 
-        print('can_entry', can_entry)
         if can_entry:
             print('--進入可能--')
             entry_list.append(car_id)
@@ -170,8 +177,6 @@ def check_can_entry(cross_name) -> None:
         else:
             print('--進入不可--')
             wait_lane[origin] = False
-    print('can_entry_list')
-    print(can_entry_list)
 
 
 def control() -> None:
