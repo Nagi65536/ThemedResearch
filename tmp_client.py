@@ -30,10 +30,19 @@ def get_decode_data(data) -> dict:
 
 
 def communication() -> None:
+    if len(args) == 2:
+        tag_id = args[0]
+        destination = args[1]
+    else:
+        tag_id = 'tag_n_connect_000_id'
+        destination = 1
+        print('-default')
+        print()
+
     input('Please push ENTER to send "connect".')
 
     # 接続報告-送信
-    send_data: bytes = get_encode_to_send('connect', 'tag_n_connect_000_id', 1)
+    send_data: bytes = get_encode_to_send('connect', tag_id, destination)
     sock.send(send_data)
 
     # 指示-受信
@@ -48,7 +57,7 @@ def communication() -> None:
     input('Please push ENTER to send "passed".')
 
     # 通過済報告-送信
-    send_data: bytes = get_encode_to_send('passed', 'tag_s_connect_000_id', 1)
+    send_data: bytes = get_encode_to_send('passed', 'tag_s_connect_000_id', destination)
     sock.send(send_data)
 
 

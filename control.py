@@ -126,7 +126,7 @@ def check_can_entry(cross_name) -> None:
         dest_dir = (origin + destination) % 4
         can_entry = False
 
-        # 既に同じレーンで待機していない & 同じ行き先にいかない
+        # TODO 同じレーンの進入中の車は無視するようにする
         if wait_lane[origin] and destination_lane[dest_dir]:
             if destination == 1:
                 print('左折')
