@@ -47,12 +47,12 @@ def communication() -> None:
 
     # 指示-受信
     get_data: dict = get_decode_data(sock.recv(1024))
-    print(get_data)
+    print('>', get_data)
 
     if get_data['operate'] == 'stop':
         # 進入指示-受信
         get_data = get_decode_data(sock.recv(1024))
-        print(get_data)
+        print('>', get_data)
 
     input('Please push ENTER to send "passed".')
 

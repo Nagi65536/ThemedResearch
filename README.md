@@ -8,6 +8,26 @@
 [重要単語の説明](/document/words_desc.md)  
 [参考文献](/document/references.md)  
 
+## スタートアップ
+```bash
+git clone https://github.com/SatooRu65536/ThemedResearch
+cd ThemedResearch
+mkdir db
+
+python3 setting.py
+(python setting.py)
+```
+
+## 試す
+```bash
+[ターミナル 1]
+python3 control.py
+```
+```bash
+[ターミナル 2,3...]
+python3 tmp_client.py
+```
+
 ## プロトコル
 [DB構造の取り決め](/document/protocol/db_protocol.txt)  
 [通信内容(json)の取り決め](/document/protocol/json_protocol.txt)  
