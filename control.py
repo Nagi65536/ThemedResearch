@@ -67,8 +67,8 @@ def communication(sock: socket.socket, addr: tuple) -> None:
     try:
         # 接続報告-受信
         get_data: dict = get_decode_data(sock.recv(1024))
-        print()
-        print('*connect', get_data)
+        # print()
+        # print('*connect', get_data)
 
         # 制御関数の代用
         add_db_control(get_data)
@@ -91,13 +91,14 @@ def communication(sock: socket.socket, addr: tuple) -> None:
 
         # 通過済報告-受信
         get_data: dict = get_decode_data(sock.recv(1024))
-        print()
-        print('*passed', get_data)
+        # print()
+        # print('*passed', get_data)
         remove_db_control(get_data['car_id'])
 
     except:
         print('-communication エラー')
 
+    print()
     print(f'【切断】{addr}')
     # クライアントをクローズ処理
     sock.shutdown(socket.SHUT_RDWR)
@@ -117,13 +118,16 @@ def check_can_entry(cross_name) -> None:
     check_list = [c for c in control_db_data if c[5] != 'entry']
     # 待機車があるレーン, 進入予定レーン
     wait_lane = [True, True, True, True]
-    destination_lane = [True, True, True, True]
+    destination_lane = [[], [], [], []]
 
     for data in entry_list:
         dest_dir = (data[3] + data[4]) % 4
-        destination_lane[dest_dir] = False
-
+        destination_lane[dest_dir].append(data[3])
+    
+    print(destination_lane)
     for data in check_list:
+        print()
+        print(data[0])
         car_id = data[0]
         origin = data[3]
         destination = data[4]
@@ -131,13 +135,14 @@ def check_can_entry(cross_name) -> None:
         can_entry = False
 
         # TODO 同じレーンの進入中の車は無視するようにする
-        if wait_lane[origin] or destination_lane[dest_dir]:
+        check: bool = not destination_lane[dest_dir] or (origin == destination_lane[dest_dir][0])
+        if  wait_lane[origin] and check:
             if destination == 1:
-                print('左折')
+                print(f'左折: {origin}->{dest_dir}')
                 can_entry = True
 
             elif destination == 2:
-                print('直進')
+                print(f'直進: {origin}->{dest_dir}')
                 can_entry = True
                 entry_origin_list = [e[3] for e in entry_list]
                 entry_dest_list = [e[4] for e in entry_list]
@@ -148,7 +153,7 @@ def check_can_entry(cross_name) -> None:
                     can_entry = False
 
             elif destination == 3:
-                print('右折')
+                print(f'右折: {origin}->{dest_dir}')
                 can_entry = True
 
                 for e in entry_list:
@@ -171,7 +176,7 @@ def check_can_entry(cross_name) -> None:
             print('--進入可能--')
             entry_list.append(car_id)
             can_entry_list.append(car_id)
-            destination_lane[destination] = False
+            destination_lane[dest_dir].append(data[3])
             cur.execute(
                 f'UPDATE control SET status="entry" WHERE car_id="{car_id}"')
         else:
@@ -183,7 +188,7 @@ def control() -> None:
     conn = sqlite3.connect('./db/main.db', isolation_level=None)
     cur = conn.cursor()
     # cur.execute('DELETE FROM control')
-    print('-control')
+    print('【control】')
 
     while True:
         cur.execute('SELECT cross_name FROM control')
