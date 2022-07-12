@@ -28,6 +28,10 @@ python3 control.py
 python3 tmp_client.py
 ```
 
+> OSError: [Errno 48] Address already in use  
+
+と出る場合は `control.py line:12`, `tmp_client.py line:9` のポート番号を変更してください。
+
 ## プロトコル
 [DB構造の取り決め](/document/protocol/db_protocol.txt)  
 [通信内容(json)の取り決め](/document/protocol/json_protocol.txt)  
