@@ -6,7 +6,7 @@ import random
 import sys
 
 IPADDR: str = "127.0.0.1"
-PORT: int = 65531
+PORT: int = 65530
 CAR_ID = 'car_' + str(random.randint(10000, 99999))
 
 sock = socket.socket(socket.AF_INET)

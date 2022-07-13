@@ -9,7 +9,7 @@ from typing import Any
 from concurrent.futures import ThreadPoolExecutor
 
 IPADDR: str = "127.0.0.1"
-PORT: int = 65531
+PORT: int = 65530
 
 sock_sv: socket.socket = socket.socket(socket.AF_INET)
 sock_sv.bind((IPADDR, PORT))
@@ -109,82 +109,87 @@ def check_can_entry(cross_name) -> None:
     # TODO conn,cur を global でグローバル化す
     conn = sqlite3.connect('./db/main.db', isolation_level=None)
     cur = conn.cursor()
-    cur.execute(f'SELECT * FROM control WHERE cross_name = "{cross_name}"')
-    control_db_data = cur.fetchall()
-    control_db_data = sorted(
-        control_db_data, reverse=False, key=lambda x: x[5])
 
-    entry_list = [c for c in control_db_data if c[5] == 'entry']
-    check_list = [c for c in control_db_data if c[5] != 'entry']
-    # 待機車があるレーン, 進入予定レーン
-    wait_lane = [True, True, True, True]
-    destination_lane = [[], [], [], []]
+    cur.execute(
+        f'SELECT * FROM control WHERE cross_name = "{cross_name}" ORDER BY time ASC')
+    control_data = cur.fetchall()
 
-    for data in entry_list:
-        dest_dir = (data[3] + data[4]) % 4
-        destination_lane[dest_dir].append(data[3])
-    
-    for data in check_list:
+    entry_list = [c for c in control_data if c[5] == 'entry']
+    check_list = [c for c in control_data if c[5] != 'entry']
+    control_data = entry_list + check_list
+
+    for my_data in check_list:
         print()
-        print('car_id: ', data[0])
-        car_id = data[0]
-        origin = data[3]
-        destination = data[4]
-        dest_dir = (origin + destination) % 4
-        can_entry = False
+        print('my_car_id:', my_data[0])
+        can_entry = True
 
-        check: bool = not destination_lane[dest_dir] or (origin == destination_lane[dest_dir][0])
-        if  wait_lane[origin] and check:
-            if destination == 1:
-                print(f'左折: {origin}->{dest_dir}')
-                can_entry = True
+        for you_data in entry_list:
+            # 自分と相手が同じ方角からくる場合
+            print('you', you_data[3])
+            print('my', my_data[3])
+            if my_data[3] == you_data[3]:
+                print('来る方同じ - 大元ブロック!')
 
-            elif destination == 2:
-                print(f'直進: {origin}->{dest_dir}')
-                can_entry = True
-                entry_origin_list = [e[3] for e in entry_list]
-                entry_dest_list = [e[4] for e in entry_list]
-                print('147-EDL', entry_dest_list)
+            elif (my_data[3] + my_data[4]) % 4 == (you_data[3] + you_data[4]) % 4:
+                print('行き先同じ - 大元ブロック!')
+                can_entry = False
 
-                if (origin + 1) % 4 in entry_origin_list:
+            # 自分が左折の場合
+            elif my_data[4] == 1:
+                print('左折希望')
+                # my_dest_dir = (my_data[3] + my_data[4]) % 4  # 自分の行き先（絶対）
+                # you_dest_dir = (you_data[3] + you_data[4]) % 4  # 相手の行き先（絶対）
+
+                # if my_dest_dir == you_dest_dir:
+                #     can_entry = False
+                #     break
+
+            # 自分が直進の場合
+            elif my_data[4] == 2:
+                print('直進希望')
+                my_left = (my_data[3] + 1) % 4
+                you_dest_dir = (you_data[3] + you_data[4]) % 4
+
+                if (you_data[3] == my_left) or (you_dest_dir == my_left):
                     can_entry = False
-                elif (origin + 1) % 4 in entry_dest_list: # TODO
-                    can_entry = False
 
-            elif destination == 3:
-                print(f'右折: {origin}->{dest_dir}')
-                can_entry = True
+            elif my_data[4] == 3:
+                print('右折希望')
+                can_entry = False
 
-                for e in entry_list:
-                    if e[3] == (origin + 1) % 4 and e[4] == origin:
-                        can_entry = False
-                        break
-                    elif e[3] == (origin + 2) % 4 and e[4] == origin:
-                        can_entry = False
-                        break
-                    elif e[3] == (origin + 3) % 4 and e[4] == (origin + 1) % 4:
-                        can_entry = False
-                        break
-                    elif e[3] == (origin + 3) % 4 and e[4] == (origin + 2) % 4:
-                        can_entry = False
-                        break
-        else:
-            print('共通ブロック!')
+                judge_1 = you_data[3] == (my_data[3] + 1) % 4   # 相手が左から来るか
+                judge_2 = you_data[4] == (my_data[3] + 2) % 4   # 相手が前に行くか
+                if judge_1 and judge_2:
+                    print('if 1つ目')
+                    can_entry = True
+
+                print('ok1')
+                judge_1 = you_data[3] == (my_data[3] + 2) % 4   # 相手が前から来るか
+                judge_2 = (you_data[3]+ you_data[4]) % 4 == (my_data[3] + 1) % 4   # 相手が左に行くか
+                if judge_1 and judge_2:
+                    print('if 2つ目')
+                    can_entry = True
+
+                print('ok2')
+                judge_1 = you_data[3] == (my_data[3] + 3) % 4   # 相手が右から来るか
+                judge_2 = (you_data[3] + you_data[4]) % 4 == my_data[3]   # 相手が自分側に行くか
+                if judge_1 and judge_2:
+                    print('if 3つ目')
+                    can_entry = True
+
+                print('どれもちがうのかい！')
+
+            else:
+                print('まだだわぼけ')
 
         if can_entry:
             print('--進入可能--')
-            entry_list.append(car_id)
-            can_entry_list.append(car_id)
-            destination_lane[dest_dir].append(data[3])
+            can_entry_list.append(my_data[0])
             cur.execute(
-                f'UPDATE control SET status="entry" WHERE car_id="{car_id}"')
+                f'UPDATE control SET status="entry" WHERE car_id="{my_data[0]}"')
         else:
             print('--進入不可--')
-            wait_lane[origin] = False
-
-        print('デバッグ!')
-        print('187-dest', destination_lane)
-        # print('185-origin', entry_origin_list)
+        can_entry = False
 
 
 def control() -> None:
