@@ -7,9 +7,14 @@ import sqlite3
 import time
 from typing import Any
 from concurrent.futures import ThreadPoolExecutor
+import random
 
 IPADDR: str = "127.0.0.1"
-PORT: int = 65530
+PORT: int = random.randint(60000, 65535)
+
+with open('./memo/port_share.txt', 'w') as f:
+    f.write(str(PORT))
+print('PORT:', PORT)
 
 sock_sv: socket.socket = socket.socket(socket.AF_INET)
 sock_sv.bind((IPADDR, PORT))
@@ -120,15 +125,13 @@ def check_can_entry(cross_name) -> None:
 
     for my_data in check_list:
         print()
-        print('my_car_id:', my_data[0])
+        print('car_id:', my_data[0])
         can_entry = True
 
         for you_data in entry_list:
             # 自分と相手が同じ方角からくる場合
-            print('you', you_data[3])
-            print('my', my_data[3])
             if my_data[3] == you_data[3]:
-                print('来る方同じ - 大元ブロック!')
+                print('来る方同じ - 大元許可!')
 
             elif (my_data[3] + my_data[4]) % 4 == (you_data[3] + you_data[4]) % 4:
                 print('行き先同じ - 大元ブロック!')
@@ -137,12 +140,6 @@ def check_can_entry(cross_name) -> None:
             # 自分が左折の場合
             elif my_data[4] == 1:
                 print('左折希望')
-                # my_dest_dir = (my_data[3] + my_data[4]) % 4  # 自分の行き先（絶対）
-                # you_dest_dir = (you_data[3] + you_data[4]) % 4  # 相手の行き先（絶対）
-
-                # if my_dest_dir == you_dest_dir:
-                #     can_entry = False
-                #     break
 
             # 自分が直進の場合
             elif my_data[4] == 2:
@@ -160,27 +157,20 @@ def check_can_entry(cross_name) -> None:
                 judge_1 = you_data[3] == (my_data[3] + 1) % 4   # 相手が左から来るか
                 judge_2 = you_data[4] == (my_data[3] + 2) % 4   # 相手が前に行くか
                 if judge_1 and judge_2:
-                    print('if 1つ目')
                     can_entry = True
 
-                print('ok1')
                 judge_1 = you_data[3] == (my_data[3] + 2) % 4   # 相手が前から来るか
                 judge_2 = (you_data[3]+ you_data[4]) % 4 == (my_data[3] + 1) % 4   # 相手が左に行くか
                 if judge_1 and judge_2:
-                    print('if 2つ目')
                     can_entry = True
 
-                print('ok2')
                 judge_1 = you_data[3] == (my_data[3] + 3) % 4   # 相手が右から来るか
                 judge_2 = (you_data[3] + you_data[4]) % 4 == my_data[3]   # 相手が自分側に行くか
                 if judge_1 and judge_2:
-                    print('if 3つ目')
                     can_entry = True
 
-                print('どれもちがうのかい！')
-
             else:
-                print('まだだわぼけ')
+                print('未実装だわぼけ！')
 
         if can_entry:
             print('--進入可能--')

@@ -6,7 +6,12 @@ import random
 import sys
 
 IPADDR: str = "127.0.0.1"
-PORT: int = 65530
+PORT: int = 0
+
+with open('./memo/port_share.txt', 'r') as f:
+    PORT = int(f.read())
+print('PORT:', PORT)
+
 CAR_ID = 'car_' + str(random.randint(10000, 99999))
 
 sock = socket.socket(socket.AF_INET)
