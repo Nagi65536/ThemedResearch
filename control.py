@@ -124,17 +124,15 @@ def check_can_entry(cross_name) -> None:
         dest_dir = (data[3] + data[4]) % 4
         destination_lane[dest_dir].append(data[3])
     
-    print(destination_lane)
     for data in check_list:
         print()
-        print(data[0])
+        print('car_id: ', data[0])
         car_id = data[0]
         origin = data[3]
         destination = data[4]
         dest_dir = (origin + destination) % 4
         can_entry = False
 
-        # TODO 同じレーンの進入中の車は無視するようにする
         check: bool = not destination_lane[dest_dir] or (origin == destination_lane[dest_dir][0])
         if  wait_lane[origin] and check:
             if destination == 1:
@@ -146,10 +144,11 @@ def check_can_entry(cross_name) -> None:
                 can_entry = True
                 entry_origin_list = [e[3] for e in entry_list]
                 entry_dest_list = [e[4] for e in entry_list]
+                print('147-EDL', entry_dest_list)
 
-                if origin + 1 in entry_origin_list:
+                if (origin + 1) % 4 in entry_origin_list:
                     can_entry = False
-                elif origin + 1 in entry_dest_list:
+                elif (origin + 1) % 4 in entry_dest_list: # TODO
                     can_entry = False
 
             elif destination == 3:
@@ -170,7 +169,7 @@ def check_can_entry(cross_name) -> None:
                         can_entry = False
                         break
         else:
-            print('大元ブロック!')
+            print('共通ブロック!')
 
         if can_entry:
             print('--進入可能--')
@@ -182,6 +181,10 @@ def check_can_entry(cross_name) -> None:
         else:
             print('--進入不可--')
             wait_lane[origin] = False
+
+        print('デバッグ!')
+        print('187-dest', destination_lane)
+        # print('185-origin', entry_origin_list)
 
 
 def control() -> None:

@@ -31,15 +31,13 @@ def get_decode_data(data) -> dict:
 
 def communication() -> None:
     if len(args) == 3:
-        tag_id = args[1]
+        tag_id = f'tag_{args[1]}_connect_000_id'
         destination = args[2]
     else:
         tag_id = 'tag_n_connect_000_id'
         destination = 1
         print('-default')
         print()
-
-    input('Please push ENTER to send "connect".')
 
     # 接続報告-送信
     send_data: bytes = get_encode_to_send('connect', tag_id, destination)
