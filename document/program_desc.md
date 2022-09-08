@@ -1,13 +1,39 @@
 # プログラム説明
 
 ## 目次
-[contrl.py](#controlpy)  
-[tmp_client.py](#tmp_clientpy)  
-[setting.py](#settingpy)  
+* [contrl.py](#controlpy)  
+* [tmp_client.py](#tmp_clientpy)  
+* [setting.py](#settingpy)  
 
 ## 注目ポイント
-[control.py add_db_control()](#adddbcontrol-関数)  
-[control.py control()](#control-関数)  
+* [control.py - add_db_control()](#adddbcontrol-関数)  
+* [control.py - control()](#control-関数)  
+
+<br>
+
+## コーディング規約
+* Python 3.8 以上を使用する。
+* match-case文は使用しない。
+* 基本的に **PEP8** に従う。
+* 変数名・関数名はわかりやすさを第一とし、ある程度の長さは許容する。
+* 型アノテーションを表記する。
+* 文字列フォーマットは `f文字列` を使用する。
+* `"` と `'` に関しては定めない。
+* 分かりやすさを大切にする。
+
+## Python のバージョンによる影響
+**Python 3.6**
+* 型アノテーション追加
+* f文字列の追加
+* `global` と `nonlocal` の厳格化
+* jsonモジュールがバイナリを入力として受け取れるようになる
+
+**Python 3.8**
+* f文字列の拡張
+* 標準のコレクション型による型付けが可能に
+* 共用体型オペレータの追加
+
+<br>
 
 ## 目標
 * 交差点において、自動運転車を効率よく走行させる
@@ -18,18 +44,32 @@
 
 ### **main()** 関数
 * メイン関数です
-* control関数とsocket通信関数を並列処理する
+
+[説明]　　
+**control()** 関数と **socket()** 関数の並列処理を開始する
 
 <br>
 
 ### **control()** 関数
 * 各交差点の車の制御をする
 
-[詳細設定]  
-* 北:0, 東:1, 南:2, 西:3 とする
-* 左折:1, 直進:2, 右折:3 とする
+[説明]
+車が接続されている交差点を集合型に入れて **check_can_entry()** 関数 を回す
 
-時間順にデータを取得し、進入可能な車IDを **can_entry_list** に追加する
+<br>
+
+### **check_can_entry()** 関数
+* 指定された交差点において各車が進入できるか判断する
+
+[引数]  
+**cross_name** : 確認する交差点を指定  
+
+[詳細設定]  
+北:0, 東:1, 南:2, 西:3 とする  
+左折:1, 直進:2, 右折:3 とする
+
+[説明]  
+進入済時間順にデータを取得し、進入可能な車IDを **can_entry_list** に追加する
 
 [判断手順]  
 **共通**
@@ -37,7 +77,7 @@
 * 同じ方向へ進む車が*ない*
 
 **Uターン**
-* (なし)
+* (未実装)
 
 **左折**
 * (なし)
@@ -55,13 +95,13 @@
 
 ### **communication()** 関数
 * 各車と通信をする
-* 並列処理によって車一台に対し、一つ実行される
+* サーバーと通信中の車の数だけ並列で実行される
 
 [手順] socket通信接続後
 1. 接続報告を受信
-2. **add_db_control()** 関数 を呼び、接続データ保存
-3. 直接進入できない場合、停止指示を送信
-4. **control()** 関数によって **can_entry_list** に車IDが追加されるまで待機
+2. **add_db_control()** 関数 を呼び、データ登録
+3. 停止指示を送信
+4. **check_can_entry()** 関数によって **can_entry_list** に車IDが追加されるまで待機
 5. 進入指示
 6. 通過済報告を受信
 7. socket通信切断
@@ -69,37 +109,47 @@
 <br>
 
 ### **add_db_control()** 関数
-* 来し方, 行き先を絶対位置（方角）で保存します
+* 各車の接続交差点名, 来し方, 行き先を登録する
+
+[引数]  
+data : 
+```Python
+{
+    car_id : 'CAR_ID',  # 車ID
+    status : 'connect',  # 車の状態
+    tag_id : 'TAG_ID',  # 接続したタグID
+    destination : 'TURN_DIRECTION'  # 行き先
+}
+```
 
 [詳細設定]  
 * 北:0, 東:1, 南:2, 西:3 とする
 * 左折:1, 直進:2, 右折:3 とする
 
-引数として車からの **tag_id**や **destination**（行き先）などをもらう  
-```python
+```Python
 car_idstr = data['car_id']    # 車ID
 tag_idstr = data['tag_id']    # 接続地点タグID
 destinationint = data['destination']  # 行き先
 time_float = time.time()  # 時間（秒）
 ```
-
-**destination** は車から見た相対位置である（右, 直進, 左...）  
+**destination** は車から見た相対位置である（右折, 直進, 左折...）  
 **tag_id** より **origin**（来し方）などを割り出す  
-```python
+
+```Python
 # DBよりデータ取得
-cur.execute(f'SELECT cross_name, direction FROM tag_info WHERE tag_id = "{tag_id}"')
+cur.execute(f'SELECT cross_name, direction FROM cross_tag_info WHERE tag_id = "{tag_id}"')
 get_db_datadict: tuple = cur.fetchone()
 cross_name: str = get_db_data[0]    # 交差点名取得
 origin: int = get_db_data[1]    # 来し方取得
 ```
 **origin** は絶対位置である（北, 東, 南, 西）  
 **dest_direction**（行き先）の絶対位置を割出す
-```python
+```Python
 dest_directionint = origin + destination
 ```
 **est_direction** は絶対位置である（北, 東, 南, 西）  
 データをDBに登録する
-```python
+```Python
 cur.execute(f'''
     REPLACE INTO control VALUES (
     "{car_id}", "{cross_name}", "{tag_id}", "{origin}", "{destination}", "{status}", {time_}

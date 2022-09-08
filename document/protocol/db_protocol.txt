@@ -1,9 +1,15 @@
 --------テーブル構成-------
 
-テーブル名 : tag_info
+テーブル名 : cross_tag_info
 要素 : tag_id, tag_name, cross_name, status, direction
-説明 : タグのIDと名前および所属交差点名、タグの表す状態、方角を保存
-（名称, タグid, 所属交差点名）
+説明 : タグのIDと名前および所属交差点名、タグの役割、方角を保存
+（タグid, タグ名, 所属交差点名, タグの役割, タグのある方角）
+
+
+テーブル名 : road_tag_info
+要素 : tag_id, cross_name_1, cross_name_2
+説明 : 交差点間のタグから接続する交差点
+（タグID, 行き先の交差点名, 来し方の交差点名）
 
 
 テーブル名 : cross_position
