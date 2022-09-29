@@ -55,7 +55,7 @@ def add_db_control(data: dict) -> None:
     status: str = data['status']
     time_: float = time.time()
     cur.execute(
-        f'SELECT cross_name, direction FROM tag_info WHERE tag_id = "{tag_id}"')
+        f'SELECT cross_name, direction FROM cross_tag_info WHERE tag_id = "{tag_id}"')
     get_db_data: dict = cur.fetchone()
     cross_name: str = get_db_data[0]
     origin: int = get_db_data[1]
@@ -72,8 +72,6 @@ def communication(sock: socket.socket, addr: tuple) -> None:
     try:
         # 接続報告-受信
         get_data: dict = get_decode_data(sock.recv(1024))
-        # print()
-        # print('*connect', get_data)
 
         # 制御関数の代用
         add_db_control(get_data)
@@ -96,8 +94,6 @@ def communication(sock: socket.socket, addr: tuple) -> None:
 
         # 通過済報告-受信
         get_data: dict = get_decode_data(sock.recv(1024))
-        # print()
-        # print('*passed', get_data)
         remove_db_control(get_data['car_id'])
 
     except:
@@ -121,7 +117,6 @@ def check_can_entry(cross_name) -> None:
 
     entry_list = [c for c in control_data if c[5] == 'entry']
     check_list = [c for c in control_data if c[5] != 'entry']
-    control_data = entry_list + check_list
 
     for my_data in check_list:
         print()
@@ -172,8 +167,12 @@ def check_can_entry(cross_name) -> None:
             else:
                 print('未実装だわぼけ！')
 
+            if not can_entry:
+                break
+
         if can_entry:
             print('--進入可能--')
+            entry_list.append(my_data)
             can_entry_list.append(my_data[0])
             cur.execute(
                 f'UPDATE control SET status="entry" WHERE car_id="{my_data[0]}"')
@@ -185,7 +184,7 @@ def check_can_entry(cross_name) -> None:
 def control() -> None:
     conn = sqlite3.connect('./db/main.db', isolation_level=None)
     cur = conn.cursor()
-    # cur.execute('DELETE FROM control')
+    cur.execute('DELETE FROM control')
     print('【control】')
 
     while True:
