@@ -1,17 +1,119 @@
-import tkinter as tk
+import tkinter
+import sqlite3
+
+class MyApp1(tkinter.Frame):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.pack()
+
+        self.cross_num = 0
+
+        self.canvas = tkinter.Canvas(root, bg="white", width=800, height=450)
+        self.canvas.bind('<Button-1>', self.l_click_canvas)
+        self.canvas.bind('<Button-3>', self.r_click_canvas)
+        self.canvas.pack()
+
+        cur.execute('DELETE FROM cross_position')
 
 
-def timer_func():
-    canvas.create_line(100, 100, 200, 200)
-    print('ok')
-    app.after(100, timer_func)
+    def l_click_canvas(self, event):
+        print(f"L clicked → ({event.x}, {event.y})")
+        
+        node_info = search_node(event.x, event.y)
+        if (not node_info):
+            print("ノード追加")
+            cur.execute(f'''
+            INSERT INTO cross_position VALUES (
+                "cross_{str(self.cross_num).zfill(3)}", {event.x}, {event.y}
+            )
+            ''')
+            self.cross_num += 1
+            self.canvas.create_oval(event.x-5, event.y-5, event.x+5, event.y+5, fill="blue")
+        
+        else:
+            print("ノード既存", node_info["x"], node_info["y"])
+            self.canvas.create_oval(node_info["x"]-5, node_info["y"]-5, node_info["x"]+5, node_info["y"]+5, fill="blue")
+
+            
+    def r_click_canvas(self, event):
+        print(f"R clicked → ({event.x}, {event.y})")
+
+        node_info = search_node(event.x, event.y)
+        if (not node_info):
+            print("ノード追加")
+            cur.execute(f'''
+            INSERT INTO cross_position VALUES (
+                "cross_{str(self.cross_num).zfill(3)}", {event.x}, {event.y}
+            )
+            ''')
+            self.cross_num += 1
+            self.canvas.create_oval(event.x-5, event.y-5, event.x+5, event.y+5, fill="yellow")
+        
+        else:
+            print("ノード既存", node_info["x"], node_info["y"])
+            self.canvas.create_oval(node_info["x"]-5, node_info["y"]-5, node_info["x"]+5, node_info["y"]+5, fill="yellow")
+
+    
+def search_node(x, y):
+    print("検索座標", x, y)
+    cur.execute(f'''
+    SELECT * FROM cross_position
+    WHERE x BETWEEN {x-15} AND {x+15}
+    AND y BETWEEN {y-15} AND {y+15}
+    ''')
+    res = cur.fetchone()
+    print("結果", res)
+
+    if (not res):
+        return False
+    else:
+        return {"name": res[0], "x":res[1], "y":res[2]}
 
 
-if __name__ == '__main__':
-    app = tk.Tk()
-    app.title('Canvas Sample')
-    app.geometry('800x450')
-    canvas = tk.Canvas(app, width=800, height=450)
-    canvas.place(x=0, y=0)
-    timer_func()
+def db_init():
+    cur.execute(f'''
+    CREATE TABLE IF NOT EXISTS cross_tag_info(
+        tag_id     TEXT PRIMARY KEY,
+        tag_name   TEXT,
+        cross_name TEXT,
+        status     TEXT,
+        direction  INTEGER
+    )''')
+
+    cur.execute(f'''
+    CREATE TABLE IF NOT EXISTS control(
+        car_id      TEXT PRIMARY KEY,
+        cross_name  TEXT,
+        tag_id      TEXT,
+        origin      INTEGER,
+        destination INTEGER,
+        status      TEXT, 
+        time        INTEGER
+    )''')
+
+    cur.execute(f'''
+    CREATE TABLE IF NOT EXISTS cross_position(
+        cross_name TEXT  PRIMARY KEY,
+        x          REAL,
+        y          REAL
+    )''')
+
+    cur.execute(f'''
+    CREATE TABLE IF NOT EXISTS road_info(
+        cross_name_1 TEXT,
+        cross_name_2 TEXT,
+        dist         REAL,
+        oneway       INTEGER
+    )''')
+        
+
+if __name__ == "__main__":
+    conn = sqlite3.connect('./db/tmp.db', isolation_level=None)
+    cur = conn.cursor()
+    db_init()
+
+    root = tkinter.Tk()
+    root.geometry("800x450")
+    root.title("マップ生成")
+    app = MyApp1(master=root)
     app.mainloop()
