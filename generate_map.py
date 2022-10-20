@@ -1,11 +1,15 @@
-import tkinter
 import sqlite3
+import tkinter
+
 
 class MyApp1(tkinter.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.pack()
-
+        self.last_create_point_l = None
+        self.last_create_point_r = None
+        self.point_l = []
+        self.point_r = []
         self.cross_num = 0
 
         self.canvas = tkinter.Canvas(root, bg="white", width=800, height=450)
@@ -17,9 +21,23 @@ class MyApp1(tkinter.Frame):
 
 
     def l_click_canvas(self, event):
+        if self.point_l and self.point_r:
+            print('draw line')
+            self.canvas.create_line(
+                self.point_l[0], self.point_l[1],
+                self.point_r[0], self.point_r[1]
+            )
+            self.canvas.create_oval(self.point_l[0]-7, self.point_l[1]-7, self.point_l[0]+7, self.point_l[1]+7, fill="black")
+            self.canvas.create_oval(self.point_r[0]-7, self.point_r[1]-7, self.point_r[0]+7, self.point_r[1]+7, fill="black")
+            self.point_l = None
+            self.point_r = None
+            return
+
         print(f"L clicked → ({event.x}, {event.y})")
-        
         node_info = search_node(event.x, event.y)
+        if self.last_create_point_l:
+            self.canvas.delete(self.last_create_point_l)
+
         if (not node_info):
             print("ノード追加")
             cur.execute(f'''
@@ -28,17 +46,22 @@ class MyApp1(tkinter.Frame):
             )
             ''')
             self.cross_num += 1
-            self.canvas.create_oval(event.x-5, event.y-5, event.x+5, event.y+5, fill="blue")
+            self.point_l = (event.x, event.y)
+            self.last_create_point_l = self.canvas.create_oval(event.x-5, event.y-5, event.x+5, event.y+5, fill="blue")
         
         else:
+            self.point_l = (node_info["x"], node_info["y"])
             print("ノード既存", node_info["x"], node_info["y"])
             self.canvas.create_oval(node_info["x"]-5, node_info["y"]-5, node_info["x"]+5, node_info["y"]+5, fill="blue")
 
             
     def r_click_canvas(self, event):
         print(f"R clicked → ({event.x}, {event.y})")
-
         node_info = search_node(event.x, event.y)
+
+        if self.last_create_point_r:
+            self.canvas.delete(self.last_create_point_r)
+
         if (not node_info):
             print("ノード追加")
             cur.execute(f'''
@@ -47,11 +70,14 @@ class MyApp1(tkinter.Frame):
             )
             ''')
             self.cross_num += 1
-            self.canvas.create_oval(event.x-5, event.y-5, event.x+5, event.y+5, fill="yellow")
+            self.point_r = (event.x, event.y)
+            self.last_create_point_r = self.canvas.create_oval(event.x-5, event.y-5, event.x+5, event.y+5, fill="yellow")
         
         else:
             print("ノード既存", node_info["x"], node_info["y"])
+            self.point_r = (node_info["x"], node_info["y"])
             self.canvas.create_oval(node_info["x"]-5, node_info["y"]-5, node_info["x"]+5, node_info["y"]+5, fill="yellow")
+
 
     
 def search_node(x, y):
