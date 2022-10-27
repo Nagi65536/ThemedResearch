@@ -10,6 +10,8 @@ class MyApp1(tkinter.Frame):
         self.last_create_point_r = None
         self.point_l = []
         self.point_r = []
+        self.isNew_l = False
+        self.isNew_r = False
         self.cross_num = 0
 
         self.canvas = tkinter.Canvas(root, bg="white", width=800, height=450)
@@ -29,6 +31,21 @@ class MyApp1(tkinter.Frame):
             )
             self.canvas.create_oval(self.point_l[0]-7, self.point_l[1]-7, self.point_l[0]+7, self.point_l[1]+7, fill="black")
             self.canvas.create_oval(self.point_r[0]-7, self.point_r[1]-7, self.point_r[0]+7, self.point_r[1]+7, fill="black")
+
+            if self.isNew_l:
+                cur.execute(f'''
+                    INSERT INTO cross_position VALUES (
+                    "cross_{str(self.cross_num).zfill(3)}", {self.point_l[0]}, {self.point_l[1]}
+                )''')
+                self.cross_num += 1
+
+            if self.isNew_r:
+                cur.execute(f'''
+                    INSERT INTO cross_position VALUES (
+                    "cross_{str(self.cross_num+1).zfill(3)}", {self.point_r[0]}, {self.point_l[1]}
+                )''')
+                self.cross_num += 1
+
             self.point_l = None
             self.point_r = None
             return
@@ -40,16 +57,12 @@ class MyApp1(tkinter.Frame):
 
         if (not node_info):
             print("ノード追加")
-            cur.execute(f'''
-            INSERT INTO cross_position VALUES (
-                "cross_{str(self.cross_num).zfill(3)}", {event.x}, {event.y}
-            )
-            ''')
-            self.cross_num += 1
+            self.isNew_l = True
             self.point_l = (event.x, event.y)
             self.last_create_point_l = self.canvas.create_oval(event.x-5, event.y-5, event.x+5, event.y+5, fill="blue")
         
         else:
+            self.isNew_l = False
             self.point_l = (node_info["x"], node_info["y"])
             print("ノード既存", node_info["x"], node_info["y"])
             self.canvas.create_oval(node_info["x"]-5, node_info["y"]-5, node_info["x"]+5, node_info["y"]+5, fill="blue")
@@ -64,20 +77,15 @@ class MyApp1(tkinter.Frame):
 
         if (not node_info):
             print("ノード追加")
-            cur.execute(f'''
-            INSERT INTO cross_position VALUES (
-                "cross_{str(self.cross_num).zfill(3)}", {event.x}, {event.y}
-            )
-            ''')
-            self.cross_num += 1
+            self.isNew_r = True
             self.point_r = (event.x, event.y)
             self.last_create_point_r = self.canvas.create_oval(event.x-5, event.y-5, event.x+5, event.y+5, fill="yellow")
         
         else:
             print("ノード既存", node_info["x"], node_info["y"])
+            self.isNew_r = False
             self.point_r = (node_info["x"], node_info["y"])
             self.canvas.create_oval(node_info["x"]-5, node_info["y"]-5, node_info["x"]+5, node_info["y"]+5, fill="yellow")
-
 
     
 def search_node(x, y):
@@ -131,6 +139,19 @@ def db_init():
         dist         REAL,
         oneway       INTEGER
     )''')
+
+    cur.execute(f'''
+    CREATE TABLE IF NOT EXISTS road_tag_info(
+        tag_id TEXT,
+        cross_name_1 TEXT,
+        cross_name_2 TEXT
+    )''')
+
+    cur.execute('DELETE FROM cross_tag_info')
+    cur.execute('DELETE FROM cross_position')
+    cur.execute('DELETE FROM road_info')
+    cur.execute('DELETE FROM control')
+    cur.execute('DELETE FROM road_tag_info')
         
 
 if __name__ == "__main__":
