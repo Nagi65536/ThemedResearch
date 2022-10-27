@@ -42,7 +42,7 @@ def register_cross():
                 cur.execute(f'INSERT INTO cross_tag_info VALUES("{tag_id}", "{tag_name}", "{cross_name}", "{s}", "{n}")')
 
 
-def create_table():
+def db_init():
     cur.execute(f'''
     CREATE TABLE IF NOT EXISTS cross_tag_info(
         tag_id     TEXT PRIMARY KEY,
@@ -77,6 +77,19 @@ def create_table():
         dist         REAL,
         oneway       INTEGER
     )''')
+
+    cur.execute(f'''
+    CREATE TABLE IF NOT EXISTS road_tag_info(
+        tag_id TEXT,
+        cross_name_1 TEXT,
+        cross_name_2 TEXT
+    )''')
+
+    cur.execute('DELETE FROM cross_tag_info')
+    cur.execute('DELETE FROM cross_position')
+    cur.execute('DELETE FROM road_info')
+    cur.execute('DELETE FROM control')
+    cur.execute('DELETE FROM road_tag_info')
 
 
 if __name__ == '__main__':

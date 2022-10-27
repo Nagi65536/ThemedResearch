@@ -1,6 +1,8 @@
 import sqlite3
 import tkinter
+import math
 
+SIZE_RATIO = 1
 
 class MyApp1(tkinter.Frame):
     def __init__(self, master=None):
@@ -21,7 +23,6 @@ class MyApp1(tkinter.Frame):
 
         cur.execute('DELETE FROM cross_position')
 
-
     def l_click_canvas(self, event):
         if self.point_l and self.point_r:
             print('draw line')
@@ -32,19 +33,40 @@ class MyApp1(tkinter.Frame):
             self.canvas.create_oval(self.point_l[0]-7, self.point_l[1]-7, self.point_l[0]+7, self.point_l[1]+7, fill="black")
             self.canvas.create_oval(self.point_r[0]-7, self.point_r[1]-7, self.point_r[0]+7, self.point_r[1]+7, fill="black")
 
-            if self.isNew_l:
+            self.point_l = [p * SIZE_RATIO for p in self.point_l]
+            self.point_r = [p * SIZE_RATIO for p in self.point_r]
+
+            coross_name_l = ''
+            if not self.isNew_l:
+                coross_name_l = str(self.cross_num).zfill(3)
                 cur.execute(f'''
                     INSERT INTO cross_position VALUES (
                     "cross_{str(self.cross_num).zfill(3)}", {self.point_l[0]}, {self.point_l[1]}
                 )''')
                 self.cross_num += 1
+            else:
+                coross_name_l = self.isNew_l
 
-            if self.isNew_r:
+            coross_name_r = ''
+            if not self.isNew_r:
+                coross_name_r = str(self.cross_num).zfill(3)
                 cur.execute(f'''
                     INSERT INTO cross_position VALUES (
                     "cross_{str(self.cross_num+1).zfill(3)}", {self.point_r[0]}, {self.point_l[1]}
                 )''')
                 self.cross_num += 1
+            else:
+                coross_name_r = self.isNew_r
+
+            dist = math.sqrt((self.point_r[0] - self.point_r[0]) ** 2 + (self.point_l[1] - self.point_l[1]) ** 2)
+            cur.execute(f'''
+                INSERT INTO road_info VALUES (
+                "cross_{coross_name_l}",
+                "cross_{coross_name_r}",
+                {dist},
+                0
+            )
+            ''')
 
             self.point_l = None
             self.point_r = None
@@ -57,17 +79,17 @@ class MyApp1(tkinter.Frame):
 
         if (not node_info):
             print("ノード追加")
-            self.isNew_l = True
+            self.isNew_l = ''
             self.point_l = (event.x, event.y)
-            self.last_create_point_l = self.canvas.create_oval(event.x-5, event.y-5, event.x+5, event.y+5, fill="blue")
-        
-        else:
-            self.isNew_l = False
-            self.point_l = (node_info["x"], node_info["y"])
-            print("ノード既存", node_info["x"], node_info["y"])
-            self.canvas.create_oval(node_info["x"]-5, node_info["y"]-5, node_info["x"]+5, node_info["y"]+5, fill="blue")
+            self.last_create_point_l = self.canvas.create_oval(
+                event.x-5, event.y-5, event.x+5, event.y+5, fill="blue")
 
-            
+        else:
+            self.isNew_l = node_info
+            self.point_l = (node_info["x"], node_info["y"])
+            self.last_create_point_l = self.canvas.create_oval(
+                node_info["x"]-5, node_info["y"]-5, node_info["x"]+5, node_info["y"]+5, fill="blue")
+
     def r_click_canvas(self, event):
         print(f"R clicked → ({event.x}, {event.y})")
         node_info = search_node(event.x, event.y)
@@ -77,13 +99,14 @@ class MyApp1(tkinter.Frame):
 
         if (not node_info):
             print("ノード追加")
-            self.isNew_r = True
+            self.isNew_r = ''
             self.point_r = (event.x, event.y)
-            self.last_create_point_r = self.canvas.create_oval(event.x-5, event.y-5, event.x+5, event.y+5, fill="yellow")
-        
+            self.last_create_point_r = self.canvas.create_oval(
+                event.x-5, event.y-5, event.x+5, event.y+5, fill="yellow")
+
         else:
             print("ノード既存", node_info["x"], node_info["y"])
-            self.isNew_r = False
+            self.isNew_r = node_info
             self.point_r = (node_info["x"], node_info["y"])
             self.canvas.create_oval(node_info["x"]-5, node_info["y"]-5, node_info["x"]+5, node_info["y"]+5, fill="yellow")
 
@@ -101,7 +124,7 @@ def search_node(x, y):
     if (not res):
         return False
     else:
-        return {"name": res[0], "x":res[1], "y":res[2]}
+        return {"name": res[0], "x": res[1], "y": res[2]}
 
 
 def db_init():
