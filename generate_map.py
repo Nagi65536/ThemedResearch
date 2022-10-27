@@ -72,9 +72,9 @@ class MyApp1(tkinter.Frame):
                 event.x-5, event.y-5, event.x+5, event.y+5, fill="blue")
 
         else:
-            self.point_l = (node_info["x"], node_info["y"])
             print("ノード既存", node_info["x"], node_info["y"])
-            self.canvas.create_oval(
+            self.point_l = (node_info["x"], node_info["y"])
+            self.last_create_point_l = self.canvas.create_oval(
                 node_info["x"]-5, node_info["y"]-5, node_info["x"]+5, node_info["y"]+5, fill="blue")
 
     def r_click_canvas(self, event):
@@ -93,7 +93,7 @@ class MyApp1(tkinter.Frame):
         else:
             print("ノード既存", node_info["x"], node_info["y"])
             self.point_r = (node_info["x"], node_info["y"])
-            self.canvas.create_oval(
+            self.last_create_point_r = self.canvas.create_oval(
                 node_info["x"]-5, node_info["y"]-5, node_info["x"]+5, node_info["y"]+5, fill="yellow")
 
 
