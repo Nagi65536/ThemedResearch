@@ -1,6 +1,7 @@
 # 交差点で制御するプログラム
 
 import json
+import math
 import select
 import socket
 import sqlite3
@@ -84,24 +85,38 @@ def client_connect(get_data):
     print(f'{get_data["car_id"]} < stop')
 
 
-def communication() -> None:
-    while True:
-        get_data: dict = get_decode_data(sock.recv(1024))
+def communication(get_data) -> None:
+    print('-----【処理開始】----------')
+    try:
+        if get_data["status"] == 'connect':
+            client_connect(get_data)
 
-        print('-----【処理開始】----------')
-        try:
-            if get_data["status"] == 'connect':
-                client_connect(get_data)
+        elif get_data["status"] == 'passed':
+            client_passed(get_data)
+    except:
+        print('【ERROR】')
+    print('-----【処理完了】----------')
 
-            elif get_data["status"] == 'passed':
-                client_passed(get_data)
-        except:
-            print('【ERROR】')
-        print('-----【処理完了】----------')
+
+def control_traffic_lights(cross_name) -> None:
+    conn = sqlite3.connect(f'./db/{DB_NAME}', isolation_level=None)
+    cur = conn.cursor()
+
+    cur.execute(
+        f'SELECT * FROM control WHERE cross_name="{cross_name}" AND status!="entry" ORDER BY time ASC')
+    control_data = cur.fetchall()
+
+    global can_entry_origin
+    can_entry_origin += 1
+    tmp_can_entry_origin = math.floor((can_entry_origin / 20) % 2)
+
+    for data in control_data:
+        if data[3] == tmp_can_entry_origin or data[3] == tmp_can_entry_origin+2:
+            client_entry(data)
 
 
 def check_can_entry(cross_name) -> None:
-    conn = sqlite3.connect(F'./db/{DB_NAME}', isolation_level=None)
+    conn = sqlite3.connect(f'./db/{DB_NAME}', isolation_level=None)
     cur = conn.cursor()
 
     cur.execute(
@@ -111,22 +126,22 @@ def check_can_entry(cross_name) -> None:
     entry_list = [c for c in control_data if c[5] == 'entry']
     check_list = [c for c in control_data if c[5] != 'entry']
 
+    # tmp_1_check_list = [c for c in check_list if check_list[0][3] == c[3]]
+    # tmp_2_check_list = [c for c in check_list if check_list[0][3] != c[3]]
+
     for my_data in check_list:
         can_entry = True
 
         for you_data in entry_list:
-            # 自分と相手が同じ方角からくる場合
             if my_data[3] == you_data[3]:
                 can_entry = True
 
             elif (my_data[3] + my_data[4]) % 4 == (you_data[3] + you_data[4]) % 4:
                 can_entry = False
 
-            # 自分が左折の場合
             elif my_data[4] == 1:
                 can_entry = True
 
-            # 自分が直進の場合
             elif my_data[4] == 2:
                 can_entry = True
                 my_left = (my_data[3] + 1) % 4
@@ -177,15 +192,21 @@ def control() -> None:
         crosses = set(crosses)
 
         for cross in crosses:
-            check_can_entry(cross)
+            if sys.argv[1] == 'cl':
+                control_traffic_lights(cross)
+            else:
+                check_can_entry(cross)
 
         time.sleep(PROCESS_DELAY)
 
 
 def main() -> None:
-    executor = ThreadPoolExecutor()
-    executor.submit(control)
-    executor.submit(communication)
+    with ThreadPoolExecutor() as executor:
+        executor.submit(control)
+
+        while True:
+            get_data: dict = get_decode_data(sock.recv(1024))
+            executor.submit(communication, get_data)
 
 
 if __name__ == '__main__':
@@ -201,5 +222,6 @@ if __name__ == '__main__':
     sock_sv.bind((IPADDR, PORT))
     sock_sv.listen()
     sock, addr = sock_sv.accept()
+    can_entry_origin = 0
 
     main()

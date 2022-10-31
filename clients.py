@@ -11,7 +11,9 @@ import time
 clients = [
     # (前の車との遅延, 来る方向, 行き先, 通過時間)
     (0, 0, 2, 3),
-    (1, 0, 2, 3),
+    (1, 1, 2, 3),
+    (1, 2, 2, 3),
+    (1, 3, 2, 3),
 ]
 PROCESS_DELAY = 0.1
 
@@ -91,7 +93,6 @@ def distribute_recv_data():
     while True:
         get_data = get_decode_data(sock.recv(1024))
         recv_datum[get_data['car_id']] = get_data
-        time.sleep(PROCESS_DELAY)
 
 
 def main() -> None:
