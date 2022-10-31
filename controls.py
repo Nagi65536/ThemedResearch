@@ -12,6 +12,7 @@ import random
 
 
 DB_NAME = 'sub.db'
+PROCESS_DELAY = 0.1
 
 
 def get_encode_data(car_id, operate) -> bytes:
@@ -100,7 +101,6 @@ def communication() -> None:
 
 
 def check_can_entry(cross_name) -> None:
-    print('>> checking <<')
     conn = sqlite3.connect(F'./db/{DB_NAME}', isolation_level=None)
     cur = conn.cursor()
 
@@ -179,7 +179,7 @@ def control() -> None:
         for cross in crosses:
             check_can_entry(cross)
 
-        time.sleep(1)
+        time.sleep(PROCESS_DELAY)
 
 
 def main() -> None:

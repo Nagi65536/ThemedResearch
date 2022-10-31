@@ -7,14 +7,16 @@ import socket
 import sys
 import time
 
+
 clients = [
     # (前の車との遅延, 来る方向, 行き先, 通過時間)
     (0, 0, 2, 3),
-    (2, 1, 2, 3),
+    (1, 0, 2, 3),
 ]
+PROCESS_DELAY = 0.1
 
 
-def get_encode_to_send(status, car_id, tag_id, destination) -> bytes:
+def get_encode_data(status, car_id, tag_id, destination) -> bytes:
     data: dict = {'car_id': str(car_id), 'status': status,
                   'tag_id': tag_id, 'destination': destination}
     data_json: str = json.dumps(data)
@@ -48,25 +50,34 @@ def communication(origin, destination, delay=-1) -> bool:
         car_id = 'car_' + str(car_num).zfill(3)
 
         # 接続報告-送信
-        send_data: bytes = get_encode_to_send(
+        send_data: bytes = get_encode_data(
             'connect', car_id, tag_id, destination)
         sock.send(send_data)
         print(f'{car_id} < connect')
 
         # 指示-受信
-        get_data: dict = get_decode_data(sock.recv(1024))
+        get_data = None
+        while not get_data:
+            if car_id in recv_datum:
+                get_data = recv_datum.pop(car_id)
+            time.sleep(PROCESS_DELAY)
+
         print(f'{car_id} > {get_data["operate"]}')
 
         if get_data['operate'] == 'stop':
             # 進入指示-受信
-            get_data = get_decode_data(sock.recv(1024))
+            get_data = None
+            while not get_data:
+                if car_id in recv_datum:
+                    get_data = recv_datum.pop(car_id)
+                time.sleep(PROCESS_DELAY)
             print(f'{car_id} > {get_data["operate"]}')
 
         print(f'{car_id} 通過中')
         time.sleep(delay)
 
         # 通過済報告-送信
-        send_data: bytes = get_encode_to_send(
+        send_data: bytes = get_encode_data(
             'passed', car_id, 'tag_s_passed_000_id', destination)
         sock.send(send_data)
         print(f'{car_id} < passed')
@@ -76,20 +87,28 @@ def communication(origin, destination, delay=-1) -> bool:
         return False
 
 
+def distribute_recv_data():
+    while True:
+        get_data = get_decode_data(sock.recv(1024))
+        recv_datum[get_data['car_id']] = get_data
+        time.sleep(PROCESS_DELAY)
+
+
 def main() -> None:
-    futur_list = []
-
-    start_time = time.time()
     with ThreadPoolExecutor() as executor:
-        for i, client in enumerate(clients):
-            future = executor.submit(communication, client[1], client[2], client[3])
-            futur_list.append(future)
+        executor.submit(distribute_recv_data)
+        start_time = time.time()
 
-            if len(clients) > i+1:
-                time.sleep(clients[i+1][0])
+        with ThreadPoolExecutor() as executor:
 
-    print()
-    print(f'経過時間 : {time.time() - start_time:.2f}s')
+            for i, client in enumerate(clients):
+                executor.submit(communication, client[1], client[2], client[3])
+
+                if len(clients) > i+1:
+                    time.sleep(clients[i+1][0])
+
+        print()
+        print(f'経過時間 : {time.time() - start_time:.2f}s')
 
 
 
@@ -102,11 +121,9 @@ if __name__ == '__main__':
 
     sock = socket.socket(socket.AF_INET)
     sock.connect((IPADDR, PORT))
-    args = sys.argv
+    
     car_num = 0
+    recv_datum = {}
 
     print('⚡ clients.py start')
     main()
-
-    # for future in futur_list:
-    #     print(future.result())
