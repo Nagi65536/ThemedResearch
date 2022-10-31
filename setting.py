@@ -1,7 +1,9 @@
 import sqlite3
+import sys
 
 
-conn = sqlite3.connect('./db/main.db', isolation_level=None)
+DB_NAME = sys.argv[1]
+conn = sqlite3.connect(f'./db/{DB_NAME}', isolation_level=None)
 cur = conn.cursor()
 
 
