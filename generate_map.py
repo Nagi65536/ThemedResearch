@@ -12,6 +12,8 @@ class MyApp1(tkinter.Frame):
         self.last_create_point_r = None
         self.point_l = []
         self.point_r = []
+        self.isNew_l = False
+        self.isNew_r = False
         self.cross_num = 0
 
         self.canvas = tkinter.Canvas(root, bg="white", width=800, height=450)
@@ -28,34 +30,44 @@ class MyApp1(tkinter.Frame):
                 self.point_l[0], self.point_l[1],
                 self.point_r[0], self.point_r[1]
             )
+            self.canvas.create_oval(self.point_l[0]-7, self.point_l[1]-7, self.point_l[0]+7, self.point_l[1]+7, fill="black")
+            self.canvas.create_oval(self.point_r[0]-7, self.point_r[1]-7, self.point_r[0]+7, self.point_r[1]+7, fill="black")
+
             self.point_l = [p * SIZE_RATIO for p in self.point_l]
             self.point_r = [p * SIZE_RATIO for p in self.point_r]
 
-            cur.execute(f'''
-                INSERT INTO cross_position VALUES (
-                "cross_{str(self.cross_num).zfill(3)}", {self.point_l[0]}, {self.point_l[1]}
-            )
-            ''')
-            cur.execute(f'''
-                INSERT INTO cross_position VALUES (
-                "cross_{str(self.cross_num+1).zfill(3)}", {self.point_r[0]}, {self.point_r[1]}
-            )
-            ''')
+            coross_name_l = ''
+            if not self.isNew_l:
+                coross_name_l = str(self.cross_num).zfill(3)
+                cur.execute(f'''
+                    INSERT INTO cross_position VALUES (
+                    "cross_{str(self.cross_num).zfill(3)}", {self.point_l[0]}, {self.point_l[1]}
+                )''')
+                self.cross_num += 1
+            else:
+                coross_name_l = self.isNew_l
+
+            coross_name_r = ''
+            if not self.isNew_r:
+                coross_name_r = str(self.cross_num).zfill(3)
+                cur.execute(f'''
+                    INSERT INTO cross_position VALUES (
+                    "cross_{str(self.cross_num+1).zfill(3)}", {self.point_r[0]}, {self.point_l[1]}
+                )''')
+                self.cross_num += 1
+            else:
+                coross_name_r = self.isNew_r
+
             dist = math.sqrt((self.point_r[0] - self.point_r[0]) ** 2 + (self.point_l[1] - self.point_l[1]) ** 2)
             cur.execute(f'''
                 INSERT INTO road_info VALUES (
-                "cross_{str(self.cross_num).zfill(3)}",
-                "cross_{str(self.cross_num+1).zfill(3)}",
+                "cross_{coross_name_l}",
+                "cross_{coross_name_r}",
                 {dist},
                 0
             )
             ''')
-            self.cross_num += 2
 
-            self.canvas.create_oval(
-                self.point_l[0]-7, self.point_l[1]-7, self.point_l[0]+7, self.point_l[1]+7, fill="black")
-            self.canvas.create_oval(
-                self.point_r[0]-7, self.point_r[1]-7, self.point_r[0]+7, self.point_r[1]+7, fill="black")
             self.point_l = None
             self.point_r = None
             return
@@ -67,12 +79,13 @@ class MyApp1(tkinter.Frame):
 
         if (not node_info):
             print("ノード追加")
+            self.isNew_l = ''
             self.point_l = (event.x, event.y)
             self.last_create_point_l = self.canvas.create_oval(
                 event.x-5, event.y-5, event.x+5, event.y+5, fill="blue")
 
         else:
-            print("ノード既存", node_info["x"], node_info["y"])
+            self.isNew_l = node_info
             self.point_l = (node_info["x"], node_info["y"])
             self.last_create_point_l = self.canvas.create_oval(
                 node_info["x"]-5, node_info["y"]-5, node_info["x"]+5, node_info["y"]+5, fill="blue")
@@ -86,17 +99,18 @@ class MyApp1(tkinter.Frame):
 
         if (not node_info):
             print("ノード追加")
+            self.isNew_r = ''
             self.point_r = (event.x, event.y)
             self.last_create_point_r = self.canvas.create_oval(
                 event.x-5, event.y-5, event.x+5, event.y+5, fill="yellow")
 
         else:
             print("ノード既存", node_info["x"], node_info["y"])
+            self.isNew_r = node_info
             self.point_r = (node_info["x"], node_info["y"])
-            self.last_create_point_r = self.canvas.create_oval(
-                node_info["x"]-5, node_info["y"]-5, node_info["x"]+5, node_info["y"]+5, fill="yellow")
+            self.canvas.create_oval(node_info["x"]-5, node_info["y"]-5, node_info["x"]+5, node_info["y"]+5, fill="yellow")
 
-
+    
 def search_node(x, y):
     print("検索座標", x, y)
     cur.execute(f'''
@@ -149,6 +163,19 @@ def db_init():
         oneway       INTEGER
     )''')
 
+    cur.execute(f'''
+    CREATE TABLE IF NOT EXISTS road_tag_info(
+        tag_id TEXT,
+        cross_name_1 TEXT,
+        cross_name_2 TEXT
+    )''')
+
+    cur.execute('DELETE FROM cross_tag_info')
+    cur.execute('DELETE FROM cross_position')
+    cur.execute('DELETE FROM road_info')
+    cur.execute('DELETE FROM control')
+    cur.execute('DELETE FROM road_tag_info')
+        
 
 if __name__ == "__main__":
     conn = sqlite3.connect('./db/tmp.db', isolation_level=None)
