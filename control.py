@@ -1,12 +1,10 @@
 # 交差点で制御するプログラム
 
 import json
-import select
 import socket
 import sqlite3
 import sys
 import time
-from typing import Any
 from concurrent.futures import ThreadPoolExecutor
 import random
 
