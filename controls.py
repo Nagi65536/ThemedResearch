@@ -61,6 +61,9 @@ def client_passed(get_data):
     print(f'{get_data["car_id"]} > passed')
     print(f'【切断】 {get_data["car_id"]}')
 
+    with open(f'log/{start_time:3.3f}.log', 'a') as f:
+        f.writelines(f'{get_data["car_id"]} passed  {time.time() - start_time:3.2f}\n')
+
 
 def client_entry(data):
     conn = sqlite3.connect(f'./db/{DB_NAME}', isolation_level=None)
@@ -71,6 +74,10 @@ def client_entry(data):
     cur.execute(
         f'UPDATE control SET status="entry" WHERE car_id="{data[0]}"')
     print(f'{data[0]} < entry')
+    entry_times.append({'car_id': data[0], 'time': time.time()})
+
+    with open(f'log/{start_time:3.3f}.log', 'a') as f:
+        f.writelines(f'{data[0]}  entry   {time.time() - start_time:3.2f}\n')
 
 
 def client_connect(get_data):
@@ -82,9 +89,17 @@ def client_connect(get_data):
     sock.send(send_data)
     print(f'{get_data["car_id"]} < stop')
 
+    with open(f'log/{start_time:3.3f}.log', 'a') as f:
+        f.writelines(f'{get_data["car_id"]}  connect {time.time() - start_time:3.2f}\n')
+
 
 def communication(get_data) -> None:
     print('-----【処理開始】----------')
+
+    global start_time
+    if not start_time:
+        start_time = time.time()
+
     try:
         if get_data["status"] == 'connect':
             client_connect(get_data)
@@ -190,10 +205,7 @@ def control() -> None:
         crosses = set(crosses)
 
         for cross in crosses:
-            if sys.argv[1] == 'cl':
-                control_traffic_lights(cross)
-            else:
-                check_can_entry(cross)
+            control_traffic_lights(cross)
 
         time.sleep(PROCESS_DELAY)
 
@@ -221,5 +233,8 @@ if __name__ == '__main__':
     sock_sv.listen()
     sock, addr = sock_sv.accept()
     can_entry_origin = 0
+    start_time = None
+    entry_times = []
+    passed_times = []
 
     main()
