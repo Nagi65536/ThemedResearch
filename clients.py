@@ -8,10 +8,10 @@ import time
 
 clients = [
     # (前の車との遅延, 来る方向, 行き先, 通過時間)
-    (0, 1, 1, 3),
-    (1, 1, 1, 3),
-    (1, 1, 1, 3),
-    (1, 1, 1, 3),
+    (0, 2, 2, 3),
+    (1, 2, 2, 3),
+    (1, 1, 2, 3),
+    #(1, 3, 2, 3),
 ]
 PROCESS_DELAY = 0.1
 
@@ -39,14 +39,13 @@ def get_decode_data(data) -> dict:
 
 def communication(origin, destination, delay=-1) -> bool:
     dir_list = ['n', 'e', 's', 'w']
-    if origin > 4:
+    if origin > 3:
         origin_dir = random.choice(dir_list)
         tag_id = f'tag_{origin_dir}_connect_000_id'
 
     else:
-        i = int(origin) % 4
-        origin_dir = dir_list[i]
-        tag_id = f'tag_{dir_list[i]}_connect_000_id'
+        origin_dir = dir_list[origin]
+        tag_id = f'tag_{dir_list[origin]}_connect_000_id'
 
     if destination > 4:
         destination = random.randint(0, 3)

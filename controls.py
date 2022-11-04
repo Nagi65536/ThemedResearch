@@ -124,11 +124,16 @@ def control_traffic_lights(cross_name) -> None:
     control_data = cur.fetchall()
 
     global can_entry_origin
-    can_entry_origin += 1
-    tmp_can_entry_origin = math.floor((can_entry_origin / 20) % 2)
+    global control_counter
+    control_counter += 1
+
+    req_count = TRAFFIC_LIGHT_TIME[(can_entry_origin+1) % 4] / PROCESS_DELAY
+    if control_counter > req_count:
+        control_counter = 0
+        can_entry_origin = (can_entry_origin + 1) % 4
 
     for data in control_data:
-        if data[3] == tmp_can_entry_origin or data[3] == tmp_can_entry_origin+2:
+        if data[3] == can_entry_origin:
             client_entry(data)
 
 
