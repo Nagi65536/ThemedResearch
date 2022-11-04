@@ -1,5 +1,3 @@
-# 自動車側の仮のプログラム
-
 from concurrent.futures import ThreadPoolExecutor
 import json
 import random
@@ -10,10 +8,10 @@ import time
 
 clients = [
     # (前の車との遅延, 来る方向, 行き先, 通過時間)
-    (0, 0, 2, 3),
-    (1, 1, 2, 3),
-    (1, 2, 2, 3),
-    (1, 3, 2, 3),
+    (0, 5, 5, 3),
+    (1, 5, 5, 3),
+    (1, 5, 5, 3),
+    (1, 5, 5, 3),
 ]
 PROCESS_DELAY = 0.1
 
@@ -35,16 +33,20 @@ def get_decode_data(data) -> dict:
 
 
 def communication(origin, destination, delay=-1) -> bool:
-    if origin == 'r':
-        dir_list = ['n', 'e', 's', 'w']
-        tag_id = f'tag_{random.choice(dir_list)}_connect_000_id'
+    dir_list = ['n', 'e', 's', 'w']
+    if origin > 4:
+        origin_dir = random.choice(dir_list)
+        tag_id = f'tag_{origin_dir}_connect_000_id'
+
     else:
-        dir_list = ['n', 'e', 's', 'w']
         i = (int(origin) + int(destination)) % 4
+        origin_dir = dir_list[i]
         tag_id = f'tag_{dir_list[i]}_connect_000_id'
 
     if destination > 4:
         destination = random.randint(0, 3)
+
+    move_data = {'origin': origin_dir, 'destination': destination}
 
     try:
         global car_num
@@ -55,7 +57,7 @@ def communication(origin, destination, delay=-1) -> bool:
         send_data: bytes = get_encode_data(
             'connect', car_id, tag_id, destination)
         sock.send(send_data)
-        print(f'{car_id} < connect')
+        print(f'{car_id} < connect  [{move_data["origin"]} -> {move_data["destination"]}]')
 
         # 指示-受信
         get_data = None

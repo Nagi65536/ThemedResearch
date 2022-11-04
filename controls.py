@@ -14,7 +14,7 @@ DB_NAME = 'sub.db'
 PROCESS_DELAY = 0.1
 
 
-def get_encode_data(car_id, operate) -> bytes:
+def get_encode_data(car_id, operate) -> bytes: 
     data: dict = {'car_id': car_id, 'operate': operate}
     data_json: str = json.dumps(data)
     data_encode: bytes = data_json.encode('utf-8')
@@ -54,6 +54,9 @@ def add_db_control(data: dict) -> None:
     REPLACE INTO control VALUES (
         "{car_id}", "{cross_name}", "{tag_id}", {origin}, {destination}, "{status}", {time_}
     )''')
+    dest_list = ['n', 'e', 's', 'w']
+    with open(f'log/{start_time:3.3f}.log', 'a') as f:
+        f.writelines(f'{car_id} connect {time.time() - start_time:3.2f} [{dest_list[origin]} -> {destination}]\n')
 
 
 def client_passed(get_data):
@@ -77,7 +80,7 @@ def client_entry(data):
     entry_times.append({'car_id': data[0], 'time': time.time()})
 
     with open(f'log/{start_time:3.3f}.log', 'a') as f:
-        f.writelines(f'{data[0]}  entry   {time.time() - start_time:3.2f}\n')
+        f.writelines(f'{data[0]} entry   {time.time() - start_time:3.2f}\n')
 
 
 def client_connect(get_data):
@@ -88,9 +91,6 @@ def client_connect(get_data):
     send_data: bytes = get_encode_data(get_data["car_id"], 'stop')
     sock.send(send_data)
     print(f'{get_data["car_id"]} < stop')
-
-    with open(f'log/{start_time:3.3f}.log', 'a') as f:
-        f.writelines(f'{get_data["car_id"]}  connect {time.time() - start_time:3.2f}\n')
 
 
 def communication(get_data) -> None:
