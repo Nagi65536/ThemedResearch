@@ -12,9 +12,15 @@ import random
 
 DB_NAME = 'sub.db'
 PROCESS_DELAY = 0.1
+TRAFFIC_LIGHT_TIME = [10, 10, 10, 10]
 
 
-def get_encode_data(car_id, operate) -> bytes: 
+def add_log(log):
+    with open(f'log/{LOG_FILE}', 'a') as f:
+        f.writelines(log + '\n')
+
+
+def get_encode_data(car_id, operate) -> bytes:
     data: dict = {'car_id': car_id, 'operate': operate}
     data_json: str = json.dumps(data)
     data_encode: bytes = data_json.encode('utf-8')
@@ -55,8 +61,8 @@ def add_db_control(data: dict) -> None:
         "{car_id}", "{cross_name}", "{tag_id}", {origin}, {destination}, "{status}", {time_}
     )''')
     dest_list = ['n', 'e', 's', 'w']
-    with open(f'log/{start_time:3.3f}.log', 'a') as f:
-        f.writelines(f'{car_id} connect {time.time() - start_time:3.2f} [{dest_list[origin]} -> {destination}]\n')
+    add_log(
+        f'{car_id} connect {time.time() - start_time:3.2f} [{dest_list[origin]} -> {destination}]')
 
 
 def client_passed(get_data):
@@ -64,8 +70,7 @@ def client_passed(get_data):
     print(f'{get_data["car_id"]} > passed')
     print(f'【切断】 {get_data["car_id"]}')
 
-    with open(f'log/{start_time:3.3f}.log', 'a') as f:
-        f.writelines(f'{get_data["car_id"]} passed  {time.time() - start_time:3.2f}\n')
+    add_log(f'{get_data["car_id"]} passed  {time.time() - start_time:3.2f}')
 
 
 def client_entry(data):
@@ -79,8 +84,7 @@ def client_entry(data):
     print(f'{data[0]} < entry')
     entry_times.append({'car_id': data[0], 'time': time.time()})
 
-    with open(f'log/{start_time:3.3f}.log', 'a') as f:
-        f.writelines(f'{data[0]} entry   {time.time() - start_time:3.2f}\n')
+    add_log(f'{data[0]} entry   {time.time() - start_time:3.2f}')
 
 
 def client_connect(get_data):
@@ -205,7 +209,10 @@ def control() -> None:
         crosses = set(crosses)
 
         for cross in crosses:
-            control_traffic_lights(cross)
+            if len(arg) > 1 and arg[1] == 'tl':
+                control_traffic_lights(cross)
+            else:
+                check_can_entry(cross)
 
         time.sleep(PROCESS_DELAY)
 
@@ -223,18 +230,29 @@ if __name__ == '__main__':
     IPADDR: str = "127.0.0.1"
     PORT: int = random.randint(60000, 65535)
     indicate_data = []
+    LOG_FILE = None
+    arg = sys.argv
+
+    if len(arg) > 1 and arg[1] == 'tl':
+        LOG_FILE = 'traffic-light.log'
+    else:
+        LOG_FILE = 'timepri.log'
 
     with open('./memo/port_share.txt', 'w') as f:
         f.write(str(PORT))
+    with open('./memo/logfile_share.txt', 'w') as f:
+        f.write(LOG_FILE)
 
     print('⚡ control.py start')
     sock_sv: socket.socket = socket.socket(socket.AF_INET)
     sock_sv.bind((IPADDR, PORT))
     sock_sv.listen()
     sock, addr = sock_sv.accept()
+
+    control_counter = 0
     can_entry_origin = 0
+
     start_time = None
     entry_times = []
-    passed_times = []
 
     main()

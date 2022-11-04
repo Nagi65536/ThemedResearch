@@ -8,12 +8,17 @@ import time
 
 clients = [
     # (前の車との遅延, 来る方向, 行き先, 通過時間)
-    (0, 5, 5, 3),
-    (1, 5, 5, 3),
-    (1, 5, 5, 3),
-    (1, 5, 5, 3),
+    (0, 2, 2, 3),
+    (1, 2, 2, 3),
+    (1, 2, 2, 3),
+    (1, 2, 2, 3),
 ]
 PROCESS_DELAY = 0.1
+
+
+def add_log(log):
+    with open(f'log/{LOG_FILE}', 'a') as f:
+        f.writelines(log + '\n')
 
 
 def get_encode_data(status, car_id, tag_id, destination) -> bytes:
@@ -39,7 +44,7 @@ def communication(origin, destination, delay=-1) -> bool:
         tag_id = f'tag_{origin_dir}_connect_000_id'
 
     else:
-        i = (int(origin) + int(destination)) % 4
+        i = int(origin) % 4
         origin_dir = dir_list[i]
         tag_id = f'tag_{dir_list[i]}_connect_000_id'
 
@@ -57,7 +62,8 @@ def communication(origin, destination, delay=-1) -> bool:
         send_data: bytes = get_encode_data(
             'connect', car_id, tag_id, destination)
         sock.send(send_data)
-        print(f'{car_id} < connect  [{move_data["origin"]} -> {move_data["destination"]}]')
+        print(
+            f'{car_id} < connect  [{move_data["origin"]} -> {move_data["destination"]}]')
 
         # 指示-受信
         get_data = None
@@ -98,6 +104,8 @@ def distribute_recv_data():
 
 
 def main() -> None:
+    add_log(f'clients\n{clients}\n')
+
     with ThreadPoolExecutor() as executor:
         executor.submit(distribute_recv_data)
         start_time = time.time()
@@ -110,21 +118,27 @@ def main() -> None:
                 if len(clients) > i+1:
                     time.sleep(clients[i+1][0])
 
-        print()
-        print(f'経過時間 : {time.time() - start_time:.2f}s')
 
+        elapsed_time = f'経過時間 : {time.time() - start_time:.2f}'
+        print()
+        print(elapsed_time)
+        time.sleep(1)
+        add_log(f'\n{elapsed_time}\n\n')
 
 
 if __name__ == '__main__':
     IPADDR: str = "127.0.0.1"
     PORT: int = 0
+    LOG_FILE = None
 
     with open('./memo/port_share.txt', 'r') as f:
         PORT = int(f.read())
+    with open('./memo/logfile_share.txt', 'r') as f:
+        LOG_FILE = f.read()
 
     sock = socket.socket(socket.AF_INET)
     sock.connect((IPADDR, PORT))
-    
+
     car_num = 0
     recv_datum = {}
 
