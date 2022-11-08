@@ -128,7 +128,7 @@ def control_traffic_lights(cross_name) -> None:
     tmp_can_entry_origin = math.floor((can_entry_origin / 20) % 2)
 
     for data in control_data:
-        if data[3] == tmp_can_entry_origin or data[3] == tmp_can_entry_origin+2:
+        if data[3] == tmp_can_entry_origin or data[3] == (tmp_can_entry_origin+2)%4:
             client_entry(data)
 
 
