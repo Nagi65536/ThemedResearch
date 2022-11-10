@@ -58,7 +58,12 @@ def a_star(start: str, goal: str,  *disable_nodes: tuple):
 
         if now_node == goal:
             # 経路が見つかった場合
-            data = [(r, node_info[r][0]) for r in route_info[goal]]
+            data = []
+            tmp = 0
+            for r in route_info[goal]:
+                data.append((r, node_info[r][0]-tmp))
+                tmp = node_info[r][0]
+
             return data
 
 

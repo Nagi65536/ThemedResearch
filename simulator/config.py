@@ -3,7 +3,7 @@ import time
 
 
 # 車の速さ
-CAR_SPEED = 10
+CAR_SPEED = 50
 # 処理の遅延
 PROCESS_DELAY = 0.1
 # 交差点を通過するまでの時間
@@ -14,14 +14,18 @@ TRAFFIC_LIGHT_TIME = [10, 10, 10, 10]
 DB_PATH = '../db/simulator.db'
 # クライアントデータ　
 clients = [
+    {'start_time': 2, 'start_node': None, 'goal_node': None},
     {'start_time': 0, 'start_node': None, 'goal_node': None},
+    {'start_time': 1, 'start_node': None, 'goal_node': None},
 ]
 
 
 # 以下システム用
 
 start_time = None
+arrived_num = 0
 clients_data = {}
+is_stop_control = False
 
 
 class Communication():
@@ -75,7 +79,7 @@ class Communication():
         conn = sqlite3.connect(f'{DB_PATH}', isolation_level=None)
         cur = conn.cursor()
         self.passed_clients.append(car_id)
-        self.client_data.pop(car_id)
+        self.client_data[car_id]['data'].pop(0)
         cur.execute(f'DELETE FROM control WHERE car_id="{car_id}"')
         print(f'{car_id}: 通過')
 
@@ -85,3 +89,10 @@ class Communication():
             'data': data
         }
 
+    def get_client_data(self, car_id):
+        return self.client_data[car_id]['data']
+    
+    def get_next_cross_data(self, car_id):
+        return self.client_data[car_id]['data'][0]
+
+comms = Communication()

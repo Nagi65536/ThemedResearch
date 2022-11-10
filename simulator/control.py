@@ -22,40 +22,40 @@ def check_can_entry(cross_name):
         can_entry = True
 
         for you_data in entry_list:
-            if my_data[3] == you_data[3]:
+            if my_data[2] == you_data[2]:
                 can_entry = True
 
-            elif (my_data[3] + my_data[4]) % 4 == (you_data[3] + you_data[4]) % 4:
+            elif (my_data[2] + my_data[3]) % 4 == (you_data[2] + you_data[3]) % 4:
                 can_entry = False
 
-            elif my_data[4] == 1:
+            elif my_data[3] == 1:
                 can_entry = True
 
-            elif my_data[4] == 2:
+            elif my_data[3] == 2:
                 can_entry = True
-                my_left = (my_data[3] + 1) % 4
-                you_dest_dir = (you_data[3] + you_data[4]) % 4
+                my_left = (my_data[2] + 1) % 4
+                you_dest_dir = (you_data[2] + you_data[3]) % 4
 
-                if (you_data[3] == my_left) or (you_dest_dir == my_left):
+                if (you_data[2] == my_left) or (you_dest_dir == my_left):
                     can_entry = False
 
-            elif my_data[4] == 3:
+            elif my_data[3] == 3:
                 can_entry = False
 
-                judge_1 = you_data[3] == (my_data[3] + 1) % 4   # 相手が左から来るか
-                judge_2 = you_data[4] == (my_data[3] + 2) % 4   # 相手が前に行くか
+                judge_1 = you_data[2] == (my_data[2] + 1) % 4   # 相手が左から来るか
+                judge_2 = you_data[3] == (my_data[2] + 2) % 4   # 相手が前に行くか
                 if judge_1 and judge_2:
                     can_entry = True
 
-                judge_1 = you_data[3] == (my_data[3] + 2) % 4   # 相手が前から来るか
-                judge_2 = (you_data[3] + you_data[4]
-                           ) % 4 == (my_data[3] + 1) % 4   # 相手が左に行くか
+                judge_1 = you_data[2] == (my_data[2] + 2) % 4   # 相手が前から来るか
+                judge_2 = (you_data[2] + you_data[3]
+                           ) % 4 == (my_data[2] + 1) % 4   # 相手が左に行くか
                 if judge_1 and judge_2:
                     can_entry = True
 
-                judge_1 = you_data[3] == (my_data[3] + 3) % 4   # 相手が右から来るか
-                judge_2 = (you_data[3] + you_data[4]
-                           ) % 4 == my_data[3]   # 相手が自分側に行くか
+                judge_1 = you_data[2] == (my_data[2] + 3) % 4   # 相手が右から来るか
+                judge_2 = (you_data[2] + you_data[3]
+                           ) % 4 == my_data[2]   # 相手が自分側に行くか
                 if judge_1 and judge_2:
                     can_entry = True
 
@@ -75,6 +75,8 @@ def control():
     cur.execute('DELETE FROM control')
 
     while True:
+        if cf.is_stop_control:
+            break
         cur.execute('SELECT cross FROM control')
         crosses = [c[0] for c in cur.fetchall()]
         crosses = set(crosses)
