@@ -1,41 +1,35 @@
+import time
+
 import config as cf
+from astar import a_star
 
 
-def communication(car_id, start_node, goal_node, delay=-1) -> bool:
-    try:
-        # 接続報告-送信
-        send_data: bytes = get_encode_data(
-            'connect', car_id, tag_id, destination)
-        sock.send(send_data)
+def communicate(car_id, start_node, goal_node, delay=-1):
+    print(f'{car_id}: 探索 {start_node} -> {goal_node}')
+    data = a_star(start_node, goal_node)
+    comms.add_client_data(car_id, data)
 
-        # 指示-受信
-        get_data = None
-        while not get_data:
-            if car_id in recv_datum:
-                get_data = recv_datum.pop(car_id)
-            time.sleep(PROCESS_DELAY)
+    if data and len(data) >= 3:
+        comms.add_connect(car_id)
+    else:
+        print(f'{car_id}: 目的地到着')
 
-        print(f'{car_id} > {get_data["operate"]}')
 
-        if get_data['operate'] == 'stop':
-            # 進入指示-受信
-            get_data = None
-            while not get_data:
-                if car_id in recv_datum:
-                    get_data = recv_datum.pop(car_id)
-                time.sleep(PROCESS_DELAY)
-            print(f'{car_id} > {get_data["operate"]}')
+def cross_process(car_id):
+    # 交差点進入
+    comms.add_entry(car_id)
+    time.sleep(cf.CAR_PASSED_TIME)
 
-        print(f'{car_id} 通過中')
-        time.sleep(delay)
+    # 交差点通過
+    comms.add_passed(car_id)
+    data = comms.get_client_data(car_id)
+    print('data', data)
 
-        # 通過済報告-送信
-        send_data: bytes = get_encode_data(
-            'passed', car_id, 'tag_s_passed_000_id', destination)
-        sock.send(send_data)
-        print(f'{car_id} < passed')
+    wait_time = data['data'][0][1] / cf.CAR_SPEED
+    print(wait_time)
+    time.sleep(wait_time)
 
-        return True
-    except:
-        print('【ERROR】')
-        return False
+    if len(comms[car_id]['data']) >= 3:
+        comms.add_connect(car_id)
+    else:
+        print(f'{car_id}: 目的地到着')

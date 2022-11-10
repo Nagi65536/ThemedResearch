@@ -1,29 +1,12 @@
 from cmath import sqrt
 import sqlite3
 
-
-dbname = "./db/sub.db"    # TODO
-conn = sqlite3.connect(dbname, isolation_level=None)
-cur = conn.cursor()
-
-
-def between(tag_id, isStart):
-    cur.execute(
-        f"SELECT cross_name_1,cross_name_2 FROM road_tag_info WHERE tag_id = '{tag_id}' ")
-    between_cross = cur.fetchone()
-
-    cross_name = ""
-    if between_cross:
-        if isStart:
-            cross_name = between_cross[0]
-        else:
-            cross_name = between_cross[1]
-    else:
-        cross_name = tag_id
-    return cross_name
+import config as cf
 
 
 def a_star(start: str, goal: str,  *disable_nodes: tuple):
+    conn = sqlite3.connect(cf.DB_PATH, isolation_level=None)
+    cur = conn.cursor()
     disable_nodes = [d for d in disable_nodes]
     now_node = start    # 探索中のノード
     node_info = {start: [0, 0]}  # 各ノードの実際の距離とコスト
@@ -31,11 +14,11 @@ def a_star(start: str, goal: str,  *disable_nodes: tuple):
 
     while True:
         cur.execute(
-            f"SELECT * FROM road_info WHERE cross_name_2 = '{now_node}' AND oneway != 1")
+            f"SELECT * FROM road_info WHERE cross_2 = '{now_node}' AND oneway != 1")
         connect_node_info = [(c[0], c[2]) for c in cur.fetchall()]
 
         cur.execute(
-            f"SELECT * FROM road_info WHERE cross_name_1 = '{now_node}' AND oneway != 2")
+            f"SELECT * FROM road_info WHERE cross_1 = '{now_node}' AND oneway != 2")
         connect_node_info += [(c[1], c[2]) for c in cur.fetchall()]
         # now_nodeから移動可能なタグをconnect_node_infoとして格納
 
@@ -46,9 +29,7 @@ def a_star(start: str, goal: str,  *disable_nodes: tuple):
                 continue
 
             # cost = 実際の距離 + ゴールとの直線距離
-            print("hello")
             dist = node_info[now_node][0] + cn[1]
-            print("hello2")
             cost = euclid(cn[0], goal) + dist
             have_connect_node = True
 
@@ -65,7 +46,7 @@ def a_star(start: str, goal: str,  *disable_nodes: tuple):
             return None
 
         disable_nodes.append(now_node)
-        node_info.pop(now_node)
+        # node_info.pop(now_node)
         route_info.pop(now_node)
 
         # 次の now_node の適任を探す
@@ -77,12 +58,15 @@ def a_star(start: str, goal: str,  *disable_nodes: tuple):
 
         if now_node == goal:
             # 経路が見つかった場合
-            return route_info[goal]
+            data = [(r, node_info[r][0]) for r in route_info[goal]]
+            return data
 
 
 def euclid(cross_name, goal_name):
+    conn = sqlite3.connect(cf.DB_PATH, isolation_level=None)
+    cur = conn.cursor()
     cur.execute(
-        f"SELECT * FROM cross_position WHERE cross_name = '{cross_name}' OR cross_name = '{goal_name}'")
+        f"SELECT * FROM cross_position WHERE cross = '{cross_name}' OR cross = '{goal_name}'")
     node_info = cur.fetchall()
 
     if len(node_info) == 1:
@@ -93,18 +77,6 @@ def euclid(cross_name, goal_name):
     dist = abs(sqrt(dist_x + dist_y))
 
     return round(dist, 2)
-
-
-def main(start_tag, goal_tag, *disable_nodes: tuple):
-    start_cross = between(start_tag, True)
-    goal_cross = between(goal_tag, False)
-
-    print(start_cross)
-    print(goal_cross)
-    if start_cross and goal_cross:
-        return a_star(start_cross, goal_cross, *disable_nodes)
-    else:
-        return ["err"]
 
 
 if __name__ == '__main__':

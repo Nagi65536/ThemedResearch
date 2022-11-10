@@ -28,10 +28,12 @@ def observer():
     Button.button_state = 1  # =>buttonの状態が変化
 
 
-import random
 if __name__ == "__main__":
-    a = [1,2,3]
-    b = random.choice(a)
-    print(b)
-    print(a.remove(b))
-    print(a)
+    print([i for i in range(1,7)])
+    # dict_ = [[0, 'a'], [1, 'b'], [2, 'c']]
+    # print([{'p':d[0], 'q':d[1]} for d in dict_])
+    # a = [1,2,3]
+    # b = random.choice(a)
+    # print(b)
+    # print(a.remove(b))
+    # print(a)
