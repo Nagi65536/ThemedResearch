@@ -120,6 +120,13 @@ def db_init():
     )''')
 
     cur.execute(f'''
+    CREATE TABLE IF NOT EXISTS cross_schedule(
+        car_id TEXT,
+        cross  TEXT,
+        time   REAL
+    )''')
+
+    cur.execute(f'''
     CREATE TABLE IF NOT EXISTS cross_position(
         cross TEXT  PRIMARY KEY,
         x          REAL,
@@ -133,9 +140,10 @@ def db_init():
         dist         REAL,
         direction    INTEGER,
         oneway       INTEGER
-    )''')  # direction １からみて２がどの方角にあるか
+    )''')
 
     cur.execute('DELETE FROM control')
+    cur.execute('DELETE FROM cross_schedule')
     cur.execute('DELETE FROM cross_position')
     cur.execute('DELETE FROM road_info')
 

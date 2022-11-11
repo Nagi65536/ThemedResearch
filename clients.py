@@ -98,9 +98,17 @@ def communication(origin, destination, delay=-1) -> bool:
 
 
 def distribute_recv_data():
+    global is_finished
     while True:
+        sock.settimeout(1)
         get_data = get_decode_data(sock.recv(1024))
-        recv_datum[get_data['car_id']] = get_data
+
+        if get_data:
+            recv_datum[get_data['car_id']] = get_data
+        else:
+            print(is_finished)
+            if is_finished:
+                break
 
 
 def main() -> None:
@@ -124,6 +132,8 @@ def main() -> None:
         print(elapsed_time)
         time.sleep(1)
         add_log(f'\n{elapsed_time}\n\n')
+        global is_finished
+        is_finished = True
 
 
 if __name__ == '__main__':
@@ -142,5 +152,6 @@ if __name__ == '__main__':
     car_num = 0
     recv_datum = {}
 
+    is_finished = False
     print('⚡ clients.py start')
     main()

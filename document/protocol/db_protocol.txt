@@ -1,33 +1,43 @@
 --------テーブル構成-------
 
 テーブル名 : cross_tag_info
-要素 : tag_id, tag_name, cross_name, status, direction
+要素 : tag_id, tag_name, cross, status, direction
 説明 : タグのIDと名前および所属交差点名、タグの役割、方角を保存
 （タグid, タグ名, 所属交差点名, タグの役割, タグのある方角）
 
 
 テーブル名 : road_tag_info
-要素 : tag_id, cross_name_1, cross_name_2
+要素 : tag_id, cross_1, cross_2
 説明 : 交差点間のタグから接続する交差点
 （タグID, 行き先の交差点名, 来し方の交差点名）
 
 
 テーブル名 : cross_position
-要素 : cross_name, x, y
+要素 : cross, x, y
 説明 : 交差点の座標保存
 （交差点名, x座標, y座標）
 
 
 テーブル名 : road_info
-要素 : cross_name_1, cross_name_2, dist, oneway
+要素 : cross_1, cross_2, dist, oneway
 説明 : 交差点間の距離と通行方向
 （交差点名1, 交差点名2, 距離, 通行方向）
 
 
 テーブル名 : control
-要素 : car_id, cross_name, tag_id, origin, destination, status, time
+要素 : car_id, cross, tag_id, origin, destination, status, time
 説明 : 交差点での車の状態管理
-（交差点名, 車ID, 接続したタグID, 来し方, 行き先, 車の状態, 時間） 
+（車ID, 交差点名, 接続したタグID, 来し方, 行き先, 車の状態, 時間） 
+
+要素 : car_id, cross, origin, destination, status, time
+説明 : 交差点での車の状態管理
+（車ID, 交差点名, 来し方, 行き先, 車の状態, 時間） 
+
+
+テーブル名 : cross_schedule
+要素 : car_id, cross, time
+説明 : 交差点に来る予定の車のデータ
+（車ID, 交差点名, 予定時間） 
 
 
 --------規則一覧--------
@@ -61,7 +71,7 @@
     entry   : 進入中
     passed  : 通過済
 
-[交差点名] cross_name
+[交差点名] cross
 cross_(nnn)
 
 [タグ名] tag_name

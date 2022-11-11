@@ -5,20 +5,22 @@ import time
 # 処理の遅延
 PROCESS_DELAY = 0.1
 # 車の速さ
-CAR_SPEED = 50
+CAR_SPEED = 10
+# 交差点混雑度を検索する時間範囲
+CHECK_CONGESTION_RANGE = (-6, 3)
 # 前方の車1台あたりの遅延
 ENTRY_DELAY = 0.5
 # 交差点を通過するまでの時間
 CAR_PASSED_TIME = 5
 # 信号機の時間
-TRAFFIC_LIGHT_TIME = [10, 10, 10, 10]
+TRAFFIC_LIGHT_TIME = (10, 10, 10, 10)
 # データベースのパス
 DB_PATH = '../db/simulator.db'
 # クライアントの時間差をランダムにした時の範囲
 time_range = (0, 10)
 # クライアントデータ　
 clients = [
-    # 前の車との出発時間の差
+    # 前の車との出発時間の差, スタート位置, ゴール位置
     {'time': 0, 'start_node': None, 'goal_node': None},
     {'time': 0, 'start_node': None, 'goal_node': None},
     {'time': 0, 'start_node': None, 'goal_node': None},
