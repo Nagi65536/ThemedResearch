@@ -80,6 +80,7 @@ def control():
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
     cur.execute('DELETE FROM control')
+    cur.execute('DELETE FROM cross_schedule')
 
     while True:
         if cf.is_stop_control:

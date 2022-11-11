@@ -1,3 +1,4 @@
+import sqlite3
 import time
 
 import config as cf
@@ -10,9 +11,11 @@ def communicate(car_id, start_node, goal_node, delay=-1):
 
     while True:
         data = a_star(start_node, goal_node)
+        print(f'経路: {[d[0] for d in data]}')
         if data and len(data) < 3:
             break
         congestion = congestion_check(car_id, data)
+        print('kore', congestion)
         if not congestion:
             break
 
@@ -33,78 +36,77 @@ def congestion_check(car_id, data):
 
     congestion = False
     cross_delay = 0
-
     for node in data:
         arrival_time = time.time() + node[1]/cf.CAR_SPEED + cross_delay
         cur.execute(f'''
         INSERT INTO cross_schedule VALUES (
             "{car_id}", "{node[0]}", "{arrival_time}"
         )''')
-
         cur.execute(f'''
         SELECT * FROM cross_schedule WHERE 
-        cross="{node[0]}" AND
-        time BETWEEN 
-        {arrival_time + CHECK_CONGESTION_RANGE[0]} 
-        {arrival_time + {arrival_time + CHECK_CONGESTION_RANGE[0]}}
+        cross="{node[0]}" AND 
+        time BETWEEN {arrival_time + cf.CHECK_CONGESTION_RANGE[0]} AND
+        {arrival_time + arrival_time + cf.CHECK_CONGESTION_RANGE[1]}
         ''')
         cross_situation = cur.fetchall()
 
-        for my_data in check_list:
-            congestion = decide_can_entry(car_id, cross_situation)
+        for my_data in cross_situation:
+            conflict_num = decide_can_entry(my_data, cross_situation)
 
-            if congestion:
-                break
+            if conflict_num > cf.CONFLICT_NUM:
+                return node[0]
+
+    return None
 
 
 def decide_can_entry(my_data, entry_list):
-    for my_data in check_list:
-        can_entry = True
-        for you_data in entry_list:
-            if my_data[2] == you_data[2]:
-                can_entry = True
+    can_entry = True
+    conflict_num = 0
+    for you_data in entry_list:
+        if my_data[2] == you_data[2]:
+            can_entry
 
-            elif (my_data[2] + my_data[3]) % 4 == (you_data[2] + you_data[3]) % 4:
+        elif (my_data[2] + my_data[3]) % 4 == (you_data[2] + you_data[3]) % 4:
+            can_entry = False
+
+        elif my_data[3] == 1:
+            can_entry = True
+
+        elif my_data[3] == 2:
+            can_entry = True
+            my_left = (my_data[2] + 1) % 4
+            you_dest_dir = (you_data[2] + you_data[3]) % 4
+
+            if (you_data[2] == my_left) or (you_dest_dir == my_left):
                 can_entry = False
 
-            elif my_data[3] == 1:
+        elif my_data[3] == 3:
+            can_entry = False
+
+            judge_1 = you_data[2] == (my_data[2] + 1) % 4   # 相手が左から来るか
+            judge_2 = you_data[3] == (my_data[2] + 2) % 4   # 相手が前に行くか
+            if judge_1 and judge_2:
                 can_entry = True
 
-            elif my_data[3] == 2:
+            judge_1 = you_data[2] == (my_data[2] + 2) % 4   # 相手が前から来るか
+            judge_2 = (you_data[2] + you_data[3]
+                       ) % 4 == (my_data[2] + 1) % 4   # 相手が左に行くか
+            if judge_1 and judge_2:
                 can_entry = True
-                my_left = (my_data[2] + 1) % 4
-                you_dest_dir = (you_data[2] + you_data[3]) % 4
 
-                if (you_data[2] == my_left) or (you_dest_dir == my_left):
-                    can_entry = False
+            judge_1 = you_data[2] == (my_data[2] + 3) % 4   # 相手が右から来るか
+            judge_2 = (you_data[2] + you_data[3]
+                       ) % 4 == my_data[2]   # 相手が自分側に行くか
+            if judge_1 and judge_2:
+                can_entry = True
 
-            elif my_data[3] == 3:
-                can_entry = False
+        else:
+            print(f'{my_data[0]}: 未実装だわぼけ！ {my_data}')
 
-                judge_1 = you_data[2] == (my_data[2] + 1) % 4   # 相手が左から来るか
-                judge_2 = you_data[3] == (my_data[2] + 2) % 4   # 相手が前に行くか
-                if judge_1 and judge_2:
-                    can_entry = True
+        if can_entry:
+            conflict_num += 1
 
-                judge_1 = you_data[2] == (my_data[2] + 2) % 4   # 相手が前から来るか
-                judge_2 = (you_data[2] + you_data[3]
-                            ) % 4 == (my_data[2] + 1) % 4   # 相手が左に行くか
-                if judge_1 and judge_2:
-                    can_entry = True
-
-                judge_1 = you_data[2] == (my_data[2] + 3) % 4   # 相手が右から来るか
-                judge_2 = (you_data[2] + you_data[3]
-                            ) % 4 == my_data[2]   # 相手が自分側に行くか
-                if judge_1 and judge_2:
-                    can_entry = True
-
-            else:
-                print(f'{my_data[0]}: 未実装だわぼけ！ {my_data}')
-
-            if not can_entry:
-                break
-
-        return can_entry
+    return conflict_num
 
 
 def cross_process(car_id, front_cars=0):
