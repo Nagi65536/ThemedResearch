@@ -19,7 +19,9 @@ def communicate(car_id, start_node, goal_node, delay=-1):
             cf.is_stop_control = True
 
 
-def cross_process(car_id):
+def cross_process(car_id, front_cars=0):
+    time.sleep(front_cars * cf.ENTRY_DELAY)
+
     # 交差点進入
     comms.add_entry(car_id)
     time.sleep(cf.CAR_PASSED_TIME)
@@ -28,7 +30,7 @@ def cross_process(car_id):
     comms.add_passed(car_id)
     dist = comms.get_next_cross_data(car_id)[1]
     wait_time = dist / cf.CAR_SPEED
-    print(f'{car_id}: 移動 {wait_time}')
+    print(f'{car_id}: 移動 {wait_time:3.3}')
     time.sleep(wait_time)
 
     if len(comms.get_client_data(car_id)) >= 3:

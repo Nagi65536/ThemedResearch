@@ -19,16 +19,14 @@ def clients_init():
 
     for i, client in enumerate(cf.clients):
         tmp_node_list = copy.deepcopy(node_list)
-        if client['start_time'] == None:
-            client['start_time'] = random.randint(0, 10)
+        if client['time'] == None:
+            client['time'] = random.randint(cf.time_range[0], cf.time_range[1])
         if not client['start_node']:
             client['start_node'] = random.choice(tmp_node_list)
             tmp_node_list.remove(client['start_node'])
         if not client['goal_node']:
             client['goal_node'] = random.choice(tmp_node_list)
         cf.clients[i] = client
-
-    cf.clients = sorted(cf.clients, key=lambda x: x['start_time'])
 
 
 def main():
@@ -49,11 +47,11 @@ def main():
 
             # 次の車の発車時間まで待機
             if len(cf.clients) > i+1:
-                time.sleep(
-                    cf.clients[i+1]['start_time'] - client['start_time'])
+                time.sleep(cf.clients[i]['time'])
         
         future.result()
-        print('fin')
+        print()
+        print(f'経過時間 {time.time() - cf.start_time}')
                 
 
 if __name__ == '__main__':

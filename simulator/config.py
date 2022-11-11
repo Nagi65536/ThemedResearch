@@ -2,21 +2,34 @@ import sqlite3
 import time
 
 
-# 車の速さ
-CAR_SPEED = 50
 # 処理の遅延
 PROCESS_DELAY = 0.1
+# 車の速さ
+CAR_SPEED = 50
+# 前方の車1台あたりの遅延
+ENTRY_DELAY = 0.5
 # 交差点を通過するまでの時間
-CAR_PASSED_TIME = 2
+CAR_PASSED_TIME = 5
 # 信号機の時間
 TRAFFIC_LIGHT_TIME = [10, 10, 10, 10]
 # データベースのパス
 DB_PATH = '../db/simulator.db'
+# クライアントの時間差をランダムにした時の範囲
+time_range = (0, 10)
 # クライアントデータ　
 clients = [
-    {'start_time': 2, 'start_node': None, 'goal_node': None},
-    {'start_time': 0, 'start_node': None, 'goal_node': None},
-    {'start_time': 1, 'start_node': None, 'goal_node': None},
+    # 前の車との出発時間の差
+    {'time': 0, 'start_node': None, 'goal_node': None},
+    {'time': 0, 'start_node': None, 'goal_node': None},
+    {'time': 0, 'start_node': None, 'goal_node': None},
+    {'time': 0, 'start_node': None, 'goal_node': None},
+    {'time': 0, 'start_node': None, 'goal_node': None},
+    {'time': 0, 'start_node': None, 'goal_node': None},
+    {'time': 0, 'start_node': None, 'goal_node': None},
+    {'time': 0, 'start_node': None, 'goal_node': None},
+    {'time': 0, 'start_node': None, 'goal_node': None},
+    {'time': 0, 'start_node': None, 'goal_node': None},
+    {'time': 0, 'start_node': None, 'goal_node': None},
 ]
 
 
@@ -59,7 +72,6 @@ class Communication():
             WHERE cross_1="{now_cross}" AND cross_2="{dest_cross}"
         ''')
         dest = cur.fetchone()[0]
-
         cur.execute(f'''
             REPLACE INTO control VALUES (
             "{car_id}", "{now_cross}", {origin}, {dest}, "connect", {time.time()-start_time}
