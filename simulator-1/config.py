@@ -28,13 +28,9 @@ clients = [
 OUTPUT_SETTING = {
     '信号': True,
     '開始': False,
-    '探索': False,
-    '経路': False,
-    '回避': False,
     '接続': True,
     '進入': True,
     '通過': True,
-    '移動': False,
     '到着': True,
 }
 
