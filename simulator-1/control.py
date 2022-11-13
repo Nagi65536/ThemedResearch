@@ -46,7 +46,8 @@ def decide_can_entry(my_data, check_list):
                 can_entry = True
 
         else:
-            print(f'{my_data[0]}: 未実装だわぼけ！ {my_data[1]}-{my_data[2]} {you_data[1]}-{you_data[2]}')
+            print(
+                f'{my_data[0]}: 未実装だわぼけ！ {my_data[1]}-{my_data[2]} {you_data[1]}-{you_data[2]}')
 
         if not can_entry:
             break
@@ -83,7 +84,8 @@ def control_traffic_light():
         if time_1 >= time_2:
             cf.blue_traffic_light = (cf.blue_traffic_light + 1) % 2
             cf.is_yellow = False
-            print(f'信号: 青 {cf.blue_traffic_light} {cf.blue_traffic_light+2}')
+            cf.cprint(
+                '', '信号', f'青 ({cf.blue_traffic_light}, {cf.blue_traffic_light+2})')
         else:
             return
     # 信号が黄色ではないとき
@@ -93,7 +95,7 @@ def control_traffic_light():
         if time_1 >= time_2:
             cf.switch_traffic_light_time = time.time()
             cf.is_yellow = True
-            print(f'信号: 黄')
+            cf.cprint('', '信号', '黄')
 
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
@@ -129,7 +131,6 @@ def control():
     cur = conn.cursor()
     cur.execute('DELETE FROM control')
     cf.switch_traffic_light_time = time.time()
-    print(f'信号: 青 {cf.blue_traffic_light} {cf.blue_traffic_light+2}')
 
     while True:
         if cf.is_stop_control:

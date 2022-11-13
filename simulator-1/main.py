@@ -11,16 +11,14 @@ import config as cf
 
 def log_init():
     with open(cf.LOG_FILE_PATH, 'a') as f:
-        f.write(f'''PROCESS_DELAY: {cf.PROCESS_DELAY}
-CAR_SPEED    : {cf.CAR_SPEED}
-CHECK_CONGESTION_RANGE: {cf.CHECK_CONGESTION_RANGE}
-CONFLICT_NUM : {cf.CONFLICT_NUM}
-ARRIVAL_DELAY: {cf.ARRIVAL_DELAY}
-ENTRY_DELAY  : {cf.ENTRY_DELAY}
-CAR_PASSED_TIME   : {cf.CAR_PASSED_TIME}
-TRAFFIC_LIGHT_TIME: {cf.TRAFFIC_LIGHT_TIME}
-TIME_RANDOM_RANGE : {cf.TIME_RANDOM_RANGE}
-''')
+        mode = 'TL' if len(cf.args) > 1 and cf.args[1] == 'tl' else 'NEW'
+        f.write(f'----  ---\n\
+        PROCESS_DELAY: {cf.PROCESS_DELAY}\n\
+        ENTRY_DELAY  : {cf.ENTRY_DELAY}\n\
+        CAR_PASSED_TIME: {cf.CAR_PASSED_TIME}\n\
+        TRAFFIC_LIGHT_TIME: {cf.TRAFFIC_LIGHT_TIME}\n\
+        TRAFFIC_LIGHT_TIME_YELLOW: {cf.TRAFFIC_LIGHT_TIME_YELLOW}\n\
+        DELAY_RANGE : {cf.DELAY_RANGE}\n')
         f.write('clients\n')
         f.write(str(cf.clients).replace("},", "},\n"))
         f.write('\n\n')
@@ -51,6 +49,11 @@ def main():
         future = executor.submit(cr.control)
 
         for i, client in enumerate(cf.clients):
+            cf.cprint(
+                car_id,
+                '開始',
+                f'{(time.time()-cf.start_time):.3} s  {client["start"]}->{client["goal"]}'
+            )
             # 車の接続開
             car_id = f'car_{str(i).zfill(3)}'
             start = client['start']
@@ -65,6 +68,8 @@ def main():
         future.result()
         print()
         print(f'経過時間 {time.time() - cf.start_time}')
+        with open(cf.LOG_FILE_PATH, 'a') as f:
+            f.write(f'\n経過時間 {(time.time() - cf.start_time):.3} s\n\n\n')
 
 
 if __name__ == '__main__':

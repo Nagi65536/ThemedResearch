@@ -18,15 +18,15 @@ CONFLICT_NUM = 5
 # 交差点到着予定時間を出す上での1台あたりの遅延
 ARRIVAL_DELAY = 0.5
 # 前方の車1台あたりの遅延
-ENTRY_DELAY = 0.5
+ENTRY_DELAY = 0.2
 # 交差点を通過するまでの時間
-CAR_PASSED_TIME = 5
+CAR_PASSED_TIME = 2
 # 信号機の時間
 TRAFFIC_LIGHT_TIME = (10, 10, 10, 10)
 # 黄色信号の時間
 TRAFFIC_LIGHT_TIME_YELLOW = 2
 # クライアントの時間差をランダムにした時の範囲
-TIME_RANDOM_RANGE = (0, 10)
+TIME_RANDOM_RANGE = (0, 5)
 # クライアントデータ　
 clients = [
     # 前の車との出発時間の差, スタート位置, ゴール位置
