@@ -9,6 +9,23 @@ import control as cr
 import config as cf
 
 
+def log_init():
+    with open(cf.LOG_FILE_PATH, 'a') as f:
+        f.write(f'''PROCESS_DELAY: {cf.PROCESS_DELAY}
+CAR_SPEED    : {cf.CAR_SPEED}
+CHECK_CONGESTION_RANGE: {cf.CHECK_CONGESTION_RANGE}
+CONFLICT_NUM : {cf.CONFLICT_NUM}
+ARRIVAL_DELAY: {cf.ARRIVAL_DELAY}
+ENTRY_DELAY  : {cf.ENTRY_DELAY}
+CAR_PASSED_TIME   : {cf.CAR_PASSED_TIME}
+TRAFFIC_LIGHT_TIME: {cf.TRAFFIC_LIGHT_TIME}
+TIME_RANDOM_RANGE : {cf.TIME_RANDOM_RANGE}
+''')
+        f.write('clients\n')
+        f.write(str(cf.clients).replace("},", "},\n"))
+        f.write('\n\n')
+
+
 def clients_init():
     global clients, start_time
 
@@ -43,7 +60,7 @@ def main():
 
             # 次の車の発車時間まで待機
             if len(cf.clients) > i+1:
-                time.sleep(cf.clients[i]['delay'])
+                time.sleep(cf.clients[i+1]['delay'])
 
         future.result()
         print()

@@ -7,25 +7,27 @@ from astar import a_star
 
 
 def communicate(car_id, start_node, goal_node, delay=-1):
-    print(f'{car_id}: 探索 {start_node} -> {goal_node}')
+    cf.cprint(car_id, '探索', f'{start_node} -> {goal_node}')
+    disable_node = []
 
     while True:
-        data = a_star(start_node, goal_node)
-        print(f'経路: {[d[0] for d in data]}')
+        data = a_star(start_node, goal_node, disable_node)
+        cf.cprint(car_id, '経路', f'{[d[0] for d in data]}')
         if data and len(data) < 3:
             break
-        congestion = congestion_check(car_id, data)
-        print('kore', congestion)
-        if not congestion:
+        congestion_node = congestion_check(car_id, data)
+        if not congestion_node:
             break
+        disable_node.append(congestion_node)
+        cf.cprint(car_id, '回避', disable_node)
 
     comms.add_client_data(car_id, data)
 
     if data and len(data) >= 3:
         comms.add_connect(car_id)
     else:
-        print(f'{car_id}: 目的地到着')
         cf.arrived_num += 1
+        cf.cprint(car_id, '到着', cf.arrived_num)
         if cf.arrived_num >= len(obj)(cf.clients):
             cf.is_stop_control = True
 
@@ -36,35 +38,61 @@ def congestion_check(car_id, data):
 
     congestion = False
     cross_delay = 0
-    for node in data:
+    for i, node in enumerate(data[1:-1]):
         arrival_time = time.time() + node[1]/cf.CAR_SPEED + cross_delay
+
+        # 来る方角取得
+        cur.execute(f'''
+        SELECT direction FROM road_info WHERE
+        cross_1="{data[i+1][0]}" AND
+        cross_2="{data[i][0]}"
+        ''')
+        origin = cur.fetchone()[0]
+
+        # 進行方向取得
+        cur.execute(f'''
+        SELECT direction FROM road_info WHERE
+        cross_1="{data[i+1][0]}" AND
+        cross_2="{data[i+2][0]}"
+        ''')
+        dest = (cur.fetchone()[0] + 4 - origin) % 4
+
+        # 予定登録
         cur.execute(f'''
         INSERT INTO cross_schedule VALUES (
-            "{car_id}", "{node[0]}", "{arrival_time}"
+            "{car_id}", "{node[0]}", "{origin}", "{dest}", {arrival_time}
         )''')
+
+        # 混雑度計算用データ取得
         cur.execute(f'''
-        SELECT * FROM cross_schedule WHERE 
-        cross="{node[0]}" AND 
+        SELECT * FROM cross_schedule WHERE
+        cross="{node[0]}" AND
         time BETWEEN {arrival_time + cf.CHECK_CONGESTION_RANGE[0]} AND
         {arrival_time + arrival_time + cf.CHECK_CONGESTION_RANGE[1]}
         ''')
-        cross_situation = cur.fetchall()
+        cross_data = cur.fetchall()
 
-        for my_data in cross_situation:
-            conflict_num = decide_can_entry(my_data, cross_situation)
+        # 混雑か判断
+        my_data = (car_id, node[0], origin, dest, arrival_time)
+        is_conflict = decide_is_conflict(my_data, cross_data)
 
-            if conflict_num > cf.CONFLICT_NUM:
-                return node[0]
+        if is_conflict:
+            cur.execute(f'DELETE FROM cross_schedule WHERE car_id="{car_id}"')
+            return node[0]
 
     return None
 
 
-def decide_can_entry(my_data, entry_list):
+def decide_is_conflict(my_data, cross_data):
     can_entry = True
+    is_conflict = False
     conflict_num = 0
-    for you_data in entry_list:
+    car_num = [0, 0, 0, 0]
+
+    for you_data in cross_data:
+        car_num[you_data[2]] += 1
         if my_data[2] == you_data[2]:
-            can_entry
+            can_entry = True
 
         elif (my_data[2] + my_data[3]) % 4 == (you_data[2] + you_data[3]) % 4:
             can_entry = False
@@ -106,27 +134,31 @@ def decide_can_entry(my_data, entry_list):
         if can_entry:
             conflict_num += 1
 
-    return conflict_num
+    if conflict_num > cf.CONFLICT_NUM:
+        is_conflict = True
+    elif car_num[my_data[2]] > cf.CONFLICT_NUM:
+        is_conflict = True
+
+    return is_conflict
 
 
 def cross_process(car_id, front_cars=0):
-    time.sleep(front_cars * cf.ENTRY_DELAY)
-
     # 交差点進入
     comms.add_entry(car_id)
+    time.sleep(front_cars * cf.ENTRY_DELAY)
     time.sleep(cf.CAR_PASSED_TIME)
 
     # 交差点通過
     comms.add_passed(car_id)
     dist = comms.get_next_cross_data(car_id)[1]
     wait_time = dist / cf.CAR_SPEED
-    print(f'{car_id}: 移動 {wait_time:3.3}')
+    cf.cprint(car_id, '移動', f'{wait_time:3.3}s')
     time.sleep(wait_time)
 
     if len(comms.get_client_data(car_id)) >= 3:
         comms.add_connect(car_id)
     else:
-        print(f'{car_id}: 目的地到着')
         cf.arrived_num += 1
+        cf.cprint(car_id, '到着', cf.arrived_num)
         if cf.arrived_num >= len(cf.clients):
             cf.is_stop_control = True

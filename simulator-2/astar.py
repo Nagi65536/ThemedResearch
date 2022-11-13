@@ -4,7 +4,7 @@ import sqlite3
 import config as cf
 
 
-def a_star(start: str, goal: str,  *disable_nodes: tuple):
+def a_star(start: str, goal: str,  disable_nodes: tuple):
     conn = sqlite3.connect(cf.DB_PATH, isolation_level=None)
     cur = conn.cursor()
     disable_nodes = [d for d in disable_nodes]

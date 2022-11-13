@@ -121,9 +121,11 @@ def db_init():
 
     cur.execute(f'''
     CREATE TABLE IF NOT EXISTS cross_schedule(
-        car_id TEXT,
-        cross  TEXT,
-        time   REAL
+        car_id       TEXT,
+        cross        TEXT,
+        origin       INTEGER,
+        destination  INTEGER,
+        time         REAL
     )''')
 
     cur.execute(f'''
