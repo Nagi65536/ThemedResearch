@@ -13,11 +13,20 @@ def communicate(car_id, start_node, goal_node, delay=-1):
     while True:
         data = a_star(start_node, goal_node, disable_node)
         cf.cprint(car_id, '経路', f'{[d[0] for d in data]}')
-        if data and len(data) < 3:
+
+        if not data:
+            data = a_star(start_node, goal_node)
+            if not data:
+                cf.cprint(car_id, '失敗', '経路が見つかりませんでした')
+                return
             break
+        elif len(data) < 3:
+            break
+
         congestion_node = congestion_check(car_id, data)
         if not congestion_node:
             break
+
         disable_node.append(congestion_node)
         cf.cprint(car_id, '回避', disable_node)
 

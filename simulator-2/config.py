@@ -1,7 +1,11 @@
 import sqlite3
 import sys
 import time
+import random
 
+
+if len(sys.argv)>=3:
+    log_random = random.
 
 # ログファイルのパス
 LOG_FILE_PATH = f'../log/simulator-2.log'
@@ -10,7 +14,7 @@ DB_PATH = '../db/simulator2.db'
 # 処理の遅延
 PROCESS_DELAY = 0.1
 # 車の速さ
-CAR_SPEED = 10
+CAR_SPEED = 50
 # 交差点混雑度を検索する時間範囲
 CHECK_CONGESTION_RANGE = (-6, 3)
 # 混雑と判断されない車の最大数
@@ -26,30 +30,30 @@ TRAFFIC_LIGHT_TIME = (10, 10, 10, 10)
 # 黄色信号の時間
 TRAFFIC_LIGHT_TIME_YELLOW = 2
 # クライアントの時間差をランダムにした時の範囲
-TIME_RANDOM_RANGE = (0, 5)
+TIME_RANDOM_RANGE = (0, 3)
 # クライアントデータ　
 clients = [
     # 前の車との出発時間の差, スタート位置, ゴール位置
-    {'time': 0, 'start_node': 'cross_009', 'goal_node': 'cross_004'},
-    {'time': 0, 'start_node': 'cross_009', 'goal_node': 'cross_004'},
-    {'time': 0, 'start_node': 'cross_009', 'goal_node': 'cross_004'},
-    {'time': 0, 'start_node': 'cross_009', 'goal_node': 'cross_004'},
-    {'time': 0, 'start_node': 'cross_009', 'goal_node': 'cross_004'},
-    {'time': 0, 'start_node': 'cross_009', 'goal_node': 'cross_004'},
-    {'time': 0, 'start_node': 'cross_009', 'goal_node': 'cross_004'},
-    {'time': 2, 'start_node': 'cross_009', 'goal_node': 'cross_016'},
+    {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+    {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+    {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+    {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+    {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+    {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+    {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
 ]
 OUTPUT_SETTING = {
     '信号': True,
-    '開始': False,
-    '探索': False,
-    '経路': False,
-    '回避': False,
+    '開始': True,
+    '探索': True,
+    '経路': True,
+    '回避': True,
     '接続': True,
     '進入': True,
     '通過': True,
     '移動': False,
     '到着': True,
+    '失敗': True,
 }
 
 
