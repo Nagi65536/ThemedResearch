@@ -4,11 +4,14 @@ import time
 import random
 
 
-if len(sys.argv)>=3:
-    log_random = random.
+# ログファイルをランダムにする
+# 引数 lr
+# 制御方法を信号にする
+# tl
+
 
 # ログファイルのパス
-LOG_FILE_PATH = f'../log/simulator-2.log'
+LOG_FILE_PATH = f'../log/simulator-2'
 # データベースのパス
 DB_PATH = '../db/simulator2.db'
 # 処理の遅延
@@ -66,6 +69,13 @@ args = sys.argv
 is_yellow = False
 blue_traffic_light = 0
 switch_traffic_light_time = 0
+
+if 'lr' in args:
+    r = str(random.randint(0, 10000))
+    LOG_FILE_PATH += f'_{r.zfill(5)}.log'
+else:
+    LOG_FILE_PATH += f'.log'
+print(f'ログファイル {LOG_FILE_PATH}')
 
 
 class Communication():
@@ -133,15 +143,16 @@ class Communication():
 def cprint(car_id, status, data=''):
     if status in OUTPUT_SETTING and OUTPUT_SETTING[status]:
         if status == '信号':
-            print(f'{status}: {data}')
+            print(f'{time.time()-start_time:3.3} {status}: {data}')
         else:
-            print(f'{car_id}: {status} {data}')
+            print(f'{time.time()-start_time:3.3} {car_id}: {status} {data}')
 
         with open(LOG_FILE_PATH, 'a') as f:
             if status == '信号':
-                f.write(f'{status}: {data}\n')
+                f.write(f'{time.time()-start_time:3.3} {status}: {data}\n')
             else:
-                f.write(f'{car_id}: {status} {data}\n')
+                f.write(
+                    f'{time.time()-start_time:3.3} {car_id}: {status} {data}\n')
 
 
 comms = Communication()

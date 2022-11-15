@@ -49,15 +49,15 @@ def main():
         future = executor.submit(cr.control)
 
         for i, client in enumerate(cf.clients):
+            # 車の接続開
+            car_id = f'car_{str(i).zfill(3)}'
+            start = client['start']
+            goal = client['goal']
             cf.cprint(
                 car_id,
                 '開始',
                 f'{(time.time()-cf.start_time):.3} s  {client["start"]}->{client["goal"]}'
             )
-            # 車の接続開
-            car_id = f'car_{str(i).zfill(3)}'
-            start = client['start']
-            goal = client['goal']
             executor.submit(
                 cl.communicate, car_id, start, goal)
 

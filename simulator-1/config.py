@@ -4,7 +4,7 @@ import time
 
 
 # ログファイルのパス
-LOG_FILE_PATH = f'../log/simulator-1.log'
+LOG_FILE_PATH = f'../log/simulator-1'
 # データベースのパス
 DB_PATH = '../db/simulator1.db'
 # 処理の遅延
@@ -46,6 +46,14 @@ is_yellow = False
 is_stop_control = False
 
 
+if 'lr' in args:
+    r = str(random.randint(0, 10000))
+    LOG_FILE_PATH += f'_{r.zfill(5)}.log'
+else:
+    LOG_FILE_PATH += f'.log'
+print(f'ログファイル {LOG_FILE_PATH}')
+
+
 class Communication():
     def __init__(self):
         self.connect_clients = []
@@ -83,15 +91,16 @@ class Communication():
 def cprint(car_id, status, data=''):
     if status in OUTPUT_SETTING and OUTPUT_SETTING[status]:
         if status == '信号':
-            print(f'{status}: {data}')
+            print(f'{time.time()-start_time:3.3} {status}: {data}')
         else:
-            print(f'{car_id}: {status} {data}')
+            print(f'{time.time()-start_time:3.3} {car_id}: {status} {data}')
 
         with open(LOG_FILE_PATH, 'a') as f:
             if status == '信号':
-                f.write(f'{status}: {data}\n')
+                f.write(f'{time.time()-start_time:3.3} {status}: {data}\n')
             else:
-                f.write(f'{car_id}: {status} {data}\n')
+                f.write(
+                    f'{time.time()-start_time:3.3} {car_id}: {status} {data}\n')
 
 
 comms = Communication()
