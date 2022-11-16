@@ -160,7 +160,6 @@ def cross_process(car_id, front_cars=0):
     time.sleep(cf.CAR_PASSED_TIME)
 
     # 交差点通過
-    cf.cprint(car_id, 'asdfasdfadfasfasgfasdgsagdsagaesgsadgas')
     comms.add_passed(car_id)
     dist = comms.get_next_cross_data(car_id)[1]
     wait_time = dist / cf.CAR_SPEED

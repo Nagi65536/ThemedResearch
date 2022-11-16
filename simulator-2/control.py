@@ -73,7 +73,7 @@ def check_can_entry(cross_name):
 
         if can_entry:
             cur.execute(
-                f'UPDATE control SET status="entry" WHERE car_id="{my_data[0]}"'
+                f'UPDATE control SET status="entry" WHERE car_id="{my_data[0]}" AND pid="{cf.pid}"'
             )
             executor.submit(
                 cl.cross_process,
@@ -109,7 +109,8 @@ def control_traffic_light():
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
 
-    cur.execute(f'SELECT * FROM control WHERE pid=""{cf.pid}"" ORDER BY time ASC')
+    cur.execute(
+        f'SELECT * FROM control WHERE pid=""{cf.pid}"" ORDER BY time ASC')
     control_data = cur.fetchall()
 
     entry_list = [c for c in control_data if c[4] == 'entry']

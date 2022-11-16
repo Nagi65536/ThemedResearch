@@ -41,13 +41,7 @@ TIME_RANDOM_RANGE = (0, 3)
 # クライアントデータ　
 clients = [
     # 前の車との出発時間の差, スタート位置, ゴール位置
-    {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
-    {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
-    {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
-    {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
-    {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
-    {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
-    {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+    {'time': 0, None: None, 'goal_node': None},
 ]
 OUTPUT_SETTING = {
     '信号': False,
