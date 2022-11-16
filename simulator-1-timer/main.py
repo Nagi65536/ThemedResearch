@@ -11,7 +11,7 @@ from setting import db_init
 
 
 def log_init():
-    if cf.OUTPUT_SETTING['ALL']:
+    if cf.OUTPUT_SETTING['ALL'] or 'ln' in cf.args:
         return
 
     with open(cf.LOG_FILE_PATH, 'a') as f:
@@ -28,6 +28,20 @@ def log_init():
         f.write('\n\n')
 
 
+def timer():
+    while True:
+        time_ = time.time() - cf.start_time
+        if time_ > cf.TIMER:
+            cf.is_stop_control = True
+            print(f'\n処理数 {cf.arrived_num}\n')
+            with open(cf.LOG_FILE_PATH, 'a') as f:
+                f.write(f'\n処理数 {cf.arrived_num}\n')
+            remove_table(cf.table_name)
+            return
+            
+        time.sleep(cf.PROCESS_DELAY)
+
+
 def main():
     db_init(cf.table_name)
 
@@ -36,6 +50,7 @@ def main():
 
     with ThreadPoolExecutor() as executor:
         executor.submit(cr.control)
+        executor.submit(timer)
 
         while True:
             if cf.is_stop_control:
@@ -49,7 +64,7 @@ def main():
             cf.departed_num += 1
 
             # 次の車の発車時間まで待機
-            sleep = random.randint(cf.DELAY_RANGE[0], cf.DELAY_RANGE[1])
+            sleep = random.randint(cf.DELAY_RANGE[0], cf.DELAY_RANGE[1])/10
             time.sleep(sleep)
 
 

@@ -69,8 +69,10 @@ def check_can_entry():
 
     executor = ThreadPoolExecutor()
     for my_data in check_list:
-        can_entry = decide_can_entry(my_data, entry_list)
+        if cf.is_stop_control:
+            return
 
+        can_entry = decide_can_entry(my_data, entry_list)
         if can_entry:
             cl.cross_process(my_data[0], wait_cars[my_data[1]])
             wait_cars[my_data[1]] += 1
@@ -146,15 +148,8 @@ def control():
     cf.switch_traffic_light_time = time.time()
 
     while True:
-        time_diff = time.time() - cf.start_time
-        if time_diff > cf.TIMER:
-            cf.is_stop_control = True
-            print(f'\n処理数 {cf.arrived_num}\n')
-            with open(cf.LOG_FILE_PATH, 'a') as f:
-                f.write(f'\n処理数 {cf.arrived_num}\n\n')
-            remove_table(cf.table_name)
+        if cf.is_stop_control:
             return
-
         if cf.is_stop_control:
             break
         if 'tl' in cf.args:

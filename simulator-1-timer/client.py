@@ -19,6 +19,5 @@ def cross_process(car_id, front_cars=0):
         return
 
     # 交差点通過
-    comms.add_passed(car_id)
-
     cf.arrived_num += 1
+    comms.add_passed(car_id)

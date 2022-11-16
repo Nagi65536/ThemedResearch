@@ -6,7 +6,8 @@ import random
 
 # 信号機モード
 # 引数 tl
-
+# ログなし
+# 引数 ln
 
 
 # ログファイルのパス
@@ -24,9 +25,9 @@ TRAFFIC_LIGHT_TIME = (4, 4)
 # 黄色の時間
 TRAFFIC_LIGHT_TIME_YELLOW = 2
 # 計測時間(s)
-TIMER = 60 * 10
-# クライアントの時間差をランダムにした時の範囲
-DELAY_RANGE = (0, 3)
+TIMER = 10
+# クライアントの時間差をランダムにした時の範囲(10倍されています)
+DELAY_RANGE = (0, 20)
 # クライアントデータ
 OUTPUT_SETTING = {
     '信号': True,
@@ -92,22 +93,23 @@ class Communication():
         conn = sqlite3.connect(f'{DB_PATH}', isolation_level=None)
         cur = conn.cursor()
         cur.execute(f'DELETE FROM {table_name} WHERE car_id="{car_id}"')
-        cprint(car_id, '通過')
+        cprint(car_id, '通過', f'処理数 {arrived_num}')
 
 
 def cprint(car_id, status, data=''):
     if status in OUTPUT_SETTING and OUTPUT_SETTING[status] and OUTPUT_SETTING['ALL']:
+        time_ = int(time.time() - start_time)
         if status == '信号':
-            print(f'{(time.time()-start_time):.3} {status}: {data}')
+            print(f'{time_} {status}: {data}')
         else:
-            print(f'{(time.time()-start_time):.3} {car_id}: {status} {data}')
+            print(f'{time_} {car_id}: {status} {data}')
 
-        with open(LOG_FILE_PATH, 'a') as f:
-            if status == '信号':
-                f.write(f'{(time.time()-start_time):.3} {status}: {data}\n')
-            else:
-                f.write(
-                    f'{(time.time()-start_time):.3} {car_id}: {status} {data}\n')
+        if 'ln' not in args:
+            with open(LOG_FILE_PATH, 'a') as f:
+                if status == '信号':
+                    f.write(f'{time_} {status}: {data}\n')
+                else:
+                    f.write(f'{time_} {car_id}: {status} {data}\n')
 
 
 comms = Communication()
