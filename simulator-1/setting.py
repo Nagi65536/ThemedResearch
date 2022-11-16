@@ -20,7 +20,8 @@ def db_init():
         origin      INTEGER,
         destination INTEGER,
         status      TEXT, 
-        time        REAL
+        time        REAL,
+        pid         TEXT
     )''')
 
     cur.execute('DELETE FROM control')

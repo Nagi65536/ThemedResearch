@@ -87,7 +87,8 @@ def congestion_check(car_id, data):
         is_conflict = decide_is_conflict(my_data, cross_data)
 
         if is_conflict:
-            cur.execute(f'DELETE FROM cross_schedule WHERE car_id="{car_id}" AND pid="{cf.pid}"')
+            cur.execute(
+                f'DELETE FROM cross_schedule WHERE car_id="{car_id}" AND pid="{cf.pid}"')
             return node[0]
 
     return None
@@ -159,6 +160,7 @@ def cross_process(car_id, front_cars=0):
     time.sleep(cf.CAR_PASSED_TIME)
 
     # 交差点通過
+    cf.cprint(car_id, 'asdfasdfadfasfasgfasdgsagdsagaesgsadgas')
     comms.add_passed(car_id)
     dist = comms.get_next_cross_data(car_id)[1]
     wait_time = dist / cf.CAR_SPEED

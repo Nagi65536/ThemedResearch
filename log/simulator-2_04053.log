@@ -1,0 +1,52 @@
+--- NEW ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+0.282 car_006: 接続 cross_002
+0.304 car_001: 接続 cross_002
+0.335 car_006: 進入 
+0.337 car_001: 進入 
+0.445 car_002: 接続 cross_007
+0.56 car_002: 進入 
+2.55 car_006: 通過 
+2.57 car_002: 通過 
+2.8 car_001: 通過 
+5.02 car_006: 接続 cross_008
+5.12 car_006: 進入 
+5.14 car_002: 接続 cross_013
+5.23 car_002: 進入 
+5.27 car_001: 接続 cross_008
+5.34 car_001: 進入 
+7.13 car_006: 通過 
+7.24 car_002: 通過 
+7.35 car_001: 通過 
+8.24 car_006: 接続 cross_009
+8.3 car_006: 進入 
+8.46 car_001: 接続 cross_009
+8.51 car_001: 進入 
+8.51 car_002: 接続 cross_014
+10.3 car_006: 通過 
+10.5 car_001: 通過 
+12.6 car_006: 接続 cross_015
+12.7 car_006: 進入 
+12.8 car_001: 接続 cross_015
+12.9 car_001: 進入 
+14.7 car_006: 通過 
+14.9 car_001: 通過 
+16.4 car_006: 接続 cross_016
+16.6 car_001: 接続 cross_016

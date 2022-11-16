@@ -77,6 +77,7 @@ def main():
         future.result()
         print()
         print(f'経過時間 {(time.time() - cf.start_time):.3} s')
+        print(f'pid: {cf.pid}')
         with open(cf.LOG_FILE_PATH, 'a') as f:
             f.write(f'\n経過時間 {(time.time() - cf.start_time):.3} s\n\n\n')
 

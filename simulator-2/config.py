@@ -50,15 +50,15 @@ clients = [
     {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
 ]
 OUTPUT_SETTING = {
-    '信号': True,
-    '開始': True,
-    '探索': True,
-    '経路': True,
-    '回避': True,
+    '信号': False,
+    '開始': False,
+    '探索': False,
+    '経路': False,
+    '回避': False,
     '接続': True,
     '進入': True,
     '通過': True,
-    '移動': True,
+    '移動': False,
     '到着': True,
     '失敗': True,
 }
@@ -151,7 +151,7 @@ def cprint(car_id, status, data=''):
         else:
             print(f'{time.time()-start_time:3.3} {car_id}: {status} {data}')
 
-        if 'log-none':
+        if 'log-none' in args:
             return
 
         with open(LOG_FILE_PATH, 'a') as f:
