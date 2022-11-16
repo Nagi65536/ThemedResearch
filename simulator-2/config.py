@@ -3,11 +3,15 @@ import sys
 import time
 import random
 
+from setting import db_init
+
 
 # ログファイルをランダムにする
-# 引数 lr
+# 引数 log-random
 # 制御方法を信号にする
-# tl
+# 引数 traficc-light
+# ログを取らない
+# 引数 log-none
 
 
 # ログファイルのパス
@@ -54,7 +58,7 @@ OUTPUT_SETTING = {
     '接続': True,
     '進入': True,
     '通過': True,
-    '移動': False,
+    '移動': True,
     '到着': True,
     '失敗': True,
 }
@@ -62,6 +66,7 @@ OUTPUT_SETTING = {
 
 # 以下システム用
 
+pid = str(random.randint(0, 10000)).zfill(5)
 start_time = None
 arrived_num = 0
 is_stop_control = False
@@ -70,11 +75,10 @@ is_yellow = False
 blue_traffic_light = 0
 switch_traffic_light_time = 0
 
-if 'lr' in args:
-    r = str(random.randint(0, 10000))
-    LOG_FILE_PATH += f'_{r.zfill(5)}.log'
+if 'log-random' in args:
+    LOG_FILE_PATH += f'_{pid}.log'
 else:
-    LOG_FILE_PATH += f'.log'
+    LOG_FILE_PATH += '.log'
 print(f'ログファイル {LOG_FILE_PATH}')
 
 
@@ -110,8 +114,8 @@ class Communication():
         ''')
         dest = cur.fetchone()[0]
         cur.execute(f'''
-            REPLACE INTO control VALUES (
-            "{car_id}", "{now_cross}", {origin}, {dest}, "connect", {time.time()-start_time}
+            INSERT INTO control VALUES (
+            "{car_id}", "{now_cross}", {origin}, {dest}, "connect", {time.time()-start_time}, "{pid}"
         )''')
         cprint(car_id, '接続', now_cross)
 
@@ -119,12 +123,12 @@ class Communication():
         self.entry_clients.append(car_id)
         cprint(car_id, '進入')
 
-    def add_passed(self, car_id):
+    def add_passed(self, car_id): 
         conn = sqlite3.connect(f'{DB_PATH}', isolation_level=None)
         cur = conn.cursor()
         self.passed_clients.append(car_id)
         self.client_data[car_id]['data'].pop(0)
-        cur.execute(f'DELETE FROM control WHERE car_id="{car_id}"')
+        cur.execute(f'DELETE FROM control WHERE car_id="{car_id}" AND pid="{pid}"')
         cprint(car_id, '通過')
 
     def add_client_data(self, car_id, data):
@@ -146,6 +150,9 @@ def cprint(car_id, status, data=''):
             print(f'{time.time()-start_time:3.3} {status}: {data}')
         else:
             print(f'{time.time()-start_time:3.3} {car_id}: {status} {data}')
+
+        if 'log-none':
+            return
 
         with open(LOG_FILE_PATH, 'a') as f:
             if status == '信号':

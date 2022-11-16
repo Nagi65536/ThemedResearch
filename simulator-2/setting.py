@@ -1,21 +1,22 @@
+import os
 import sqlite3
+import sys
 import random
 from cmath import sqrt
 
 import config as cf
 
 
-conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
-cur = conn.cursor()
-
-
 def main():
+    remove_db()
     db_init()
     register_crosses_info()
     connect_cross_info()
 
 
 def register_crosses_info():
+    conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
+    cur = conn.cursor()
     cross_num = 1
 
     for x in range(1, 7):
@@ -29,6 +30,8 @@ def register_crosses_info():
 
 
 def connect_cross_info():
+    conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
+    cur = conn.cursor()
     cross_num = 0
     while (True):
         cross_num += 1
@@ -108,15 +111,21 @@ def connect_cross_info():
             )
 
 
-def db_init():
+def db_init(db_path=None):
+    if not db_path:
+        db_path = cf.DB_PATH
+    conn = sqlite3.connect(f'{db_path}', isolation_level=None)
+    cur = conn.cursor()
+
     cur.execute(f'''
     CREATE TABLE IF NOT EXISTS control(
-        car_id      TEXT PRIMARY KEY,
-        cross  TEXT,
+        car_id      TEXT,
+        cross       TEXT,
         origin      INTEGER,
         destination INTEGER,
         status      TEXT, 
-        time        REAL
+        time        REAL,
+        pid         INTEGER
     )''')
 
     cur.execute(f'''
@@ -125,7 +134,8 @@ def db_init():
         cross        TEXT,
         origin       INTEGER,
         destination  INTEGER,
-        time         REAL
+        time         REAL,
+        pid          INTEGER
     )''')
 
     cur.execute(f'''
@@ -156,6 +166,21 @@ def euclid(node_1, node_2):
     return round(abs(sqrt(dist_x + dist_y)), 4)
 
 
+def remove_db():
+    os.remove(cf.DB_PATH)
+
+
+def clear_db():
+    conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
+    cur = conn.cursor()
+    cur.execute('DELETE FROM control')
+    cur.execute('DELETE FROM cross_schedule')
+    print('⚡️データベースを綺麗にしました')
+
+
 if __name__ == '__main__':
-    print('⚡️start setting.py')
-    main()
+    if 'clear' in sys.argv:
+        clear_db()
+    else:
+        print('⚡️start setting.py')
+        main()

@@ -11,7 +11,7 @@ import control as cr
 
 def log_init():
     with open(cf.LOG_FILE_PATH, 'a') as f:
-        mode = 'TL' if len(cf.args) > 1 and cf.args[1] == 'tl' else 'NEW'
+        mode = 'TRAFICC-LIGHT' if 'traficc-light' in cf.args else 'NEW'
         f.write(f'--- {mode} ---\n\
     PROCESS_DELAY: {cf.PROCESS_DELAY}\n\
     CAR_SPEED    : {cf.CAR_SPEED}\n\

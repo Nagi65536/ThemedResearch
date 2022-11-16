@@ -17,73 +17,926 @@ clients
  {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
  {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
 
-0.00315 car_000: 開始 0.00304 s  cross_001->cross_036
-0.00433 car_000: 探索 cross_001 -> cross_036
-0.00491 car_001: 開始 0.00474 s  cross_001->cross_036
-0.00531 car_002: 開始 0.00521 s  cross_001->cross_036
-0.00564 car_001: 探索 cross_001 -> cross_036
-0.00571 car_002: 探索 cross_001 -> cross_036
-0.00587 car_003: 開始 0.00574 s  cross_001->cross_036
-0.00658 car_003: 探索 cross_001 -> cross_036
-0.00679 car_004: 開始 0.00671 s  cross_001->cross_036
-0.00711 car_004: 探索 cross_001 -> cross_036
-0.00723 car_005: 開始 0.00715 s  cross_001->cross_036
-0.008 car_006: 開始 0.00789 s  cross_001->cross_036
-0.00879 car_006: 探索 cross_001 -> cross_036
-0.00898 car_005: 探索 cross_001 -> cross_036
-0.169 car_002: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
-0.17 car_003: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
-0.171 car_004: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
-0.171 car_006: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
-0.186 car_004: 接続 cross_002
-0.204 car_003: 接続 cross_002
-0.219 car_006: 接続 cross_002
-0.221 car_004: 進入 
-0.223 car_003: 進入 
-0.224 car_006: 進入 
-0.231 car_001: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
-0.246 car_001: 接続 cross_002
-0.255 car_000: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
-0.256 car_005: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
-0.258 car_000: 回避 ['cross_002']
-0.264 car_005: 回避 ['cross_002']
-0.302 car_002: 接続 cross_002
-0.332 car_001: 進入 
-0.336 car_002: 進入 
-0.362 car_000: 経路 ['cross_001', 'cross_007', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
-0.369 car_000: 回避 ['cross_002', 'cross_009']
-0.376 car_005: 経路 ['cross_001', 'cross_007', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
-0.385 car_005: 回避 ['cross_002', 'cross_009']
-0.429 car_000: 経路 ['cross_001', 'cross_007', 'cross_013', 'cross_019', 'cross_020', 'cross_026', 'cross_032', 'cross_033', 'cross_034', 'cross_035', 'cross_036']
-0.446 car_000: 接続 cross_007
-0.455 car_005: 経路 ['cross_001', 'cross_007', 'cross_013', 'cross_019', 'cross_020', 'cross_026', 'cross_032', 'cross_033', 'cross_034', 'cross_035', 'cross_036']
-0.471 car_005: 接続 cross_007
-0.547 car_000: 進入 
-0.549 car_005: 進入 
-2.23 car_004: 通過 
-2.34 car_001: 通過 
-2.43 car_003: 通過 
-2.54 car_002: 通過 
-2.55 car_000: 通過 
-2.63 car_006: 通過 
-2.76 car_005: 通過 
-4.34 car_004: 接続 cross_008
-4.39 car_004: 進入 
-4.45 car_001: 接続 cross_008
-4.5 car_001: 進入 
-4.54 car_003: 接続 cross_008
-4.61 car_003: 進入 
-4.65 car_002: 接続 cross_008
-4.72 car_002: 進入 
-4.74 car_006: 接続 cross_008
-4.82 car_006: 進入 
-5.11 car_000: 接続 cross_013
-5.14 car_000: 進入 
-5.31 car_005: 接続 cross_013
-5.35 car_005: 進入 
-6.4 car_004: 通過 
-6.51 car_001: 通過 
-6.62 car_003: 通過 
-6.73 car_002: 通過 
-6.84 car_006: 通過 
-7.15 car_000: 通過 
+0.00301 car_000: 開始 0.00285 s  cross_001->cross_036
+0.00348 car_000: 探索 cross_001 -> cross_036
+0.00357 car_001: 開始 0.00331 s  cross_001->cross_036
+0.00391 car_001: 探索 cross_001 -> cross_036
+0.00398 car_002: 開始 0.00377 s  cross_001->cross_036
+0.00446 car_003: 開始 0.00434 s  cross_001->cross_036
+0.00452 car_002: 探索 cross_001 -> cross_036
+0.00504 car_003: 探索 cross_001 -> cross_036
+0.0052 car_004: 開始 0.00482 s  cross_001->cross_036
+0.0057 car_004: 探索 cross_001 -> cross_036
+0.00578 car_005: 開始 0.00557 s  cross_001->cross_036
+0.0061 car_005: 探索 cross_001 -> cross_036
+0.00616 car_006: 開始 0.00601 s  cross_001->cross_036
+0.00649 car_006: 探索 cross_001 -> cross_036
+0.193 car_006: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.195 car_000: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.195 car_005: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.195 car_004: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.195 car_002: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.204 car_006: 接続 cross_002
+0.216 car_003: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.216 car_001: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.227 car_005: 接続 cross_002
+0.238 car_001: 接続 cross_002
+0.252 car_002: 接続 cross_002
+0.28 car_003: 回避 ['cross_002']
+0.337 car_004: 接続 cross_002
+0.42 car_000: 回避 ['cross_002']
+0.432 car_003: 経路 ['cross_001', 'cross_007', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.443 car_003: 回避 ['cross_002', 'cross_009']
+0.58 car_006: 進入 
+0.622 car_000: 経路 ['cross_001', 'cross_007', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.631 car_000: 回避 ['cross_002', 'cross_009']
+0.634 car_003: 経路 ['cross_001', 'cross_007', 'cross_013', 'cross_019', 'cross_020', 'cross_026', 'cross_032', 'cross_033', 'cross_034', 'cross_035', 'cross_036']
+0.652 car_003: 接続 cross_007
+0.683 car_004: 進入 
+0.684 car_005: 進入 
+0.686 car_001: 進入 
+0.688 car_002: 進入 
+0.69 car_003: 進入 
+0.706 car_000: 経路 ['cross_001', 'cross_007', 'cross_013', 'cross_019', 'cross_020', 'cross_026', 'cross_032', 'cross_033', 'cross_034', 'cross_035', 'cross_036']
+0.721 car_000: 接続 cross_007
+0.797 car_000: 進入 
+2.59 car_006: 通過 
+2.59 car_006: 移動 2.1s
+2.69 car_004: 通過 
+2.69 car_004: 移動 2.1s
+2.7 car_003: 通過 
+2.7 car_003: 移動 2.55s
+2.8 car_000: 通過 
+2.8 car_000: 移動 2.55s
+2.89 car_005: 通過 
+2.89 car_005: 移動 2.1s
+3.1 car_001: 通過 
+3.1 car_001: 移動 2.1s
+3.3 car_002: 通過 
+3.3 car_002: 移動 2.1s
+4.7 car_006: 接続 cross_008
+4.77 car_006: 進入 
+4.8 car_004: 接続 cross_008
+4.88 car_004: 進入 
+5.0 car_005: 接続 cross_008
+5.08 car_005: 進入 
+5.2 car_001: 接続 cross_008
+5.25 car_003: 接続 cross_013
+5.3 car_003: 進入 
+5.3 car_001: 進入 
+5.36 car_000: 接続 cross_013
+5.4 car_000: 進入 
+5.41 car_002: 接続 cross_008
+5.51 car_002: 進入 
+6.78 car_006: 通過 
+6.78 car_006: 移動 1.67s
+6.88 car_004: 通過 
+6.88 car_004: 移動 1.67s
+7.09 car_005: 通過 
+7.09 car_005: 移動 1.67s
+7.3 car_003: 通過 
+7.3 car_003: 移動 1.96s
+7.31 car_001: 通過 
+7.31 car_001: 移動 1.67s
+7.41 car_000: 通過 
+7.41 car_000: 移動 1.96s
+7.52 car_002: 通過 
+7.52 car_002: 移動 1.67s
+8.46 car_006: 接続 cross_009
+8.56 car_006: 進入 
+8.56 car_004: 接続 cross_009
+8.67 car_004: 進入 
+8.77 car_005: 接続 cross_009
+8.78 car_005: 進入 
+8.98 car_001: 接続 cross_009
+9.09 car_001: 進入 
+9.2 car_002: 接続 cross_009
+9.27 car_003: 接続 cross_019
+9.3 car_003: 進入 
+9.3 car_002: 進入 
+9.38 car_000: 接続 cross_019
+9.41 car_000: 進入 
+10.6 car_006: 通過 
+10.6 car_006: 移動 1.94s
+10.7 car_004: 通過 
+10.7 car_004: 移動 1.94s
+10.8 car_005: 通過 
+10.8 car_005: 移動 1.94s
+11.1 car_001: 通過 
+11.1 car_001: 移動 1.94s
+11.3 car_003: 通過 
+11.3 car_003: 移動 1.36s
+11.3 car_002: 通過 
+11.3 car_002: 移動 1.94s
+11.4 car_000: 通過 
+11.4 car_000: 移動 1.36s
+12.5 car_006: 接続 cross_010
+12.6 car_006: 進入 
+12.6 car_004: 接続 cross_010
+12.7 car_004: 進入 
+12.7 car_003: 接続 cross_020
+12.7 car_005: 接続 cross_010
+12.8 car_003: 進入 
+12.8 car_005: 進入 
+12.8 car_000: 接続 cross_020
+12.9 car_000: 進入 
+13.0 car_001: 接続 cross_010
+13.1 car_001: 進入 
+13.3 car_002: 接続 cross_010
+13.3 car_002: 進入 
+14.6 car_006: 通過 
+14.6 car_006: 移動 1.69s
+14.7 car_004: 通過 
+14.7 car_004: 移動 1.69s
+14.8 car_003: 通過 
+14.8 car_003: 移動 1.95s
+14.8 car_005: 通過 
+14.8 car_005: 移動 1.69s
+14.9 car_000: 通過 
+14.9 car_000: 移動 1.95s
+15.1 car_001: 通過 
+15.1 car_001: 移動 1.69s
+15.3 car_002: 通過 
+15.3 car_002: 移動 1.69s
+16.3 car_006: 接続 cross_016
+16.3 car_006: 進入 
+16.4 car_004: 接続 cross_016
+16.5 car_004: 進入 
+16.5 car_005: 接続 cross_016
+16.6 car_005: 進入 
+16.7 car_003: 接続 cross_026
+16.8 car_003: 進入 
+16.8 car_001: 接続 cross_016
+16.8 car_000: 接続 cross_026
+16.9 car_001: 進入 
+16.9 car_000: 進入 
+17.0 car_002: 接続 cross_016
+17.1 car_002: 進入 
+18.4 car_006: 通過 
+18.4 car_006: 移動 1.15s
+18.5 car_004: 通過 
+18.5 car_004: 移動 1.15s
+18.6 car_005: 通過 
+18.6 car_005: 移動 1.15s
+18.8 car_003: 通過 
+18.8 car_003: 移動 1.56s
+18.9 car_001: 通過 
+18.9 car_001: 移動 1.15s
+18.9 car_000: 通過 
+18.9 car_000: 移動 1.56s
+19.1 car_002: 通過 
+19.1 car_002: 移動 1.15s
+19.5 car_006: 接続 cross_017
+19.5 car_006: 進入 
+19.6 car_004: 接続 cross_017
+19.6 car_004: 進入 
+19.7 car_005: 接続 cross_017
+19.7 car_005: 進入 
+20.0 car_001: 接続 cross_017
+20.1 car_001: 進入 
+20.3 car_002: 接続 cross_017
+20.3 car_003: 接続 cross_032
+20.4 car_003: 進入 
+20.4 car_002: 進入 
+20.5 car_000: 接続 cross_032
+20.5 car_000: 進入 
+21.5 car_006: 通過 
+21.5 car_006: 移動 2.4s
+21.6 car_004: 通過 
+21.6 car_004: 移動 2.4s
+21.8 car_005: 通過 
+21.8 car_005: 移動 2.4s
+22.1 car_001: 通過 
+22.1 car_001: 移動 2.4s
+22.4 car_003: 通過 
+22.4 car_003: 移動 2.16s
+22.4 car_002: 通過 
+22.4 car_002: 移動 2.4s
+22.5 car_000: 通過 
+22.5 car_000: 移動 2.16s
+23.9 car_006: 接続 cross_023
+24.0 car_006: 進入 
+24.1 car_004: 接続 cross_023
+24.2 car_004: 進入 
+24.2 car_005: 接続 cross_023
+24.3 car_005: 進入 
+24.5 car_001: 接続 cross_023
+24.6 car_003: 接続 cross_033
+24.6 car_003: 進入 
+24.6 car_001: 進入 
+24.7 car_000: 接続 cross_033
+24.7 car_000: 進入 
+24.8 car_002: 接続 cross_023
+24.8 car_002: 進入 
+26.1 car_006: 通過 
+26.1 car_006: 移動 1.61s
+26.2 car_004: 通過 
+26.2 car_004: 移動 1.61s
+26.3 car_005: 通過 
+26.3 car_005: 移動 1.61s
+26.6 car_003: 通過 
+26.6 car_003: 移動 1.49s
+26.6 car_001: 通過 
+26.6 car_001: 移動 1.61s
+26.7 car_000: 通過 
+26.7 car_000: 移動 1.49s
+26.8 car_002: 通過 
+26.8 car_002: 移動 1.61s
+27.7 car_006: 接続 cross_024
+27.7 car_006: 進入 
+27.8 car_004: 接続 cross_024
+27.8 car_004: 進入 
+27.9 car_005: 接続 cross_024
+28.0 car_005: 進入 
+28.1 car_003: 接続 cross_034
+28.2 car_003: 進入 
+28.2 car_000: 接続 cross_034
+28.2 car_001: 接続 cross_024
+28.3 car_000: 進入 
+28.3 car_001: 進入 
+28.4 car_002: 接続 cross_024
+28.5 car_002: 進入 
+29.7 car_006: 通過 
+29.7 car_006: 移動 1.62s
+29.8 car_004: 通過 
+29.8 car_004: 移動 1.62s
+30.0 car_005: 通過 
+30.0 car_005: 移動 1.62s
+30.2 car_003: 通過 
+30.2 car_003: 移動 2.06s
+30.3 car_000: 通過 
+30.3 car_000: 移動 2.06s
+30.3 car_001: 通過 
+30.3 car_001: 移動 1.62s
+30.5 car_002: 通過 
+30.5 car_002: 移動 1.62s
+31.4 car_006: 接続 cross_030
+31.4 car_006: 進入 
+31.5 car_004: 接続 cross_030
+31.5 car_004: 進入 
+31.6 car_005: 接続 cross_030
+31.6 car_005: 進入 
+31.9 car_001: 接続 cross_030
+32.0 car_001: 進入 
+32.1 car_002: 接続 cross_030
+32.2 car_002: 進入 
+32.2 car_003: 接続 cross_035
+32.3 car_003: 進入 
+32.4 car_000: 接続 cross_035
+32.4 car_000: 進入 
+33.4 car_006: 通過 
+33.4 car_006: 移動 2.39s
+33.5 car_004: 通過 
+33.5 car_004: 移動 2.39s
+33.7 car_005: 通過 
+33.7 car_005: 移動 2.39s
+34.0 car_001: 通過 
+34.0 car_001: 移動 2.39s
+34.2 car_002: 通過 
+34.2 car_002: 移動 2.39s
+34.3 car_003: 通過 
+34.3 car_003: 移動 1.91s
+34.4 car_000: 通過 
+34.4 car_000: 移動 1.91s
+35.8 car_006: 到着 1
+35.9 car_004: 到着 2
+36.1 car_005: 到着 3
+36.2 car_003: 到着 4
+36.3 car_000: 到着 5
+36.4 car_001: 到着 6
+36.6 car_002: 到着 7
+
+経過時間 36.7 s
+
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW SYSTEM ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+--- NEW ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+
+経過時間 35.3 s
+
+

@@ -69,13 +69,14 @@ def congestion_check(car_id, data):
         # 予定登録
         cur.execute(f'''
         INSERT INTO cross_schedule VALUES (
-            "{car_id}", "{node[0]}", "{origin}", "{dest}", {arrival_time}
+            "{car_id}", "{node[0]}", "{origin}", "{dest}", {arrival_time}, "{cf.pid}"
         )''')
 
         # 混雑度計算用データ取得
         cur.execute(f'''
         SELECT * FROM cross_schedule WHERE
         cross="{node[0]}" AND
+        pid="{cf.pid}" AND
         time BETWEEN {arrival_time + cf.CHECK_CONGESTION_RANGE[0]} AND
         {arrival_time + arrival_time + cf.CHECK_CONGESTION_RANGE[1]}
         ''')
@@ -86,7 +87,7 @@ def congestion_check(car_id, data):
         is_conflict = decide_is_conflict(my_data, cross_data)
 
         if is_conflict:
-            cur.execute(f'DELETE FROM cross_schedule WHERE car_id="{car_id}"')
+            cur.execute(f'DELETE FROM cross_schedule WHERE car_id="{car_id}" AND pid="{cf.pid}"')
             return node[0]
 
     return None

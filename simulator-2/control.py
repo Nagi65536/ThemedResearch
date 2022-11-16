@@ -60,7 +60,7 @@ def check_can_entry(cross_name):
     cur = conn.cursor()
 
     cur.execute(
-        f'SELECT * FROM control WHERE cross = "{cross_name}" ORDER BY time ASC')
+        f'SELECT * FROM control WHERE cross="{cross_name}" AND pid="{cf.pid}" ORDER BY time ASC')
     control_data = cur.fetchall()
 
     entry_list = [c for c in control_data if c[4] == 'entry']
@@ -109,7 +109,7 @@ def control_traffic_light():
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
 
-    cur.execute(f'SELECT * FROM control ORDER BY time ASC')
+    cur.execute(f'SELECT * FROM control WHERE pid=""{cf.pid}"" ORDER BY time ASC')
     control_data = cur.fetchall()
 
     entry_list = [c for c in control_data if c[4] == 'entry']
@@ -142,18 +142,18 @@ def control_traffic_light():
 def control():
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
-    cur.execute('DELETE FROM control')
-    cur.execute('DELETE FROM cross_schedule')
+    cur.execute(f'DELETE FROM control WHERE pid="{cf.pid}"')
+    cur.execute(f'DELETE FROM cross_schedule WHERE pid="{cf.pid}"')
 
     while True:
         if cf.is_stop_control:
             break
-        cur.execute('SELECT cross FROM control')
+        cur.execute(f'SELECT cross FROM control WHERE pid="{cf.pid}"')
         crosses = [c[0] for c in cur.fetchall()]
         crosses = set(crosses)
 
         for cross in crosses:
-            if len(cf.args) > 1 and cf.args[1] == 'tl':
+            if 'traficc-light' in cf.args:
                 control_traffic_light()
             else:
                 check_can_entry(cross)

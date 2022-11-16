@@ -1,0 +1,285 @@
+--- NEW ---
+    PROCESS_DELAY: 0.1
+    CAR_SPEED    : 50
+    CHECK_CONGESTION_RANGE: (-6, 3)
+    CONFLICT_NUM : 5
+    ARRIVAL_DELAY: 0.5
+    ENTRY_DELAY  : 0.2
+    CAR_PASSED_TIME   : 2
+    TRAFFIC_LIGHT_TIME: (10, 10, 10, 10)
+    TIME_RANDOM_RANGE : (0, 3)
+clients
+[{'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'},
+ {'time': 0, 'start_node': 'cross_001', 'goal_node': 'cross_036'}]
+
+0.00325 car_000: 開始 0.00308 s  cross_001->cross_036
+0.0037 car_000: 探索 cross_001 -> cross_036
+0.00376 car_001: 開始 0.00354 s  cross_001->cross_036
+0.00421 car_001: 探索 cross_001 -> cross_036
+0.00431 car_002: 開始 0.00413 s  cross_001->cross_036
+0.00475 car_002: 探索 cross_001 -> cross_036
+0.00483 car_003: 開始 0.00455 s  cross_001->cross_036
+0.0052 car_003: 探索 cross_001 -> cross_036
+0.00537 car_004: 開始 0.00506 s  cross_001->cross_036
+0.00573 car_004: 探索 cross_001 -> cross_036
+0.00599 car_005: 開始 0.00561 s  cross_001->cross_036
+0.00633 car_005: 探索 cross_001 -> cross_036
+0.00646 car_006: 開始 0.0062 s  cross_001->cross_036
+0.00709 car_006: 探索 cross_001 -> cross_036
+0.204 car_005: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.205 car_006: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.224 car_005: 接続 cross_002
+0.237 car_006: 接続 cross_002
+0.244 car_005: 進入 
+0.245 car_006: 進入 
+0.249 car_002: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.25 car_004: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.25 car_003: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.251 car_000: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.268 car_003: 接続 cross_002
+0.271 car_001: 経路 ['cross_001', 'cross_002', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.299 car_004: 接続 cross_002
+0.303 car_001: 回避 ['cross_002']
+0.342 car_000: 回避 ['cross_002']
+0.385 car_002: 接続 cross_002
+0.462 car_001: 経路 ['cross_001', 'cross_007', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.463 car_000: 経路 ['cross_001', 'cross_007', 'cross_008', 'cross_009', 'cross_010', 'cross_016', 'cross_017', 'cross_023', 'cross_024', 'cross_030', 'cross_036']
+0.467 car_001: 回避 ['cross_002', 'cross_009']
+0.48 car_000: 回避 ['cross_002', 'cross_009']
+0.517 car_001: 経路 ['cross_001', 'cross_007', 'cross_013', 'cross_019', 'cross_020', 'cross_026', 'cross_032', 'cross_033', 'cross_034', 'cross_035', 'cross_036']
+0.528 car_001: 接続 cross_007
+0.547 car_000: 経路 ['cross_001', 'cross_007', 'cross_013', 'cross_019', 'cross_020', 'cross_026', 'cross_032', 'cross_033', 'cross_034', 'cross_035', 'cross_036']
+0.559 car_000: 接続 cross_007
+1.28 car_006: 進入 
+1.52 car_005: 進入 
+1.73 car_001: 進入 
+2.07 car_006: 進入 
+2.07 car_002: 進入 
+2.07 car_001: 進入 
+2.07 car_003: 進入 
+2.07 car_000: 進入 
+2.27 car_005: 通過 
+2.27 car_005: 移動 2.1s
+2.45 car_006: 通過 
+2.45 car_006: 移動 2.1s
+3.28 car_003: 進入 
+3.29 car_006: 通過 
+3.29 car_006: 移動 1.67s
+3.52 car_005: 通過 
+3.52 car_005: 移動 1.67s
+3.73 car_001: 通過 
+3.73 car_001: 移動 2.55s
+4.07 car_006: 通過 
+4.07 car_006: 移動 1.94s
+4.08 car_000: 通過 
+4.08 car_000: 移動 2.55s
+4.28 car_002: 通過 
+4.28 car_002: 移動 2.1s
+4.38 car_005: 接続 cross_009
+4.46 car_003: 進入 
+4.47 car_001: 通過 
+4.47 car_001: 移動 1.96s
+4.56 car_006: 接続 cross_010
+4.57 car_006: 進入 
+4.68 car_003: 通過 
+4.68 car_003: 移動 2.1s
+4.69 car_000: 進入 
+4.9 car_005: 進入 
+4.97 car_006: 接続 cross_010
+5.01 car_000: 進入 
+5.2 car_005: 接続 cross_009
+5.29 car_003: 通過 
+5.29 car_003: 移動 1.67s
+5.83 car_005: 進入 
+6.02 car_006: 接続 cross_010
+6.15 car_000: 進入 
+6.29 car_001: 接続 cross_019
+6.39 car_002: 接続 cross_008
+6.46 car_001: 接続 cross_019
+6.47 car_003: 通過 
+6.47 car_003: 移動 1.94s
+6.58 car_006: 通過 
+6.58 car_006: 移動 1.69s
+6.64 car_000: 接続 cross_013
+6.69 car_000: 通過 
+6.69 car_000: 移動 1.96s
+6.7 car_006: 進入 
+6.79 car_003: 接続 cross_010
+6.8 car_003: 進入 
+6.91 car_005: 通過 
+6.91 car_005: 移動 1.94s
+6.97 car_003: 接続 cross_010
+7.01 car_000: 通過 
+7.02 car_000: 移動 1.36s
+7.02 car_004: 進入 
+7.83 car_005: 通過 
+7.83 car_005: 移動 1.69s
+8.09 car_005: 進入 
+8.16 car_000: 通過 
+8.16 car_000: 移動 1.95s
+8.2 car_003: 進入 
+8.2 car_005: 進入 
+8.28 car_006: 接続 cross_016
+8.38 car_000: 接続 cross_026
+8.41 car_000: 進入 
+8.42 car_003: 接続 cross_010
+8.66 car_000: 接続 cross_026
+8.7 car_006: 通過 
+8.7 car_006: 移動 1.15s
+8.73 car_000: 進入 
+8.81 car_003: 通過 
+8.81 car_003: 移動 1.69s
+8.84 car_004: 進入 
+8.85 car_005: 接続 cross_016
+9.03 car_004: 通過 
+9.03 car_004: 移動 2.1s
+9.39 car_001: 進入 
+9.53 car_005: 接続 cross_016
+9.86 car_006: 接続 cross_017
+10.0 car_003: 進入 
+10.1 car_005: 通過 
+10.1 car_005: 移動 1.15s
+10.1 car_000: 接続 cross_026
+10.2 car_005: 通過 
+10.2 car_005: 移動 2.4s
+10.2 car_003: 通過 
+10.2 car_003: 移動 1.15s
+10.4 car_000: 通過 
+10.4 car_000: 移動 1.56s
+10.5 car_003: 接続 cross_017
+10.7 car_000: 通過 
+10.7 car_000: 移動 2.16s
+10.9 car_004: 通過 
+10.9 car_004: 移動 1.67s
+11.1 car_004: 接続 cross_009
+11.2 car_005: 接続 cross_023
+11.4 car_003: 接続 cross_017
+11.4 car_001: 通過 
+11.4 car_001: 移動 1.36s
+12.0 car_000: 接続 cross_033
+12.0 car_003: 通過 
+12.0 car_003: 移動 2.4s
+12.5 car_004: 接続 cross_009
+12.6 car_005: 接続 cross_023
+12.8 car_001: 接続 cross_020
+12.8 car_003: 進入 
+12.9 car_000: 接続 cross_033
+13.1 car_001: 進入 
+14.4 car_003: 接続 cross_023
+14.5 car_003: 進入 
+14.8 car_003: 通過 
+14.8 car_003: 移動 1.61s
+15.1 car_001: 通過 
+15.1 car_001: 移動 1.95s
+15.3 car_000: 進入 
+15.9 car_003: 進入 
+16.5 car_003: 接続 cross_024
+16.5 car_003: 通過 
+16.5 car_003: 移動 1.62s
+16.6 car_000: 進入 
+17.0 car_001: 接続 cross_026
+17.3 car_000: 通過 
+17.3 car_000: 移動 1.49s
+18.0 car_003: 通過 
+18.0 car_003: 移動 2.39s
+18.1 car_004: 進入 
+18.1 car_003: 到着 1
+18.6 car_000: 通過 
+18.6 car_000: 移動 2.06s
+18.8 car_000: 接続 cross_035
+18.9 car_003: 進入 
+19.0 car_002: 進入 
+20.1 car_004: 通過 
+20.1 car_004: 移動 1.94s
+20.3 car_003: 到着 2
+20.7 car_000: 接続 cross_035
+20.8 car_001: 進入 
+20.9 car_001: 進入 
+20.9 car_003: 通過 
+21.0 car_003: 移動 1.74s
+21.0 car_002: 通過 
+21.0 car_002: 移動 1.67s
+21.0 car_004: 進入 
+21.1 car_001: 進入 
+21.2 car_004: 進入 
+21.3 car_006: 進入 
+22.0 car_004: 接続 cross_010
+22.2 car_006: 進入 
+22.2 car_002: 進入 
+22.4 car_002: 進入 
+22.6 car_002: 接続 cross_009
+22.7 car_003: 到着 3
+22.8 car_001: 通過 
+22.8 car_001: 移動 1.56s
+22.9 car_001: 通過 
+22.9 car_001: 移動 2.16s
+23.0 car_004: 通過 
+23.0 car_004: 移動 1.69s
+23.1 car_001: 通過 
+23.1 car_001: 移動 1.49s
+23.2 car_004: 通過 
+23.2 car_004: 移動 1.15s
+23.3 car_006: 通過 
+23.3 car_006: 移動 2.4s
+23.4 car_003: 進入 
+24.2 car_006: 通過 
+24.2 car_006: 移動 1.61s
+24.2 car_002: 通過 
+24.2 car_002: 移動 1.94s
+24.3 car_001: 接続 cross_034
+24.4 car_004: 接続 cross_017
+24.4 car_002: 通過 
+24.4 car_002: 移動 1.69s
+24.4 car_000: 進入 
+24.4 car_001: 進入 
+24.5 car_006: 進入 
+24.6 car_001: 接続 cross_034
+24.6 car_001: 進入 
+24.7 car_004: 接続 cross_017
+24.8 car_004: 進入 
+25.0 car_004: 進入 
+25.0 car_006: 進入 
+25.0 car_001: 接続 cross_034
+25.1 car_001: 進入 
+25.4 car_003: 通過 
+25.7 car_006: 接続 cross_024
+25.8 car_006: 接続 cross_024
+25.9 car_006: 進入 
+26.1 car_002: 接続 cross_016
+26.1 car_002: 接続 cross_016
+26.4 car_000: 通過 
+26.4 car_000: 移動 1.91s
+26.4 car_001: 通過 
+26.4 car_001: 移動 2.06s
+26.5 car_006: 通過 
+26.5 car_006: 移動 1.62s
+26.7 car_001: 通過 
+26.7 car_001: 移動 1.91s
+26.8 car_004: 通過 
+26.8 car_004: 移動 2.4s
+27.0 car_004: 通過 
+27.0 car_004: 移動 1.61s
+27.0 car_006: 通過 
+27.0 car_006: 移動 2.39s
+27.1 car_001: 通過 
+27.1 car_001: 移動 2.12s
+27.9 car_006: 通過 
+27.9 car_006: 移動 1.74s
+28.2 car_006: 到着 4
+28.3 car_000: 到着 5
+28.5 car_001: 到着 6
+28.6 car_001: 到着 7
+28.6 car_004: 接続 cross_024
+
+経過時間 28.6 s
+
+
+29.2 car_004: 接続 cross_024
+29.2 car_001: 到着 8
+29.4 car_006: 到着 9
+29.6 car_006: 到着 10
