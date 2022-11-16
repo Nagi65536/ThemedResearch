@@ -149,19 +149,19 @@ class Communication():
 def cprint(car_id, status, data=''):
     if status in OUTPUT_SETTING and OUTPUT_SETTING[status]:
         if status == '信号':
-            print(f'{time.time()-start_time:3.3} {status}: {data}')
+            print(f'{time.time()-start_time:.3} {status}: {data}')
         else:
-            print(f'{time.time()-start_time:3.3} {car_id}: {status} {data}')
+            print(f'{time.time()-start_time:.3} {car_id}: {status} {data}')
 
         if 'log-none' in args or not OUTPUT_SETTING['ALL']:
             return
 
         with open(LOG_FILE_PATH, 'a') as f:
             if status == '信号':
-                f.write(f'{time.time()-start_time:3.3} {status}: {data}\n')
+                f.write(f'{time.time()-start_time:.3} {status}: {data}\n')
             else:
                 f.write(
-                    f'{time.time()-start_time:3.3} {car_id}: {status} {data}\n')
+                    f'{time.time()-start_time:.3} {car_id}: {status} {data}\n')
 
 
 comms = Communication()

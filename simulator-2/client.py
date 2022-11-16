@@ -163,7 +163,7 @@ def cross_process(car_id, front_cars=0):
     comms.add_passed(car_id)
     dist = comms.get_next_cross_data(car_id)[1]
     wait_time = dist / cf.CAR_SPEED
-    cf.cprint(car_id, '移動', f'{wait_time:3.3}s')
+    cf.cprint(car_id, '移動', f'{wait_time:.3}s')
     time.sleep(wait_time)
 
     if len(comms.get_client_data(car_id)) >= 3:

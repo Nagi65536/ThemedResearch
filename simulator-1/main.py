@@ -7,9 +7,13 @@ import time
 import client as cl
 import control as cr
 import config as cf
+from setting import db_init, remove_table
 
 
 def log_init():
+    if cf.OUTPUT_SETTING['ALL']:
+        return
+
     with open(cf.LOG_FILE_PATH, 'a') as f:
         mode = 'TL' if len(cf.args) > 1 and cf.args[1] == 'tl' else 'NEW'
         f.write(f'----  ---\n\
@@ -25,22 +29,22 @@ def log_init():
 
 
 def clients_init():
-    global clients, start_time
-
-    conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
-    cur = conn.cursor()
-
     for i, client in enumerate(cf.clients):
+        dir_list = [0, 1, 2, 3]
         if client['delay'] == None:
             client['delay'] = random.randint(cf.DELAY_RANGE[0], cf.DELAY_RANGE[1])
         if client['start'] == None:
-            client['start'] = random.randint(0, 3)
+            c = random.choice(dir_list)
+            client['start'] = c
+            dir_list.remove(c)
         if client['goal'] == None:
-            client['goal'] = random.randint(0, 3)
+            client['goal'] = random.choice(dir_list)
         cf.clients[i] = client
 
 
 def main():
+    db_init(cf.table_name)
+
     cf.start_time = time.time()
     clients_init()
     futures = []
@@ -56,7 +60,7 @@ def main():
             cf.cprint(
                 car_id,
                 '開始',
-                f'{(time.time()-cf.start_time):.3} s  {client["start"]}->{client["goal"]}'
+                f'{(time.time()-cf.start_time):.3} s  {client["start"]} -> {client["goal"]}'
             )
             executor.submit(
                 cl.communicate, car_id, start, goal)
@@ -67,9 +71,10 @@ def main():
 
         future.result()
         print()
-        print(f'経過時間 {time.time() - cf.start_time}')
+        print(f'経過時間 {time.time() - cf.start_time:.3}')
         with open(cf.LOG_FILE_PATH, 'a') as f:
-            f.write(f'\n経過時間 {(time.time() - cf.start_time):.3} s\n\n\n')
+            f.write(f'\n経過時間 {(time.time() - cf.start_time):.3} s\n\n')
+        remove_table(cf.table_name)
 
 
 if __name__ == '__main__':

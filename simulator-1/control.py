@@ -59,7 +59,7 @@ def check_can_entry():
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
 
-    cur.execute(f'SELECT * FROM control ORDER BY time ASC')
+    cur.execute(f'SELECT * FROM {cf.table_name} ORDER BY time ASC')
     control_data = cur.fetchall()
 
     entry_list = [c for c in control_data if c[3] == 'entry']
@@ -100,7 +100,7 @@ def control_traffic_light():
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
 
-    cur.execute(f'SELECT * FROM control ORDER BY time ASC')
+    cur.execute(f'SELECT * FROM {cf.table_name} WHERE ORDER BY time ASC')
     control_data = cur.fetchall()
 
     entry_list = [c for c in control_data if c[3] == 'entry']
@@ -129,8 +129,7 @@ def control_traffic_light():
 def control_down_grade():
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
-    print('ok')
-    cur.execute(f'SELECT * FROM control ORDER BY time ASC')
+    cur.execute(f'SELECT * FROM {cf.table_name} WHERE ORDER BY time ASC')
     control_data = cur.fetchall()
     status_list = [c[3] for c in control_data if c[3] == 'entry']
 
@@ -142,7 +141,7 @@ def control_down_grade():
 def control():
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
-    cur.execute('DELETE FROM control')
+    cur.execute(f'DELETE FROM {cf.table_name}')
     cf.switch_traffic_light_time = time.time()
 
     while True:
