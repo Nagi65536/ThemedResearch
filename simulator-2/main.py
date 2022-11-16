@@ -10,6 +10,9 @@ import control as cr
 
 
 def log_init():
+    if not cf.OUTPUT_SETTING['ALL']:
+        return
+
     with open(cf.LOG_FILE_PATH, 'a') as f:
         mode = 'TRAFICC-LIGHT' if 'traficc-light' in cf.args else 'NEW'
         f.write(f'--- {mode} ---\n\
@@ -79,7 +82,7 @@ def main():
         print(f'経過時間 {(time.time() - cf.start_time):.3} s')
         print(f'pid: {cf.pid}')
         with open(cf.LOG_FILE_PATH, 'a') as f:
-            f.write(f'\n経過時間 {(time.time() - cf.start_time):.3} s\n\n\n')
+            f.write(f'\n経過時間 {(time.time() - cf.start_time):.3} s\n')
 
 
 if __name__ == '__main__':

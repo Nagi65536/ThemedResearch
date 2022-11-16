@@ -41,7 +41,14 @@ TIME_RANDOM_RANGE = (0, 3)
 # クライアントデータ　
 clients = [
     # 前の車との出発時間の差, スタート位置, ゴール位置
-    {'time': 0, None: None, 'goal_node': None},
+    {'time': None, 'start_node': None, 'goal_node': None},
+    {'time': None, 'start_node': None, 'goal_node': None},
+    {'time': None, 'start_node': None, 'goal_node': None},
+    {'time': None, 'start_node': None, 'goal_node': None},
+    {'time': None, 'start_node': None, 'goal_node': None},
+    {'time': None, 'start_node': None, 'goal_node': None},
+    {'time': None, 'start_node': None, 'goal_node': None},
+    {'time': None, 'start_node': None, 'goal_node': None},
 ]
 OUTPUT_SETTING = {
     '信号': False,
@@ -55,6 +62,7 @@ OUTPUT_SETTING = {
     '移動': False,
     '到着': True,
     '失敗': True,
+    'ALL': False
 }
 
 
@@ -69,7 +77,7 @@ is_yellow = False
 blue_traffic_light = 0
 switch_traffic_light_time = 0
 
-if 'log-random' in args:
+if 'log-random' in args and OUTPUT_SETTING['ALL']:
     LOG_FILE_PATH += f'_{pid}.log'
 else:
     LOG_FILE_PATH += '.log'
@@ -145,7 +153,7 @@ def cprint(car_id, status, data=''):
         else:
             print(f'{time.time()-start_time:3.3} {car_id}: {status} {data}')
 
-        if 'log-none' in args:
+        if 'log-none' in args or not OUTPUT_SETTING['ALL']:
             return
 
         with open(LOG_FILE_PATH, 'a') as f:
