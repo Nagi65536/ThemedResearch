@@ -30,6 +30,9 @@ def communicate(car_id, start_node, goal_node, delay=-1):
         disable_node.append(congestion_node)
         cf.cprint(car_id, '回避', disable_node)
 
+    if cf.is_stop_control:
+        return
+
     comms.add_client_data(car_id, data)
 
     if data and len(data) >= 3:
@@ -158,6 +161,9 @@ def cross_process(car_id, front_cars=0):
     comms.add_entry(car_id)
     time.sleep(front_cars * cf.ENTRY_DELAY)
     time.sleep(cf.CAR_PASSED_TIME)
+
+    if cf.is_stop_control:
+        return
 
     # 交差点通過
     comms.add_passed(car_id)

@@ -55,9 +55,6 @@ def main():
         future = executor.submit(cr.control)
         executor.submit(timer)
         while True:
-            if cf.is_stop_control:
-                break
-
             nodes = random.sample(crosses, 2)
             car_id = f'car_{str(cf.departed_num).zfill(3)}'
             cf.cprint(
@@ -65,6 +62,9 @@ def main():
                 '開始',
                 f'{(time.time()-cf.start_time):.3} s  {nodes[0]} -> {nodes[1]}'
             )
+            if cf.is_stop_control:
+                break
+
             cf.departed_num += 1
             executor.submit(
                 cl.communicate, car_id, nodes[0], nodes[1])

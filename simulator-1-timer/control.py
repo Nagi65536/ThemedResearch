@@ -100,10 +100,10 @@ def control_traffic_light():
             cf.is_yellow = True
             cf.cprint('', '信号', '黄')
 
-    conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
+    conn = sqlite3.connect(cf.DB_PATH, isolation_level=None)
     cur = conn.cursor()
 
-    cur.execute(f'SELECT * FROM {cf.table_name} WHERE ORDER BY time ASC')
+    cur.execute(f'SELECT * FROM {cf.table_name} ORDER BY time ASC')
     control_data = cur.fetchall()
 
     entry_list = [c for c in control_data if c[3] == 'entry']
@@ -112,8 +112,10 @@ def control_traffic_light():
     stop_lane = []
 
     executor = ThreadPoolExecutor()
+    blue = (cf.blue_traffic_light, cf.blue_traffic_light+2)
     for my_data in check_list:
-        blue = (cf.blue_traffic_light, cf.blue_traffic_light+2)
+        if len(stop_lane) >= 2:
+            break
         if my_data[1] not in stop_lane \
                 and my_data[1] in blue:
 
@@ -146,12 +148,10 @@ def control():
     cur = conn.cursor()
     cur.execute(f'DELETE FROM {cf.table_name}')
     cf.switch_traffic_light_time = time.time()
-
     while True:
         if cf.is_stop_control:
             return
-        if cf.is_stop_control:
-            break
+
         if 'tl' in cf.args:
             control_traffic_light()
         elif 'dg' in cf.args:

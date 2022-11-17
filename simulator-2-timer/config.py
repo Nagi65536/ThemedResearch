@@ -38,20 +38,20 @@ TRAFFIC_LIGHT_TIME = (10, 10, 10, 10)
 TRAFFIC_LIGHT_TIME_YELLOW = 2
 # クライアントの時間差をランダムにした時の範囲(ms)
 TIME_RANDOM_RANGE = (1000, 1000)
-# クライアントデータ
-TIMER = 10
+
+TIMER = 60 * 5
 OUTPUT_SETTING = {
     '信号': False,
     '開始': False,
     '探索': False,
     '経路': False,
     '回避': False,
-    '接続': True,
-    '進入': True,
-    '通過': True,
+    '接続': False,
+    '進入': False,
+    '通過': False,
     '移動': False,
     '到着': True,
-    '失敗': True,
+    '失敗': False,
     '待機数': True,
     'ALL': False
 }
@@ -117,7 +117,7 @@ class Communication():
         status="connect" AND
         pid="{pid}"
         ''')
-        cprint('', '待機数', f'{len(cur.fetchall())}')
+        cprint('', '待機数', len(cur.fetchall()))
 
     def add_entry(self, car_id):
         self.entry_clients.append(car_id)
@@ -136,7 +136,7 @@ class Communication():
         status="connect" AND
         pid="{pid}"
         ''')
-        cprint('', '待機数', f'件数{len(cur.fetchall())}')
+        cprint('', '待機数', len(cur.fetchall()))
 
     def add_client_data(self, car_id, data):
         self.client_data[car_id] = {
@@ -152,21 +152,22 @@ class Communication():
 
 
 def cprint(car_id, status, data=''):
+    time_ = int(time.time()-start_time)
     if status in OUTPUT_SETTING and OUTPUT_SETTING[status]:
         if status in ['信号', '接続数']:
-            print(f'{time.time()-start_time:.3} {status}: {data}')
+            print(f'{time_} {status}: {data}')
         else:
-            print(f'{time.time()-start_time:.3} {car_id}: {status} {data}')
+            print(f'{time_} {car_id}: {status} {data}')
 
         if 'log-none' in args or not OUTPUT_SETTING['ALL']:
             return
 
         with open(LOG_FILE_PATH, 'a') as f:
             if status == '信号':
-                f.write(f'{time.time()-start_time:.3} {status}: {data}\n')
+                f.write(f'{time_} {status}: {data}\n')
             else:
                 f.write(
-                    f'{time.time()-start_time:.3} {car_id}: {status} {data}\n')
+                    f'{time_} {car_id}: {status} {data}\n')
 
 
 comms = Communication()

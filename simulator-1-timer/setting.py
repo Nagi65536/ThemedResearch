@@ -28,6 +28,7 @@ def db_init(table_name='control'):
 
 
 def db_clear():
+    os.remove(cf.DB_PATH)
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     db_init()
     print('⚡️綺麗にしました')
