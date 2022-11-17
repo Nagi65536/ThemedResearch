@@ -36,11 +36,22 @@ def timer():
 
         time.sleep(cf.PROCESS_DELAY)
 
+    conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
+    cur = conn.cursor()
+
+    cur.execute(f'''
+    SELECT car_id FROM control WHERE
+    status="connect" AND
+    pid="{cf.pid}"
+    ''')
+    wait_num = len(cur.fetchall())
     cf.is_stop_control = True
-    print(f'\n処理数 {cf.arrived_num}\n')
+    print(f'\n処理数 {cf.arrived_num}')
+    print(f'待機数 {wait_num}')
     with open(cf.LOG_FILE_PATH, 'a') as f:
-        f.write(f'処理数 {cf.arrived_num}\n')
+        f.write(f'処理数 {cf.arrived_num}  待機数 {wait_num}\n')
     db_init(cf.table_name)
+    
 
 
 def normal():

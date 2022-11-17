@@ -38,7 +38,7 @@ TRAFFIC_LIGHT_TIME_YELLOW = 5
 TIME_RANDOM_RANGE = (0, 3000)
 
 LOOP_NUM = 10
-TIMER = 60 * 5
+TIMER = 60 * 60
 OUTPUT_SETTING = {
     '信号': False,
     '開始': False,
