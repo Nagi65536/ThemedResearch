@@ -83,12 +83,6 @@ class Communication():
         dist = ['北', '東', '南', '西']
         cprint(car_id, '接続', f'{start} -> {goal}')
 
-        cur.execute(f'''
-        SELECT car_id FROM {table_name} WHERE
-        status="connect"
-        ''')
-        cprint('', '待機数', f'{len(cur.fetchall())}')
-
     def add_entry(self, car_id, delay):
         conn = sqlite3.connect(f'{DB_PATH}', isolation_level=None)
         cur = conn.cursor()
@@ -109,7 +103,8 @@ class Communication():
         SELECT car_id FROM {table_name} WHERE
         status="connect"
         ''')
-        cprint('', '待機数', f'{len(cur.fetchall())}')
+        global arrived_num
+        cprint('', '待機数', f'{len(cur.fetchall())} 処理数 {arrived_num}')
 
 
 def cprint(car_id, status, data=''):

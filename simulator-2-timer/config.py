@@ -112,12 +112,6 @@ class Communication():
             "{car_id}", "{now_cross}", {origin}, {dest}, "connect", {time.time()-start_time}, "{pid}"
         )''')
         cprint(car_id, '接続', f'{now_cross}')
-        cur.execute(f'''
-        SELECT car_id FROM control WHERE
-        status="connect" AND
-        pid="{pid}"
-        ''')
-        cprint('', '待機数', len(cur.fetchall()))
 
     def add_entry(self, car_id):
         self.entry_clients.append(car_id)
@@ -136,7 +130,8 @@ class Communication():
         status="connect" AND
         pid="{pid}"
         ''')
-        cprint('', '待機数', len(cur.fetchall()))
+        global arrived_num
+        cprint('', '待機数', f'{len(cur.fetchall())} 処理数 {arrived_num}')
 
     def add_client_data(self, car_id, data):
         self.client_data[car_id] = {
