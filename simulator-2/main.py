@@ -44,7 +44,7 @@ def clients_init():
             client['time'] = random.randint(
                 cf.TIME_RANDOM_RANGE[0],
                 cf.TIME_RANDOM_RANGE[1]
-            )
+            ) / 1000
         if not client['start_node']:
             client['start_node'] = random.choice(tmp_node_list)
             tmp_node_list.remove(client['start_node'])

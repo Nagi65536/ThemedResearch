@@ -15,9 +15,9 @@ from setting import db_init
 
 
 # ログファイルのパス
-LOG_FILE_PATH = f'../log/simulator-2'
+LOG_FILE_PATH = f'../log/simulator-2timer'
 # データベースのパス
-DB_PATH = '../db/simulator2.db'
+DB_PATH = '../db/simulator2-timer.db'
 # 処理の遅延
 PROCESS_DELAY = 0.1
 # 車の速さ
@@ -39,17 +39,7 @@ TRAFFIC_LIGHT_TIME_YELLOW = 2
 # クライアントの時間差をランダムにした時の範囲(ms)
 TIME_RANDOM_RANGE = (1000, 1000)
 # クライアントデータ
-clients = [
-    # 前の車との出発時間の差, スタート位置, ゴール位置
-    {'time': None, 'start_node': None, 'goal_node': None},
-    {'time': None, 'start_node': None, 'goal_node': None},
-    {'time': None, 'start_node': None, 'goal_node': None},
-    {'time': None, 'start_node': None, 'goal_node': None},
-    {'time': None, 'start_node': None, 'goal_node': None},
-    {'time': None, 'start_node': None, 'goal_node': None},
-    {'time': None, 'start_node': None, 'goal_node': None},
-    {'time': None, 'start_node': None, 'goal_node': None},
-]
+TIMER = 10
 OUTPUT_SETTING = {
     '信号': False,
     '開始': False,
@@ -62,6 +52,7 @@ OUTPUT_SETTING = {
     '移動': False,
     '到着': True,
     '失敗': True,
+    '待機数': True,
     'ALL': False
 }
 
@@ -71,6 +62,7 @@ OUTPUT_SETTING = {
 pid = str(random.randint(0, 10000)).zfill(5)
 start_time = None
 arrived_num = 0
+departed_num = 0
 is_stop_control = False
 args = sys.argv
 is_yellow = False
@@ -119,7 +111,13 @@ class Communication():
             INSERT INTO control VALUES (
             "{car_id}", "{now_cross}", {origin}, {dest}, "connect", {time.time()-start_time}, "{pid}"
         )''')
-        cprint(car_id, '接続', now_cross)
+        cprint(car_id, '接続', f'{now_cross}')
+        cur.execute(f'''
+        SELECT car_id FROM control WHERE
+        status="connect" AND
+        pid="{pid}"
+        ''')
+        cprint('', '待機数', f'{len(cur.fetchall())}')
 
     def add_entry(self, car_id):
         self.entry_clients.append(car_id)
@@ -133,6 +131,12 @@ class Communication():
         cur.execute(
             f'DELETE FROM control WHERE car_id="{car_id}" AND pid="{pid}"')
         cprint(car_id, '通過')
+        cur.execute(f'''
+        SELECT car_id FROM control WHERE
+        status="connect" AND
+        pid="{pid}"
+        ''')
+        cprint('', '待機数', f'件数{len(cur.fetchall())}')
 
     def add_client_data(self, car_id, data):
         self.client_data[car_id] = {
@@ -149,7 +153,7 @@ class Communication():
 
 def cprint(car_id, status, data=''):
     if status in OUTPUT_SETTING and OUTPUT_SETTING[status]:
-        if status == '信号':
+        if status in ['信号', '接続数']:
             print(f'{time.time()-start_time:.3} {status}: {data}')
         else:
             print(f'{time.time()-start_time:.3} {car_id}: {status} {data}')

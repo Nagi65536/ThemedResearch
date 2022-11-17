@@ -11,9 +11,9 @@ import random
 
 
 # ログファイルのパス
-LOG_FILE_PATH = f'../log/simulator-timer'
+LOG_FILE_PATH = f'../log/simulator-1timer'
 # データベースのパス
-DB_PATH = '../db/simulator-timer.db'
+DB_PATH = '../db/simulator-1timer.db'
 # 処理の遅延
 PROCESS_DELAY = 0.1
 # 前方の車1台あたりの遅延
@@ -36,6 +36,7 @@ OUTPUT_SETTING = {
     '進入': True,
     '通過': True,
     '到着': True,
+    '待機数': True,
     'ALL': True
 }
 
@@ -79,6 +80,12 @@ class Communication():
         dist = ['北', '東', '南', '西']
         cprint(car_id, '接続', f'{start} -> {goal}')
 
+        cur.execute(f'''
+        SELECT car_id FROM {table_name} WHERE
+        status="connect"
+        ''')
+        cprint('', '待機数', f'{len(cur.fetchall())}')
+
     def add_entry(self, car_id, delay):
         conn = sqlite3.connect(f'{DB_PATH}', isolation_level=None)
         cur = conn.cursor()
@@ -95,11 +102,17 @@ class Communication():
         cur.execute(f'DELETE FROM {table_name} WHERE car_id="{car_id}"')
         cprint(car_id, '通過', f'処理数 {arrived_num}')
 
+        cur.execute(f'''
+        SELECT car_id FROM {table_name} WHERE
+        status="connect"
+        ''')
+        cprint('', '待機数', f'{len(cur.fetchall())}')
+
 
 def cprint(car_id, status, data=''):
     if status in OUTPUT_SETTING and OUTPUT_SETTING[status] and OUTPUT_SETTING['ALL']:
         time_ = int(time.time() - start_time)
-        if status == '信号':
+        if status in ['信号', '待機数']:
             print(f'{time_} {status}: {data}')
         else:
             print(f'{time_} {car_id}: {status} {data}')
