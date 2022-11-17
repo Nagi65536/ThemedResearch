@@ -40,7 +40,7 @@ def timer():
 
     clear_db()
     cf.is_stop_control = True
-    print(f'\n処理数 {cf.arrived_num}\n')
+    print(f'\n処理数 {cf.arrived_num}')
     with open(cf.LOG_FILE_PATH, 'a') as f:
         f.write(f'処理数 {cf.arrived_num}\n')
 

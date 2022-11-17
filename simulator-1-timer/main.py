@@ -7,11 +7,11 @@ import time
 import client as cl
 import control as cr
 import config as cf
-from setting import db_init
+from setting import db_init, remove_table
 
 
 def log_init():
-    if cf.OUTPUT_SETTING['ALL'] or 'ln' in cf.args:
+    if 'log' not in cf.args:
         return
 
     with open(cf.LOG_FILE_PATH, 'a') as f:
@@ -32,22 +32,23 @@ def timer():
     while True:
         time_ = time.time() - cf.start_time
         if time_ > cf.TIMER:
-            cf.is_stop_control = True
-            print(f'\n処理数 {cf.arrived_num}\n')
-            with open(cf.LOG_FILE_PATH, 'a') as f:
-                f.write(f'\n処理数 {cf.arrived_num}\n')
-            remove_table(cf.table_name)
-            return
-            
+            break
+
         time.sleep(cf.PROCESS_DELAY)
 
-
-def main():
+    cf.is_stop_control = True
+    print(f'\n処理数 {cf.arrived_num}\n')
+    with open(cf.LOG_FILE_PATH, 'a') as f:
+        f.write(f'処理数 {cf.arrived_num}\n')
     db_init(cf.table_name)
 
-    cf.start_time = time.time()
-    futures = []
 
+def normal():
+    cf.config_init()
+    db_init(cf.table_name)
+
+    futures = []
+    cf.start_time = time.time()
     with ThreadPoolExecutor() as executor:
         executor.submit(cr.control)
         executor.submit(timer)
@@ -64,8 +65,17 @@ def main():
             cf.departed_num += 1
 
             # 次の車の発車時間まで待機
-            sleep = random.randint(cf.DELAY_RANGE[0], cf.DELAY_RANGE[1])/10
+            sleep = random.randint(cf.DELAY_RANGE[0], cf.DELAY_RANGE[1])/1000
             time.sleep(sleep)
+
+
+def main():
+    for i in range(1, cf.LOOP_NUM+1):
+        print(f'----- {i}回目 -----')
+        print()
+        normal()
+
+    remove_table(cf.table_name)
 
 
 if __name__ == '__main__':

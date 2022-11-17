@@ -6,14 +6,16 @@ import random
 
 # 信号機モード
 # 引数 tl
-# ログなし
-# 引数 ln
+# ログファイルをランダムに
+# log-random
+# ログあり
+# 引数 log
 
 
 # ログファイルのパス
-LOG_FILE_PATH = f'../log/simulator-1timer'
+LOG_FILE_PATH = f'./log/simulator-1timer'
 # データベースのパス
-DB_PATH = '../db/simulator-1timer.db'
+DB_PATH = './db/simulator-1timer.db'
 # 処理の遅延
 PROCESS_DELAY = 0.1
 # 前方の車1台あたりの遅延
@@ -24,11 +26,14 @@ CAR_PASSED_TIME = 2
 TRAFFIC_LIGHT_TIME = (4, 4)
 # 黄色の時間
 TRAFFIC_LIGHT_TIME_YELLOW = 2
+
+# ループ回数
+LOOP_NUM = 3
 # 計測時間(s)
 TIMER = 10
-# クライアントの時間差をランダムにした時の範囲(10倍されています)
-DELAY_RANGE = (0, 20)
-# クライアントデータ
+# クライアントの時間差をランダムにした時の範囲(ms)
+DELAY_RANGE = (0, 2000)
+# 出力内容
 OUTPUT_SETTING = {
     '信号': True,
     '開始': True,
@@ -36,8 +41,7 @@ OUTPUT_SETTING = {
     '進入': True,
     '通過': True,
     '到着': True,
-    '待機数': True,
-    'ALL': True
+    '待機数': True
 }
 
 
@@ -55,9 +59,8 @@ is_yellow = False
 is_stop_control = False
 
 
-if 'lr' in args:
-    r = str(random.randint(0, 10000))
-    LOG_FILE_PATH += f'_{r.zfill(5)}.log'
+if 'log-random' in args:
+    LOG_FILE_PATH += f'_{pid}.log'
 else:
     LOG_FILE_PATH += f'.log'
 print(f'pid {pid}')
@@ -110,19 +113,32 @@ class Communication():
 
 
 def cprint(car_id, status, data=''):
-    if status in OUTPUT_SETTING and OUTPUT_SETTING[status] and OUTPUT_SETTING['ALL']:
+    if status in OUTPUT_SETTING and OUTPUT_SETTING[status]:
         time_ = int(time.time() - start_time)
         if status in ['信号', '待機数']:
             print(f'{time_} {status}: {data}')
         else:
             print(f'{time_} {car_id}: {status} {data}')
 
-        if 'ln' not in args:
+        if 'log' in args:
             with open(LOG_FILE_PATH, 'a') as f:
                 if status == '信号':
                     f.write(f'{time_} {status}: {data}\n')
                 else:
                     f.write(f'{time_} {car_id}: {status} {data}\n')
+
+
+def config_init():
+    global start_time, departed_num, arrived_num, blue_traffic_light
+    global switch_traffic_light_time, is_yellow, is_stop_control
+
+    start_time = None
+    departed_num = 0
+    arrived_num = 0
+    blue_traffic_light = 0
+    switch_traffic_light_time = 0
+    is_yellow = False
+    is_stop_control = False
 
 
 comms = Communication()

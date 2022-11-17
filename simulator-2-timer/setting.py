@@ -179,7 +179,7 @@ def euclid(node_1, node_2):
 
 
 def clear_db():
-    conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
+    conn = sqlite3.connect(cf.DB_PATH, isolation_level=None)
     cur = conn.cursor()
     cur.execute('DELETE FROM control')
     cur.execute('DELETE FROM cross_schedule')

@@ -35,10 +35,10 @@ TRAFFIC_LIGHT_TIME = (30, 30)
 # 黄色信号の時間
 TRAFFIC_LIGHT_TIME_YELLOW = 5
 # クライアントの時間差をランダムにした時の範囲(ms)
-TIME_RANDOM_RANGE = (1000, 2000)
+TIME_RANDOM_RANGE = (0, 3000)
 
-LOOP_NUM = 2
-TIMER = 10
+LOOP_NUM = 10
+TIMER = 60 * 5
 OUTPUT_SETTING = {
     '信号': False,
     '開始': False,
