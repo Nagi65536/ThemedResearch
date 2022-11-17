@@ -14,11 +14,11 @@ def a_star(start: str, goal: str,  disable_nodes: tuple):
 
     while True:
         cur.execute(
-            f"SELECT * FROM road_info WHERE cross_2 = '{now_node}' AND oneway != 1")
+            f"SELECT * FROM road_info WHERE cross_2='{now_node}' AND oneway!=1")
         connect_node_info = [(c[0], c[2]) for c in cur.fetchall()]
 
         cur.execute(
-            f"SELECT * FROM road_info WHERE cross_1 = '{now_node}' AND oneway != 2")
+            f"SELECT * FROM road_info WHERE cross_1='{now_node}' AND oneway!=2")
         connect_node_info += [(c[1], c[2]) for c in cur.fetchall()]
         # now_nodeから移動可能なタグをconnect_node_infoとして格納
 
@@ -71,7 +71,7 @@ def euclid(cross_name, goal_name):
     conn = sqlite3.connect(cf.DB_PATH, isolation_level=None)
     cur = conn.cursor()
     cur.execute(
-        f"SELECT * FROM cross_position WHERE cross = '{cross_name}' OR cross = '{goal_name}'")
+        f"SELECT * FROM cross_position WHERE cross='{cross_name}' OR cross='{goal_name}'")
     node_info = cur.fetchall()
 
     if len(node_info) == 1:

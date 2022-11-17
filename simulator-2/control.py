@@ -117,10 +117,12 @@ def control_traffic_light():
     check_list = [c for c in control_data if c[4] != 'entry']
     wait_cars = [0, 0, 0, 0]
     stop_lane = []
+    blue = (cf.blue_traffic_light, cf.blue_traffic_light+2)
 
     executor = ThreadPoolExecutor()
     for my_data in check_list:
-        blue = (cf.blue_traffic_light, cf.blue_traffic_light+2)
+        if stop_lane >= 2:
+            return
         if my_data[2] not in stop_lane \
                 and my_data[2] in blue:
 
@@ -153,11 +155,16 @@ def control():
         crosses = [c[0] for c in cur.fetchall()]
         crosses = set(crosses)
 
+        futures = []
+        executor = ThreadPoolExecutor()
         for cross in crosses:
             if 'traficc-light' in cf.args:
-                control_traffic_light()
+                futures.append(executor.submit(control_traffic_light, cross))
             else:
-                check_can_entry(cross)
+                futures.append(executor.submit(check_can_entry, cross))
+
+        for future in futures:
+            future.result()
 
         time.sleep(cf.PROCESS_DELAY)
 

@@ -7,6 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 import client as cl
 import config as cf
 import control as cr
+from setting import generate_db, clear_db
 
 
 def log_init():
@@ -34,23 +35,26 @@ def timer():
     while True:
         time_ = time.time() - cf.start_time
         if time_ > cf.TIMER:
-            cf.is_stop_control = True
-            print(f'\n処理数 {cf.arrived_num}\n')
-            with open(cf.LOG_FILE_PATH, 'a') as f:
-                f.write(f'\n処理数 {cf.arrived_num}\n')
-            return
-
+            break
         time.sleep(cf.PROCESS_DELAY)
 
+    clear_db()
+    cf.is_stop_control = True
+    print(f'\n処理数 {cf.arrived_num}\n')
+    with open(cf.LOG_FILE_PATH, 'a') as f:
+        f.write(f'処理数 {cf.arrived_num}\n')
 
-def main():
-    log_init()
-    cf.start_time = time.time()
+
+def normal():
+    cf.config_init()
+    generate_db()
+
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
     cur.execute('SELECT cross FROM cross_position')
     crosses = list(set([c[0] for c in cur.fetchall()]))
 
+    cf.start_time = time.time()
     with ThreadPoolExecutor() as executor:
         future = executor.submit(cr.control)
         executor.submit(timer)
@@ -62,6 +66,7 @@ def main():
                 '開始',
                 f'{(time.time()-cf.start_time):.3} s  {nodes[0]} -> {nodes[1]}'
             )
+
             if cf.is_stop_control:
                 break
 
@@ -74,6 +79,13 @@ def main():
                 cf.TIME_RANDOM_RANGE[1]
             ) / 1000
             time.sleep(sleep)
+
+
+def main():
+    for i in range(1, cf.LOOP_NUM+1):
+        print(f'----- {i}回目 -----')
+        print()
+        normal()
 
 
 if __name__ == '__main__':

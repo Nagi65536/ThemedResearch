@@ -3,57 +3,55 @@ import sys
 import time
 import random
 
-from setting import db_init
-
 
 # ログファイルをランダムにする
 # 引数 log-random
 # 制御方法を信号にする
 # 引数 traficc-light
-# ログを取らない
-# 引数 log-none
+# ログを取る
+# 引数 log
 
 
 # ログファイルのパス
-LOG_FILE_PATH = f'../log/simulator-2timer'
+LOG_FILE_PATH = f'./log/simulator-2timer'
 # データベースのパス
-DB_PATH = '../db/simulator2-timer.db'
+DB_PATH = './db/simulator2-timer'
 # 処理の遅延
 PROCESS_DELAY = 0.1
 # 車の速さ
-CAR_SPEED = 50
+CAR_SPEED = 10
 # 交差点混雑度を検索する時間範囲
-CHECK_CONGESTION_RANGE = (-6, 3)
+CHECK_CONGESTION_RANGE = (-10, 5)
 # 混雑と判断されない車の最大数
 CONFLICT_NUM = 5
 # 交差点到着予定時間を出す上での1台あたりの遅延
 ARRIVAL_DELAY = 0.5
 # 前方の車1台あたりの遅延
-ENTRY_DELAY = 0.2
+ENTRY_DELAY = 0.5
 # 交差点を通過するまでの時間
 CAR_PASSED_TIME = 2
 # 信号機の時間
-TRAFFIC_LIGHT_TIME = (10, 10, 10, 10)
+TRAFFIC_LIGHT_TIME = (30, 30)
 # 黄色信号の時間
-TRAFFIC_LIGHT_TIME_YELLOW = 2
+TRAFFIC_LIGHT_TIME_YELLOW = 5
 # クライアントの時間差をランダムにした時の範囲(ms)
-TIME_RANDOM_RANGE = (1000, 1000)
+TIME_RANDOM_RANGE = (1000, 2000)
 
-TIMER = 60 * 5
+LOOP_NUM = 2
+TIMER = 10
 OUTPUT_SETTING = {
     '信号': False,
     '開始': False,
-    '探索': False,
+    '探索': True,
     '経路': False,
     '回避': False,
-    '接続': False,
-    '進入': False,
-    '通過': False,
+    '接続': True,
+    '進入': True,
+    '通過': True,
     '移動': False,
     '到着': True,
     '失敗': False,
-    '待機数': True,
-    'ALL': False
+    '待機数': True
 }
 
 
@@ -69,10 +67,12 @@ is_yellow = False
 blue_traffic_light = 0
 switch_traffic_light_time = 0
 
-if 'log-random' in args and OUTPUT_SETTING['ALL']:
-    LOG_FILE_PATH += f'_{pid}.log'
+DB_PATH += f'_{pid}.db'
+if 'traficc-light' in args:
+    LOG_FILE_PATH += '_tf.log'
 else:
-    LOG_FILE_PATH += '.log'
+    LOG_FILE_PATH += '_new.log'
+
 print(f'ログファイル {LOG_FILE_PATH}')
 
 
@@ -153,13 +153,16 @@ class Communication():
 
 def cprint(car_id, status, data=''):
     time_ = int(time.time()-start_time)
+    if is_stop_control:
+        return
+
     if status in OUTPUT_SETTING and OUTPUT_SETTING[status]:
         if status in ['信号', '接続数']:
             print(f'{time_} {status}: {data}')
         else:
             print(f'{time_} {car_id}: {status} {data}')
 
-        if 'log-none' in args or not OUTPUT_SETTING['ALL']:
+        if 'log' not in args:
             return
 
         with open(LOG_FILE_PATH, 'a') as f:
@@ -168,6 +171,22 @@ def cprint(car_id, status, data=''):
             else:
                 f.write(
                     f'{time_} {car_id}: {status} {data}\n')
+
+
+def config_init():
+    global pid, start_time, arrived_num, departed_num, is_stop_control
+    global args, is_yellow, blue_traffic_light, switch_traffic_light_time
+
+    start_time = None
+    arrived_num = 0
+    departed_num = 0
+    is_stop_control = False
+    is_yellow = False
+    blue_traffic_light = 0
+    switch_traffic_light_time = 0
+
+
+print(f'pid {pid}')
 
 
 comms = Communication()

@@ -12,7 +12,6 @@ def communicate(car_id, start_node, goal_node, delay=-1):
 
     while True:
         data = a_star(start_node, goal_node, disable_node)
-        cf.cprint(car_id, '経路', f'{[d[0] for d in data]}')
 
         if not data:
             data = a_star(start_node, goal_node)
@@ -29,6 +28,7 @@ def communicate(car_id, start_node, goal_node, delay=-1):
 
         disable_node.append(congestion_node)
         cf.cprint(car_id, '回避', disable_node)
+    cf.cprint(car_id, '経路', f'{[d[0] for d in data]}')
 
     if cf.is_stop_control:
         return

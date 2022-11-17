@@ -47,7 +47,7 @@ def decide_can_entry(my_data, entry_list):
                 can_entry = True
 
         else:
-            print(f'{my_data[0]}: 未実装だわぼけ！ {my_data}')
+            cf.cprint(my_data[0], '未実装だわぼけ！', my_data)
 
         if not can_entry:
             break
@@ -84,7 +84,7 @@ def check_can_entry(cross_name):
             wait_cars[my_data[2]] += 1
 
 
-def control_traffic_light():
+def control_traffic_light(cross):
     # 信号が黄色のとき
     if cf.is_yellow:
         time_1 = time.time() - cf.switch_traffic_light_time
@@ -110,34 +110,35 @@ def control_traffic_light():
     cur = conn.cursor()
 
     cur.execute(
-        f'SELECT * FROM control WHERE pid="{cf.pid}" ORDER BY time ASC')
+        f'SELECT * FROM control WHERE cross="{cross}" AND pid="{cf.pid}" ORDER BY time ASC')
     control_data = cur.fetchall()
 
     entry_list = [c for c in control_data if c[4] == 'entry']
     check_list = [c for c in control_data if c[4] != 'entry']
     wait_cars = [0, 0, 0, 0]
-    stop_lane = []
+    stop_lane = [cf.blue_traffic_light+1, (cf.blue_traffic_light+3) % 4]
 
     executor = ThreadPoolExecutor()
     for my_data in check_list:
-        blue = (cf.blue_traffic_light, cf.blue_traffic_light+2)
-        if my_data[2] not in stop_lane \
-                and my_data[2] in blue:
+        if len(stop_lane) >= 4:
+            return
+        elif my_data[2] in stop_lane:
+            continue
 
-            can_entry = decide_can_entry(my_data, entry_list)
-            if can_entry:
-                cur.execute(
-                    f'UPDATE control SET status="entry" WHERE car_id="{my_data[0]}"'
-                )
-                entry_list.append(my_data)
-                executor.submit(
-                    cl.cross_process,
-                    my_data[0],
-                    wait_cars[my_data[2]]
-                )
-                wait_cars[my_data[2]] += 1
-            else:
-                stop_lane.append(my_data[2])
+        can_entry = decide_can_entry(my_data, entry_list)
+        if can_entry:
+            cur.execute(
+                f'UPDATE control SET status="entry" WHERE car_id="{my_data[0]}" AND pid="{cf.pid}"'
+            )
+            entry_list.append(my_data)
+            executor.submit(
+                cl.cross_process,
+                my_data[0],
+                wait_cars[my_data[2]]
+            )
+            wait_cars[my_data[2]] += 1
+        else:
+            stop_lane.append(my_data[2])
 
 
 def control():
@@ -146,6 +147,7 @@ def control():
     cur.execute(f'DELETE FROM control WHERE pid="{cf.pid}"')
     cur.execute(f'DELETE FROM cross_schedule WHERE pid="{cf.pid}"')
 
+    executor = ThreadPoolExecutor()
     while True:
         if cf.is_stop_control:
             break
@@ -153,11 +155,16 @@ def control():
         crosses = [c[0] for c in cur.fetchall()]
         crosses = set(crosses)
 
+        futures = []
+        executor = ThreadPoolExecutor()
         for cross in crosses:
             if 'traficc-light' in cf.args:
-                control_traffic_light()
+                futures.append(executor.submit(control_traffic_light, cross))
             else:
-                check_can_entry(cross)
+                futures.append(executor.submit(check_can_entry, cross))
+
+        for future in futures:
+            future.result()
 
         time.sleep(cf.PROCESS_DELAY)
 
