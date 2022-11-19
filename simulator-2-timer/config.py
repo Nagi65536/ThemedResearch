@@ -8,6 +8,8 @@ import random
 # 引数 log-random
 # 制御方法を信号にする
 # 引数 traficc-light
+# 回避しない
+# 引数 not-avoidance
 # ログを取る
 # 引数 log
 
@@ -37,12 +39,12 @@ TRAFFIC_LIGHT_TIME = (20, 20)
 # 黄色信号の時間
 TRAFFIC_LIGHT_TIME_YELLOW = 5
 # 1ターンに1方向から進入できる車の最大数
-CAN_ENTRY_NUM = (3, 3)
+CAN_ENTRY_NUM = (10, 10)
 # クライアントの時間差をランダムにした時の範囲(ms)
 TIME_RANDOM_RANGE = (0, 3000)
 
 LOOP_NUM = 12
-TIMER = 60 *  5
+TIMER = 10
 OUTPUT_SETTING = {
     '信号': True,
     '開始': False,
@@ -75,11 +77,18 @@ entry_num_list = {}
 
 DB_PATH += f'_{pid}.db'
 if 'traficc-light' in args:
-    LOG_FILE_PATH += '_tf.log'
+    LOG_FILE_PATH += '_tf'
 else:
-    LOG_FILE_PATH += '_new.log'
+    LOG_FILE_PATH += '_new'
+if 'not-avoidance' in args:
+    LOG_FILE_PATH += '_not.log'
+else:
+    LOG_FILE_PATH += '_avd.log'
 
+print()
 print(f'ログファイル {LOG_FILE_PATH}')
+print(f'pid {pid}')
+print(args)
 
 
 class Communication():
@@ -179,9 +188,6 @@ def config_init():
     is_yellow = False
     blue_traffic_light = 0
     switch_traffic_light_time = 0
-
-
-print(f'pid {pid}')
 
 
 comms = Communication()

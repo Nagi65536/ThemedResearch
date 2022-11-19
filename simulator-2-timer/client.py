@@ -20,10 +20,11 @@ def communicate(car_id, start_node, goal_node, delay=-1):
             if not data:
                 cf.cprint('失敗', f'{car_id} : 失敗 経路が見つかりませんでした')
                 return
-            break
         elif len(data) < 3:
             break
-
+        
+        if 'not-avoidance' in cf.args:
+            break
         congestion_node = congestion_check(car_id, data)
         if not congestion_node:
             break
