@@ -174,19 +174,19 @@ def euclid(node_1, node_2):
     return round(abs(sqrt(dist_x + dist_y)), 4)
 
 
-def clear_db():
-    files = glob.glob("./db/*")
-    for file in files:
-        os.remove(file)
+def clear_table(db_path):
+    conn = sqlite3.connect(db_path, isolation_level=None)
+    cur = conn.cursor()
+    cur.execute(f'DELETE FROM control')
+    cur.execute(f'DELETE FROM cross_schedule')
     print('⚡️データベースフォルダーを綺麗にしました')
 
 
 def remove_db():
-    if os.path.exists(cf.DB_PATH):
-        os.remove(cf.DB_PATH)
-        print('⚡️データベースを削除しました')
-    else:
-        print('⚡️データベースが見つかりませんでした')
+    files = glob.glob("./db/*")
+    for file in files:
+        os.remove(file)
+    print('⚡️データベースフォルダーを綺麗にしました')
 
 
 def generate_db():

@@ -14,6 +14,8 @@ def communicate(car_id, start_node, goal_node, delay=-1):
         data = a_star(start_node, goal_node, disable_node)
 
         if not data:
+            if cf.is_stop_control:
+                return
             data = a_star(start_node, goal_node)
             if not data:
                 cf.cprint('失敗', f'{car_id} : 失敗 経路が見つかりませんでした')
@@ -34,7 +36,8 @@ def communicate(car_id, start_node, goal_node, delay=-1):
         return
 
     comms.add_client_data(car_id, data)
-
+    if cf.is_stop_control:
+        return
     if data and len(data) >= 3:
         comms.add_connect(car_id)
     else:
@@ -51,8 +54,10 @@ def congestion_check(car_id, data):
     congestion = False
     cross_delay = 0
     for i, node in enumerate(data[1:-1]):
-        arrival_time = time.time() + node[1]/cf.CAR_SPEED + cross_delay
+        if cf.is_stop_control:
+            return
 
+        arrival_time = time.time() + node[1]/cf.CAR_SPEED + cross_delay
         # 来る方角取得
         cur.execute(f'''
         SELECT direction FROM road_info WHERE
@@ -88,7 +93,8 @@ def congestion_check(car_id, data):
         # 混雑か判断
         my_data = (car_id, node[0], origin, dest, arrival_time)
         is_conflict = decide_is_conflict(my_data, cross_data)
-
+        if cf.is_stop_control:
+            break
         if is_conflict:
             cur.execute(
                 f'DELETE FROM cross_schedule WHERE car_id="{car_id}" AND pid="{cf.pid}"')
@@ -104,6 +110,8 @@ def decide_is_conflict(my_data, cross_data):
     car_num = [0, 0, 0, 0]
 
     for you_data in cross_data:
+        if cf.is_stop_control:
+            break
         car_num[you_data[2]] += 1
         if my_data[2] == you_data[2]:
             can_entry = True
@@ -172,6 +180,8 @@ def cross_process(car_id, front_cars=0):
     cf.cprint('移動', f'{car_id} : 移動 {wait_time:.3}s')
     time.sleep(wait_time)
 
+    if cf.is_stop_control:
+        return
     if len(comms.get_client_data(car_id)) >= 3:
         comms.add_connect(car_id)
     else:

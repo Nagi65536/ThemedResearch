@@ -58,7 +58,8 @@ def decide_can_entry(my_data, entry_list):
 def check_can_entry(cross_name):
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
-
+    if cf.is_stop_control:
+        return
     cur.execute(
         f'SELECT * FROM control WHERE cross="{cross_name}" AND pid="{cf.pid}" ORDER BY time ASC')
     control_data = cur.fetchall()
@@ -74,6 +75,8 @@ def check_can_entry(cross_name):
             continue
         can_entry = decide_can_entry(my_data, entry_list)
 
+        if cf.is_stop_control:
+            return
         if can_entry:
             cur.execute(
                 f'UPDATE control SET status="entry" WHERE car_id="{my_data[0]}" AND pid="{cf.pid}"'
@@ -116,9 +119,13 @@ def control_traffic_light(cross):
 
     if cross not in cf.entry_num_list:
         cf.entry_num_list[cross] = [0, 0, 0, 0]
+    if cf.is_stop_control:
+        return
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
 
+    if cf.is_stop_control:
+        return
     cur.execute(
         f'SELECT * FROM control WHERE cross="{cross}" AND pid="{cf.pid}" ORDER BY time ASC')
     control_data = cur.fetchall()
@@ -130,6 +137,8 @@ def control_traffic_light(cross):
 
     executor = ThreadPoolExecutor()
     for my_data in check_list:
+        if cf.is_stop_control:
+            return
         if len(stop_lane) >= 4:
             return
         elif my_data[2] in stop_lane:
@@ -172,6 +181,8 @@ def control():
         futures = []
         executor = ThreadPoolExecutor()
         for cross in crosses:
+            if cf.is_stop_control:
+                return
             if 'traficc-light' in cf.args:
                 futures.append(executor.submit(control_traffic_light, cross))
             else:

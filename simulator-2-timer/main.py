@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 import client as cl
 import config as cf
 import control as cr
-from setting import generate_db, clear_db
+from setting import generate_db, clear_table
 
 
 def log_init():
@@ -38,7 +38,6 @@ def timer():
             break
         time.sleep(cf.PROCESS_DELAY)
 
-    clear_db()
     cf.is_stop_control = True
 
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
@@ -54,6 +53,8 @@ def timer():
     print(f'待機数 {wait_num}')
     with open(cf.LOG_FILE_PATH, 'a') as f:
         f.write(f'処理数 {cf.arrived_num}  待機数 {wait_num}\n')
+    time.sleep(10)
+    clear_table(cf.DB_PATH)
 
 
 def normal():
@@ -67,8 +68,8 @@ def normal():
 
     cf.start_time = time.time()
     with ThreadPoolExecutor() as executor:
-        future = executor.submit(cr.control)
-        executor.submit(timer)
+        executor.submit(cr.control)
+        future = executor.submit(timer)
         while True:
             nodes = random.sample(crosses, 2)
             car_id = f'car_{str(cf.departed_num).zfill(3)}'
@@ -79,7 +80,6 @@ def normal():
 
             if cf.is_stop_control:
                 break
-
             cf.departed_num += 1
             executor.submit(
                 cl.communicate, car_id, nodes[0], nodes[1])
@@ -89,6 +89,8 @@ def normal():
                 cf.TIME_RANDOM_RANGE[1]
             ) / 1000
             time.sleep(sleep)
+
+        future.result()
 
 
 def main():

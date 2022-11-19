@@ -17,9 +17,9 @@ LOG_FILE_PATH = f'./log/simulator-2timer'
 # データベースのパス
 DB_PATH = './db/simulator2-timer'
 # マップの大きさ
-MAP_SIZE = 5
+MAP_SIZE = 12
 # 処理の遅延
-PROCESS_DELAY = 0
+PROCESS_DELAY = 0.1
 # 車の速さ
 CAR_SPEED = 10
 # 交差点混雑度を検索する時間範囲
@@ -33,13 +33,13 @@ ENTRY_DELAY = 0.5
 # 交差点を通過するまでの時間
 CAR_PASSED_TIME = 2
 # 信号機の時間
-TRAFFIC_LIGHT_TIME = (10, 10)
+TRAFFIC_LIGHT_TIME = (20, 20)
 # 黄色信号の時間
 TRAFFIC_LIGHT_TIME_YELLOW = 5
-# ターンに1方向から進入できる車の最大数
+# 1ターンに1方向から進入できる車の最大数
 CAN_ENTRY_NUM = (3, 3)
 # クライアントの時間差をランダムにした時の範囲(ms)
-TIME_RANDOM_RANGE = (000, 100)
+TIME_RANDOM_RANGE = (0, 3000)
 
 LOOP_NUM = 12
 TIMER = 60 *  5
@@ -48,7 +48,7 @@ OUTPUT_SETTING = {
     '開始': False,
     '探索': False,
     '経路': False,
-    '回避': True,
+    '回避': False,
     '接続': True,
     '進入': True,
     '通過': True,
@@ -113,6 +113,7 @@ class Communication():
             WHERE cross_1="{now_cross}" AND cross_2="{dest_cross}"
         ''')
         dest = (cur.fetchone()[0] - origin + 4)%4
+
         cur.execute(f'''
             INSERT INTO control VALUES (
             "{car_id}", "{now_cross}", {origin}, {dest}, "connect", {time.time()-start_time}, "{pid}"
@@ -137,7 +138,6 @@ class Communication():
         pid="{pid}"
         ''')
         global arrived_num
-
         cprint('状況', f'待機数 : {len(cur.fetchall())}  処理数 : {arrived_num}')
 
     def add_client_data(self, car_id, data):
@@ -154,7 +154,6 @@ class Communication():
 
 
 def cprint(type_, data):
-
     if is_stop_control:
         return
 
@@ -170,7 +169,7 @@ def cprint(type_, data):
 
 
 def config_init():
-    global pid, start_time, arrived_num, departed_num, is_stop_control
+    global start_time, arrived_num, departed_num, is_stop_control
     global args, is_yellow, blue_traffic_light, switch_traffic_light_time
 
     start_time = None
