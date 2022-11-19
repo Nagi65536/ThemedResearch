@@ -66,9 +66,12 @@ def check_can_entry(cross_name):
     entry_list = [c for c in control_data if c[4] == 'entry']
     check_list = [c for c in control_data if c[4] != 'entry']
     wait_cars = [0, 0, 0, 0]
+    wait_lane = []
 
     executor = ThreadPoolExecutor()
     for my_data in check_list:
+        if my_data[2] in wait_lane:
+            continue
         can_entry = decide_can_entry(my_data, entry_list)
 
         if can_entry:
@@ -82,6 +85,8 @@ def check_can_entry(cross_name):
             )
             entry_list.append(my_data)
             wait_cars[my_data[2]] += 1
+        else:
+            wait_lane.append(my_data[2])
 
 
 def control_traffic_light(cross):

@@ -66,11 +66,14 @@ def check_can_entry():
     entry_list = [c for c in control_data if c[3] == 'entry']
     check_list = [c for c in control_data if c[3] != 'entry']
     wait_cars = [0, 0, 0, 0]
+    wait_lane = []
 
     executor = ThreadPoolExecutor()
     for my_data in check_list:
         if cf.is_stop_control:
             return
+        elif my_data[1] in wait_lane:
+            continue
 
         can_entry = decide_can_entry(my_data, entry_list)
         if can_entry:
@@ -81,6 +84,8 @@ def check_can_entry():
             )
             entry_list.append(my_data)
             wait_cars[my_data[1]] += 1
+        else:
+            wait_lane.append(my_data[1])
 
 
 def control_traffic_light():
