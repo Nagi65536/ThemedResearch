@@ -1,3 +1,4 @@
+import glob
 import os
 import sqlite3
 import sys
@@ -7,13 +8,10 @@ from cmath import sqrt
 import config as cf
 
 
-size = 12
-
-
 def main():
     db_init()
     register_crosses_info()
-    connect_cross_info()
+    connect_cross_info(cf.DB_PATH)
 
 
 def register_crosses_info(db_path=None):
@@ -24,9 +22,8 @@ def register_crosses_info(db_path=None):
 
     cur = conn.cursor()
     cross_num = 1
-    global size
-    for x in range(1, size + 1):
-        for y in range(1, size + 1):
+    for x in range(1, cf.MAP_SIZE + 1):
+        for y in range(1, cf.MAP_SIZE + 1):
             x_position = x * 100 + random.randint(-30, 30)
             y_position = y * 100 + random.randint(-30, 30)
             cur.execute(
@@ -42,11 +39,10 @@ def connect_cross_info(db_path):
         conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
 
     cur = conn.cursor()
-    global size
     cross_num = 0
     while (True):  # 東
         cross_num += 1
-        if cross_num % size == 0:
+        if cross_num % cf.MAP_SIZE == 0:
             continue
         else:
             cur.execute(
@@ -72,7 +68,7 @@ def connect_cross_info(db_path):
         )
         node_1 = cur.fetchone()
         cur.execute(
-            f"SELECT * FROM cross_position WHERE cross = 'cross_{str(cross_num + size).zfill(3)}'"
+            f"SELECT * FROM cross_position WHERE cross = 'cross_{str(cross_num + cf.MAP_SIZE).zfill(3)}'"
         )
         node_2 = cur.fetchone()
         if not node_2:
@@ -84,7 +80,7 @@ def connect_cross_info(db_path):
     cross_num = 0
     while (True):  # 西
         cross_num += 1
-        if cross_num % size == 1:
+        if cross_num % cf.MAP_SIZE == 1:
             continue
         else:
             cur.execute(
@@ -104,7 +100,7 @@ def connect_cross_info(db_path):
     cross_num = 0
     while (True):  # 北
         cross_num += 1
-        if cross_num <= size:
+        if cross_num <= cf.MAP_SIZE:
             continue
         else:
             cur.execute(
@@ -112,7 +108,7 @@ def connect_cross_info(db_path):
             )
             node_1 = cur.fetchone()
             cur.execute(
-                f"SELECT * FROM cross_position WHERE cross = 'cross_{str(cross_num - size).zfill(3)}'"
+                f"SELECT * FROM cross_position WHERE cross = 'cross_{str(cross_num - cf.MAP_SIZE).zfill(3)}'"
             )
             node_2 = cur.fetchone()
             if not node_1:
@@ -179,11 +175,10 @@ def euclid(node_1, node_2):
 
 
 def clear_db():
-    conn = sqlite3.connect(cf.DB_PATH, isolation_level=None)
-    cur = conn.cursor()
-    cur.execute('DELETE FROM control')
-    cur.execute('DELETE FROM cross_schedule')
-    print('⚡️データベースを綺麗にしました')
+    files = glob.glob("./db/*")
+    for file in files:
+        os.remove(file)
+    print('⚡️データベースフォルダーを綺麗にしました')
 
 
 def remove_db():

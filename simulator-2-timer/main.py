@@ -73,9 +73,8 @@ def normal():
             nodes = random.sample(crosses, 2)
             car_id = f'car_{str(cf.departed_num).zfill(3)}'
             cf.cprint(
-                car_id,
                 '開始',
-                f'{(time.time()-cf.start_time):.3} s  {nodes[0]} -> {nodes[1]}'
+                f'{car_id} : 開始 {(time.time()-cf.start_time):.3} s  {nodes[0]} -> {nodes[1]}'
             )
 
             if cf.is_stop_control:
@@ -94,8 +93,7 @@ def normal():
 
 def main():
     for i in range(1, cf.LOOP_NUM+1):
-        print(f'----- {i}回目 -----')
-        print()
+        cf.cprint('その他', f'----- {i}回目 -----\n')
         normal()
 
 

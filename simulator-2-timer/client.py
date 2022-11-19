@@ -7,7 +7,7 @@ from astar import a_star
 
 
 def communicate(car_id, start_node, goal_node, delay=-1):
-    cf.cprint(car_id, '探索', f'{start_node} -> {goal_node}')
+    cf.cprint('探索', f'{car_id} : 探索 {start_node} -> {goal_node}')
     disable_node = []
 
     while True:
@@ -16,7 +16,7 @@ def communicate(car_id, start_node, goal_node, delay=-1):
         if not data:
             data = a_star(start_node, goal_node)
             if not data:
-                cf.cprint(car_id, '失敗', '経路が見つかりませんでした')
+                cf.cprint('失敗', f'{car_id} : 失敗 経路が見つかりませんでした')
                 return
             break
         elif len(data) < 3:
@@ -27,8 +27,8 @@ def communicate(car_id, start_node, goal_node, delay=-1):
             break
 
         disable_node.append(congestion_node)
-        cf.cprint(car_id, '回避', disable_node)
-    cf.cprint(car_id, '経路', f'{[d[0] for d in data]}')
+        cf.cprint('回避', f'{car_id} : 回避 {disable_node}')
+    cf.cprint('経路', f'{car_id} : 経路 {[d[0] for d in data]}')
 
     if cf.is_stop_control:
         return
@@ -39,7 +39,7 @@ def communicate(car_id, start_node, goal_node, delay=-1):
         comms.add_connect(car_id)
     else:
         cf.arrived_num += 1
-        cf.cprint(car_id, '到着', cf.arrived_num)
+        cf.cprint('到着', f'{car_id} : 到着 {cf.arrived_num}')
         if cf.arrived_num >= len(obj)(cf.clients):
             cf.is_stop_control = True
 
@@ -169,13 +169,13 @@ def cross_process(car_id, front_cars=0):
     comms.add_passed(car_id)
     dist = comms.get_next_cross_data(car_id)[1]
     wait_time = dist / cf.CAR_SPEED
-    cf.cprint(car_id, '移動', f'{wait_time:.3}s')
+    cf.cprint('移動', f'{car_id} : 移動 {wait_time:.3}s')
     time.sleep(wait_time)
 
     if len(comms.get_client_data(car_id)) >= 3:
         comms.add_connect(car_id)
     else:
         cf.arrived_num += 1
-        cf.cprint(car_id, '到着', cf.arrived_num)
+        cf.cprint('到着', f'{car_id} : 到着 {cf.arrived_num}')
         if cf.arrived_num >= len(cf.clients):
             cf.is_stop_control = True

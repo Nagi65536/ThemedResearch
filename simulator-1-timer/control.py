@@ -47,8 +47,8 @@ def decide_can_entry(my_data, check_list):
                 can_entry = True
 
         else:
-            print(
-                f'{my_data[0]}: 未実装だわぼけ！ {my_data[1]}-{my_data[2]} {you_data[1]}-{you_data[2]}')
+            cf.cprint(
+                'その他', f'{my_data[0]}: 未実装だわぼけ！ {my_data[1]}-{my_data[2]} {you_data[1]}-{you_data[2]}')
 
         if not can_entry:
             break
@@ -74,31 +74,38 @@ def check_can_entry():
 
         can_entry = decide_can_entry(my_data, entry_list)
         if can_entry:
-            cl.cross_process(my_data[0], wait_cars[my_data[1]])
+            executor.submit(
+                cl.cross_process,
+                my_data[0],
+                wait_cars[my_data[1]]
+            )
+            entry_list.append(my_data)
             wait_cars[my_data[1]] += 1
 
 
 def control_traffic_light():
     # 信号が黄色のとき
     if cf.is_yellow:
-        time_1 = time.time() - cf.switch_traffic_light_time
-        time_2 = cf.TRAFFIC_LIGHT_TIME_YELLOW
-
-        if time_1 >= time_2:
+        elapsed_time = time.time() - cf.switch_traffic_light_time
+        setting_time = cf.TRAFFIC_LIGHT_TIME_YELLOW
+        diff_time = setting_time - elapsed_time
+        if diff_time <= 0:
             cf.blue_traffic_light = (cf.blue_traffic_light + 1) % 2
             cf.is_yellow = False
             cf.cprint(
-                '', '信号', f'青 ({cf.blue_traffic_light}, {cf.blue_traffic_light+2})')
+                '信号', f'信号 : 青 ({cf.blue_traffic_light}, {cf.blue_traffic_light+2})')
         else:
             return
+
     # 信号が黄色ではないとき
-    else:
-        time_1 = time.time() - cf.switch_traffic_light_time
-        time_2 = cf.TRAFFIC_LIGHT_TIME[cf.blue_traffic_light]
-        if time_1 >= time_2:
-            cf.switch_traffic_light_time = time.time()
-            cf.is_yellow = True
-            cf.cprint('', '信号', '黄')
+    elapsed_time = time.time() - cf.switch_traffic_light_time
+    setting_time = cf.TRAFFIC_LIGHT_TIME[cf.blue_traffic_light]
+    diff_time = setting_time - elapsed_time
+    if diff_time <= 0:
+        cf.switch_traffic_light_time = time.time()
+        cf.is_yellow = True
+        cf.entry_num_list = [0, 0, 0, 0]
+        cf.cprint('信号', '信号 : 黄')
 
     conn = sqlite3.connect(cf.DB_PATH, isolation_level=None)
     cur = conn.cursor()
@@ -109,26 +116,29 @@ def control_traffic_light():
     entry_list = [c for c in control_data if c[3] == 'entry']
     check_list = [c for c in control_data if c[3] != 'entry']
     wait_cars = [0, 0, 0, 0]
-    stop_lane = []
+    stop_lane = [cf.blue_traffic_light+1, (cf.blue_traffic_light+3) % 4]
 
     executor = ThreadPoolExecutor()
-    blue = (cf.blue_traffic_light, cf.blue_traffic_light+2)
     for my_data in check_list:
-        if len(stop_lane) >= 2:
+        if len(stop_lane) >= 4:
             break
-        if my_data[1] not in stop_lane \
-                and my_data[1] in blue:
+        elif my_data[1] in stop_lane:
+            continue
+        elif diff_time < wait_cars[my_data[1]] * cf.ENTRY_DELAY:
+            stop_lane.append(my_data[1])
+            continue
+        elif cf.entry_num_list[my_data[1]] > cf.CAN_ENTRY_NUM[cf.blue_traffic_light]:
+            stop_lane.append(my_data[1])
+            continue
 
-            can_entry = decide_can_entry(my_data, entry_list)
-            if can_entry:
-                entry_list.append(my_data)
-                executor.submit(
-                    cl.cross_process,
-                    my_data[0], wait_cars[my_data[1]]
-                )
-                wait_cars[my_data[1]] += 1
-            else:
-                stop_lane.append(my_data[1])
+        if decide_can_entry(my_data, entry_list):
+            entry_list.append(my_data)
+            executor.submit(
+                cl.cross_process,
+                my_data[0], wait_cars[my_data[1]]
+            )
+            cf.entry_num_list[my_data[2]] += 1
+        wait_cars[my_data[1]] += 1
 
 
 def control_down_grade():
@@ -154,7 +164,7 @@ def control():
 
         if 'tl' in cf.args:
             control_traffic_light()
-        elif 'dg' in cf.args:
+        elif 'gd' in cf.args:
             control_down_grade()
         else:
             check_can_entry()

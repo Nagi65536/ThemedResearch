@@ -71,7 +71,7 @@ def normal():
             car_id = f'car_{str(cf.departed_num).zfill(3)}'
             p = random.sample([0, 1, 2, 3], 2)
             time_ = time.time() - cf.start_time
-            cf.cprint(car_id, '開始', f'{time_:.3} s  {p[0]} -> {p[1]}')
+            cf.cprint('開始', f'{car_id} : 開始 {time_:.3} s  {p[0]} -> {p[1]}')
             executor.submit(cl.communicate, car_id, p[0], p[1])
             cf.departed_num += 1
 

@@ -47,7 +47,7 @@ def decide_can_entry(my_data, entry_list):
                 can_entry = True
 
         else:
-            cf.cprint(my_data[0], '未実装だわぼけ！', my_data)
+            cf.cprint('その他', f'未実装だわぼけ！ {my_data}')
 
         if not can_entry:
             break
@@ -87,25 +87,30 @@ def check_can_entry(cross_name):
 def control_traffic_light(cross):
     # 信号が黄色のとき
     if cf.is_yellow:
-        time_1 = time.time() - cf.switch_traffic_light_time
-        time_2 = cf.TRAFFIC_LIGHT_TIME_YELLOW
-
-        if time_1 >= time_2:
+        elapsed_time = time.time() - cf.switch_traffic_light_time
+        setting_time = cf.TRAFFIC_LIGHT_TIME_YELLOW
+        if elapsed_time >= setting_time:
             cf.blue_traffic_light = (cf.blue_traffic_light + 1) % 2
             cf.is_yellow = False
             cf.cprint(
-                '', '信号', f'青 ({cf.blue_traffic_light}, {cf.blue_traffic_light+2})')
+                '信号',
+                f'信号 : --- 青 --- ({cf.blue_traffic_light}, {cf.blue_traffic_light+2})'
+            )
         else:
             return
-    # 信号が黄色ではないとき
-    else:
-        time_1 = time.time() - cf.switch_traffic_light_time
-        time_2 = cf.TRAFFIC_LIGHT_TIME[cf.blue_traffic_light]
-        if time_1 >= time_2:
-            cf.switch_traffic_light_time = time.time()
-            cf.is_yellow = True
-            cf.cprint('', '信号', '黄')
 
+    # 信号が黄色ではないとき
+    elapsed_time = time.time() - cf.switch_traffic_light_time
+    setting_time = cf.TRAFFIC_LIGHT_TIME[cf.blue_traffic_light]
+    diff_time = setting_time - elapsed_time
+    if diff_time <= 0:
+        cf.switch_traffic_light_time = time.time()
+        cf.is_yellow = True
+        cf.entry_num_list = {}
+        cf.cprint('信号', '信号 : --- 黄 ---')
+
+    if cross not in cf.entry_num_list:
+        cf.entry_num_list[cross] = [0, 0, 0, 0]
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
 
@@ -124,9 +129,14 @@ def control_traffic_light(cross):
             return
         elif my_data[2] in stop_lane:
             continue
+        elif diff_time < wait_cars[my_data[2]] * cf.ENTRY_DELAY:
+            stop_lane.append(my_data[2])
+            continue
+        elif cf.entry_num_list[cross][my_data[2]] > cf.CAN_ENTRY_NUM[cf.blue_traffic_light]:
+            stop_lane.append(my_data[2])
+            continue
 
-        can_entry = decide_can_entry(my_data, entry_list)
-        if can_entry:
+        if decide_can_entry(my_data, entry_list):
             cur.execute(
                 f'UPDATE control SET status="entry" WHERE car_id="{my_data[0]}" AND pid="{cf.pid}"'
             )
@@ -136,9 +146,8 @@ def control_traffic_light(cross):
                 my_data[0],
                 wait_cars[my_data[2]]
             )
-            wait_cars[my_data[2]] += 1
-        else:
-            stop_lane.append(my_data[2])
+            cf.entry_num_list[cross][my_data[2]] += 1
+        wait_cars[my_data[2]] += 1
 
 
 def control():
