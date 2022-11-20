@@ -200,7 +200,7 @@ def generate_db():
 
 if __name__ == '__main__':
     if 'clear' in sys.argv:
-        clear_db()
+        remove_db()
     else:
         print('⚡️start setting.py')
         main()

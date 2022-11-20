@@ -41,10 +41,10 @@ TRAFFIC_LIGHT_TIME_YELLOW = 5
 # 1ターンに1方向から進入できる車の最大数
 CAN_ENTRY_NUM = (10, 10)
 # クライアントの時間差をランダムにした時の範囲(ms)
-TIME_RANDOM_RANGE = (0, 3000)
+TIME_RANDOM_RANGE = [2000, 2000]
 
-LOOP_NUM = 12
-TIMER = 10
+LOOP_NUM = 120
+TIMER = 60 * 5
 OUTPUT_SETTING = {
     '信号': True,
     '開始': False,
@@ -88,7 +88,6 @@ else:
 print()
 print(f'ログファイル {LOG_FILE_PATH}')
 print(f'pid {pid}')
-print(args)
 
 
 class Communication():
@@ -147,7 +146,7 @@ class Communication():
         pid="{pid}"
         ''')
         global arrived_num
-        cprint('状況', f'待機数 : {len(cur.fetchall())}  処理数 : {arrived_num}')
+        cprint('状況', f'処理数 : {arrived_num}  待機数 : {len(cur.fetchall())}')
 
     def add_client_data(self, car_id, data):
         self.client_data[car_id] = {
@@ -188,6 +187,9 @@ def config_init():
     is_yellow = False
     blue_traffic_light = 0
     switch_traffic_light_time = 0
+
+    TIME_RANDOM_RANGE[0] += 100
+    TIME_RANDOM_RANGE[1] += 100
 
 
 comms = Communication()

@@ -52,6 +52,7 @@ def timer():
     print(f'\n処理数 {cf.arrived_num}')
     print(f'待機数 {wait_num}')
     with open(cf.LOG_FILE_PATH, 'a') as f:
+        f.write(f'{cf.TIME_RANDOM_RANGE}\n')
         f.write(f'処理数 {cf.arrived_num}  待機数 {wait_num}\n')
     time.sleep(10)
     clear_table(cf.DB_PATH)
