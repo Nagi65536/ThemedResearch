@@ -149,12 +149,11 @@ def control_traffic_light():
 def control_down_grade():
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
-    cur.execute(f'SELECT * FROM {cf.table_name} WHERE ORDER BY time ASC')
+    cur.execute(f'SELECT * FROM {cf.table_name} ORDER BY time ASC')
     control_data = cur.fetchall()
     status_list = [c[3] for c in control_data if c[3] == 'entry']
 
-    if 'entry' not in status_list:
-        executor = ThreadPoolExecutor()
+    if 'entry' not in status_list and len(control_data) > 0:
         cl.cross_process(control_data[0][0])
 
 
@@ -169,7 +168,7 @@ def control():
 
         if 'tl' in cf.args:
             control_traffic_light()
-        elif 'gd' in cf.args:
+        elif 'dg' in cf.args:
             control_down_grade()
         else:
             check_can_entry()

@@ -7,7 +7,7 @@ import random
 # 信号機モード
 # 引数 tl
 # グレードダウンモード
-# 引数 gd
+# 引数 dg
 # ログあり
 # 引数 log
 # ログファイルをランダムに
@@ -25,16 +25,16 @@ ENTRY_DELAY = 0.5
 # 交差点を通過するまでの時間
 CAR_PASSED_TIME = 2
 # 信号機の時間(南北, 東西)
-TRAFFIC_LIGHT_TIME = (10, 10)
+TRAFFIC_LIGHT_TIME = (20, 20)
 # 1ターンに1方向から進入できる車の最大数
 CAN_ENTRY_NUM = (TRAFFIC_LIGHT_TIME[0]/0.7, TRAFFIC_LIGHT_TIME[1]/0.7)
 # 黄色の時間
 TRAFFIC_LIGHT_TIME_YELLOW = 2
 
 # ループ回数
-LOOP_NUM = 3
+LOOP_NUM = 100
 # 計測時間(s)
-TIMER = 20
+TIMER = 60 * 5
 # クライアントの時間差をランダムにした時の範囲(ms)
 DELAY_RANGE = (1000, 1000)
 # 出力内容
@@ -63,6 +63,12 @@ is_yellow = False
 is_stop_control = False
 entry_num_list = [0, 0, 0, 0]
 
+if 'tl' in args:
+    LOG_FILE_PATH += f'_tl'
+elif 'dg' in args:
+    LOG_FILE_PATH += f'_dg'
+else:
+    LOG_FILE_PATH += f'_new'
 
 if 'lr' in args:
     LOG_FILE_PATH += f'_{pid}.log'

@@ -73,7 +73,6 @@ def normal():
 
             if cf.is_stop_control:
                 break
-            print(cf.is_stop_control)
             executor.submit(cl.communicate, car_id, p[0], p[1])
             cf.departed_num += 1
 
