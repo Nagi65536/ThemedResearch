@@ -1,3 +1,5 @@
+
+
 import copy
 from concurrent.futures import ThreadPoolExecutor
 import random
@@ -36,48 +38,50 @@ def timer():
 
         time.sleep(cf.PROCESS_DELAY)
 
+    cf.is_stop_control = True
+
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
 
     cur.execute(f'''
-    SELECT car_id FROM control WHERE
-    status="connect" AND
-    pid="{cf.pid}"
+    SELECT car_id FROM {cf.table_name} WHERE
+    status="connect"
     ''')
     wait_num = len(cur.fetchall())
-    cf.is_stop_control = True
     print(f'\n処理数 {cf.arrived_num}')
     print(f'待機数 {wait_num}')
     with open(cf.LOG_FILE_PATH, 'a') as f:
         f.write(f'処理数 {cf.arrived_num}  待機数 {wait_num}\n')
+    time.sleep(10)
     db_init(cf.table_name)
-    
 
 
 def normal():
     cf.config_init()
     db_init(cf.table_name)
 
-    futures = []
     cf.start_time = time.time()
     with ThreadPoolExecutor() as executor:
         executor.submit(cr.control)
-        executor.submit(timer)
+        future = executor.submit(timer)
 
         while True:
-            if cf.is_stop_control:
-                break
-
             car_id = f'car_{str(cf.departed_num).zfill(3)}'
             p = random.sample([0, 1, 2, 3], 2)
             time_ = time.time() - cf.start_time
             cf.cprint('開始', f'{car_id} : 開始 {time_:.3} s  {p[0]} -> {p[1]}')
+
+            if cf.is_stop_control:
+                break
+            print(cf.is_stop_control)
             executor.submit(cl.communicate, car_id, p[0], p[1])
             cf.departed_num += 1
 
             # 次の車の発車時間まで待機
             sleep = random.randint(cf.DELAY_RANGE[0], cf.DELAY_RANGE[1])/1000
             time.sleep(sleep)
+
+        future.result()
 
 
 def main():

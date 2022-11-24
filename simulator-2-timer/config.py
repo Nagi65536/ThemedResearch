@@ -1,3 +1,4 @@
+
 import sqlite3
 import sys
 import time
@@ -41,7 +42,7 @@ TRAFFIC_LIGHT_TIME_YELLOW = 5
 # 1ターンに1方向から進入できる車の最大数
 CAN_ENTRY_NUM = (10, 10)
 # クライアントの時間差をランダムにした時の範囲(ms)
-TIME_RANDOM_RANGE = [2000, 2000]
+TIME_RANDOM_RANGE = [200, 200]
 
 LOOP_NUM = 120
 TIMER = 60 * 5
@@ -188,8 +189,8 @@ def config_init():
     blue_traffic_light = 0
     switch_traffic_light_time = 0
 
-    TIME_RANDOM_RANGE[0] += 100
-    TIME_RANDOM_RANGE[1] += 100
+    TIME_RANDOM_RANGE[0] += 20
+    TIME_RANDOM_RANGE[1] += 20
 
 
 comms = Communication()

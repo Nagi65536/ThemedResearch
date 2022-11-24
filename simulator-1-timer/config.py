@@ -34,7 +34,7 @@ TRAFFIC_LIGHT_TIME_YELLOW = 2
 # ループ回数
 LOOP_NUM = 3
 # 計測時間(s)
-TIMER = 10
+TIMER = 20
 # クライアントの時間差をランダムにした時の範囲(ms)
 DELAY_RANGE = (1000, 1000)
 # 出力内容
