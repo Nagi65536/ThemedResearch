@@ -16,7 +16,7 @@ import random
 
 
 # ログファイルのパス
-LOG_FILE_PATH = f'./log/simulator-2timer'
+LOG_FILE_PATH = f'./log/s'
 # データベースのパス
 DB_PATH = './db/simulator2-timer'
 # マップの大きさ
@@ -42,7 +42,7 @@ TRAFFIC_LIGHT_TIME_YELLOW = 5
 # 1ターンに1方向から進入できる車の最大数
 CAN_ENTRY_NUM = (10, 10)
 # クライアントの時間差をランダムにした時の範囲(ms)
-TIME_RANDOM_RANGE = [200, 200]
+TIME_RANDOM_RANGE = (220, 220)
 
 LOOP_NUM = 120
 TIMER = 60 * 5
@@ -75,10 +75,11 @@ is_yellow = False
 blue_traffic_light = 0
 switch_traffic_light_time = 0
 entry_num_list = {}
+i = 5
 
 DB_PATH += f'_{pid}.db'
 if 'traficc-light' in args:
-    LOG_FILE_PATH += '_tf'
+    LOG_FILE_PATH += '_tl'
 else:
     LOG_FILE_PATH += '_new'
 if 'not-avoidance' in args:
@@ -189,8 +190,10 @@ def config_init():
     blue_traffic_light = 0
     switch_traffic_light_time = 0
 
-    TIME_RANDOM_RANGE[0] += 20
-    TIME_RANDOM_RANGE[1] += 20
+    global i, TIME_RANDOM_RANGE
+    list_ = (180, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200)
+    TIME_RANDOM_RANGE = (list_[i], list_[i])
+    i = (i + 1) % len(list_)
 
 
 comms = Communication()
