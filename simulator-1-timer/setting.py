@@ -1,4 +1,3 @@
-import glob
 import sys
 import os
 import sqlite3
@@ -29,29 +28,16 @@ def db_init(table_name='control'):
 
 
 def db_clear():
-    files = glob.glob("./db/*")
-    for file in files:
-        os.remove(file)
-    print('⚡️データベースフォルダーを綺麗にしました')
+    os.remove(cf.DB_PATH)
+    conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
+    db_init()
+    print('⚡️綺麗にしました')
 
 
 def remove_table(table_name='control'):
     conn = sqlite3.connect(f'{cf.DB_PATH}', isolation_level=None)
     cur = conn.cursor()
     cur.execute(f'DROP TABLE {table_name}')
-
-
-def remove_db():
-    files = glob.glob("./db/*")
-    if cf.DB_NAME in files:
-        os.remove(cf.DB_NAME)
-
-
-def generate_db():
-    print(f'⚡️GENERATE {cf.DB_PATH}')
-    db_init()
-    print('------------')
-    print('')
 
 
 if __name__ == '__main__':

@@ -9,7 +9,7 @@ import time
 import client as cl
 import control as cr
 import config as cf
-import  setting as st
+from setting import db_init, remove_table
 
 
 def log_init():
@@ -51,14 +51,14 @@ def timer():
     print(f'\n処理数 {cf.arrived_num}')
     print(f'待機数 {wait_num}')
     with open(cf.LOG_FILE_PATH, 'a') as f:
-        f.write(f'{cf.DELAY_RANGE}\n処理数 {cf.arrived_num}  待機数 {wait_num}\n')
+        f.write(f'処理数 {cf.arrived_num}  待機数 {wait_num}\n')
     time.sleep(10)
     db_init(cf.table_name)
 
 
 def normal():
     cf.config_init()
-    st.db_init(cf.table_name)
+    db_init(cf.table_name)
 
     cf.start_time = time.time()
     with ThreadPoolExecutor() as executor:
@@ -84,14 +84,12 @@ def normal():
 
 
 def main():
-    st.generate_db()
-
     for i in range(1, cf.LOOP_NUM+1):
         print(f'----- {i}回目 -----')
         print()
         normal()
 
-    st.remove_db(cf.DB_PATH)
+    remove_table(cf.table_name)
 
 
 if __name__ == '__main__':
