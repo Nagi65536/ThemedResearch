@@ -2,4 +2,3 @@
 __pycache__
 /memo/port_share.txt
 .venv/*
-*/db/
