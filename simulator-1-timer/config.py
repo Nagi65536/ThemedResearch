@@ -13,11 +13,14 @@ import random
 # ログファイルをランダムに
 # lr
 
+pid = str(random.randint(0, 10000)).zfill(5)
 
 # ログファイルのパス
 LOG_FILE_PATH = f'./log/s1-timer'
+# データベース名
+DB_NAME = f'simulator-1timer-{pid}.db'
 # データベースのパス
-DB_PATH = './db/simulator-1timer.db'
+DB_PATH = f'./db/{DB_NAME}'
 # 処理の遅延
 PROCESS_DELAY = 0.1
 # 待機中の前方の車1台あたりの遅延(待機位置から交差点進入まで)
@@ -51,8 +54,7 @@ OUTPUT_SETTING = {
 
 # 以下システム用
 
-pid = str(random.randint(0, 10000)).zfill(5)
-table_name = f'control{pid}'
+table_name = 'control'
 args = sys.argv
 start_time = None
 departed_num = 0

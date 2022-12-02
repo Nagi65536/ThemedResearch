@@ -9,7 +9,7 @@ import time
 import client as cl
 import control as cr
 import config as cf
-from setting import db_init, remove_table
+import  setting as st
 
 
 def log_init():
@@ -58,7 +58,7 @@ def timer():
 
 def normal():
     cf.config_init()
-    db_init(cf.table_name)
+    st.db_init(cf.table_name)
 
     cf.start_time = time.time()
     with ThreadPoolExecutor() as executor:
@@ -84,12 +84,14 @@ def normal():
 
 
 def main():
+    st.generate_db()
+
     for i in range(1, cf.LOOP_NUM+1):
         print(f'----- {i}回目 -----')
         print()
         normal()
 
-    remove_table(cf.table_name)
+    st.remove_db(cf.DB_PATH)
 
 
 if __name__ == '__main__':
