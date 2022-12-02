@@ -51,7 +51,7 @@ def timer():
     print(f'\n処理数 {cf.arrived_num}')
     print(f'待機数 {wait_num}')
     with open(cf.LOG_FILE_PATH, 'a') as f:
-        f.write(f'処理数 {cf.arrived_num}  待機数 {wait_num}\n')
+        f.write(f'{cf.DELAY_RANGE}\n処理数 {cf.arrived_num}  待機数 {wait_num}\n')
     time.sleep(10)
     db_init(cf.table_name)
 

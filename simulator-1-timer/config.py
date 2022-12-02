@@ -15,7 +15,7 @@ import random
 
 
 # ログファイルのパス
-LOG_FILE_PATH = f'./log/simulator-1timer'
+LOG_FILE_PATH = f'./log/s1-timer'
 # データベースのパス
 DB_PATH = './db/simulator-1timer.db'
 # 処理の遅延
@@ -36,7 +36,7 @@ LOOP_NUM = 100
 # 計測時間(s)
 TIMER = 60 * 5
 # クライアントの時間差をランダムにした時の範囲(ms)
-DELAY_RANGE = (1000, 1000)
+DELAY_RANGE = (100, 100)
 # 出力内容
 OUTPUT_SETTING = {
     '信号': True,
@@ -62,6 +62,7 @@ switch_traffic_light_time = 0
 is_yellow = False
 is_stop_control = False
 entry_num_list = [0, 0, 0, 0]
+i = 0
 
 if 'tl' in args:
     LOG_FILE_PATH += f'_tl'
@@ -138,6 +139,11 @@ def config_init():
     switch_traffic_light_time = 0
     is_yellow = False
     is_stop_control = False
+
+    global i, DELAY_RANGE
+    list_ = (100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200)
+    DELAY_RANGE = (list_[i], list_[i])
+    i = (i + 1) % len(list_)
 
 
 comms = Communication()
