@@ -4,7 +4,7 @@
 情報科学科の小松, 多田, 吉田です。よろしくお願いします。  
 私たちのテーマは`自動運転の一括制御`です。
 
-はじめに目次です。  
+目次です。  
 - はじめに
 - 問題提起・目標
 - システムについて
@@ -31,7 +31,7 @@
 現在の自動運転では画像認識が主体ですが、気候などの条件により認識の精度が落ちるという問題が起きています。  
 そこで私たちは画像認識に頼らないタグを用いた新しい自動運転のシステムを開発することにしました。  
 タグを用いることで、全ての車を一括制御することにより無駄な一時停止を減らし、  
-混雑の融和にも役立つシステムになると考えました。
+混雑の緩和にも役立つシステムになると考えました。
 
 
 ## システムについて - 多田
@@ -58,11 +58,11 @@
 > - 拒否: 相手が前から来て左に行く
 > - 許可: 相手が右から来て手前に行く
 
-これには`車の来る方角`  `進行方向` を判断する必要があります。  
 直進する場合の一例を見てみると、  
 `左側から相手が来るか` を判断するだけで  
+
 自分が`北`にいて、相手が`東`から来る場合、  
-`東`にいて、相手が`南`から来るなど、  
+`東`にいて、相手が`南`から来るなど、  d
 東西南北の4パターンあり、判断手順が増えてしまいます。  
 
 > - 自分が`北`にいて、相手が`東`から来る場合
@@ -74,7 +74,7 @@
 > - `相手の来る方` == `自分の来る方 + 1`  
 
 はじめに、Python3.8を使用し、socket通信で車側と通信するプログラムを制作しました。  
-今回合わせる前に、シミュレーターを制作し、検証することにしました。  
+今回、他の分野と合わせる前に、1からシミュレーターを制作し、検証することにしました。  
 
 
 ## 検証 1回目- 吉田
@@ -90,8 +90,8 @@
 
 ### 検証結果
 こちらが結果をグラフ化したものです。  
-![1-処理数](https://docs.google.com/spreadsheets/d/e/2PACX-1vSDcloY71481hB0FpkomezlnNjGZpPEFegFVnGm2JX5h_pkD8_AO-UcSNwicodauZi7aXvQntKbFgBz/pubchart?oid=1751094130&format=image)  
-![1-待機数](https://docs.google.com/spreadsheets/d/e/2PACX-1vSDcloY71481hB0FpkomezlnNjGZpPEFegFVnGm2JX5h_pkD8_AO-UcSNwicodauZi7aXvQntKbFgBz/pubchart?oid=1814756461&format=image)  
+> ![1-処理数](https://docs.google.com/spreadsheets/d/e/2PACX-1vSDcloY71481hB0FpkomezlnNjGZpPEFegFVnGm2JX5h_pkD8_AO-UcSNwicodauZi7aXvQntKbFgBz/pubchart?oid=1751094130&format=image)  
+> ![1-待機数](https://docs.google.com/spreadsheets/d/e/2PACX-1vSDcloY71481hB0FpkomezlnNjGZpPEFegFVnGm2JX5h_pkD8_AO-UcSNwicodauZi7aXvQntKbFgBz/pubchart?oid=1814756461&format=image)  
 
 グラフからnew1は同時進入できなく処理数が制限されるため、一定となってしまいました。  
 それに対しnew2の混雑時は信号に勝っています。  
@@ -110,20 +110,29 @@
 
 ### 検証結果
 こちらも同様にグラフ化しました。  
-![2-処理数](https://docs.google.com/spreadsheets/d/e/2PACX-1vSDcloY71481hB0FpkomezlnNjGZpPEFegFVnGm2JX5h_pkD8_AO-UcSNwicodauZi7aXvQntKbFgBz/pubchart?oid=522272234&format=image)  
-![2-待機数](https://docs.google.com/spreadsheets/d/e/2PACX-1vSDcloY71481hB0FpkomezlnNjGZpPEFegFVnGm2JX5h_pkD8_AO-UcSNwicodauZi7aXvQntKbFgBz/pubchart?oid=1762092698&format=image)  
 
-信号に比べてnew2は処理数が多い理想的な状態だとわかりました。  
+> ![2-処理数](https://docs.google.com/spreadsheets/d/e/2PACX-1vSDcloY71481hB0FpkomezlnNjGZpPEFegFVnGm2JX5h_pkD8_AO-UcSNwicodauZi7aXvQntKbFgBz/pubchart?oid=522272234&format=image)  
+> ![2-待機数](https://docs.google.com/spreadsheets/d/e/2PACX-1vSDcloY71481hB0FpkomezlnNjGZpPEFegFVnGm2JX5h_pkD8_AO-UcSNwicodauZi7aXvQntKbFgBz/pubchart?oid=1762092698&format=image)  
+
+処理数のグラフを見てみると信号に比べてnew2は処理数が多い理想的な状態だとわかりました。  
 これは交差点単体での遅延は少なくても経路全体とすると大きくなってしまっているからだと考えられます。  
-また、待機数のグラフより、信号は混雑度に関わらず一定数以上待機する必要がありますが、new2はあまり待機する必要がなくなっていることが分かります。  
-しかし、信号もnew2も混雑回避の仕組みは、想像以上に効果が小さい結果となりました。ただし、これは、今回使ったシミュレーションのマップが小さく、混雑により回避できる経路に限りがあったためと思われます。  
+
+また、待機数のグラフより、信号は混雑度に関わらず一定数以上待機する必要がありますが、  
+new2はあまり待機する必要がなくなっていることが分かります。  
+
+しかし、信号もnew2も混雑回避の仕組みは、想像以上に効果が小さい結果となりました。  
+ただし、これは今回作ったシミュレーションのマップが小さく、回避できる経路に限りがあったためと思われます。  
 今後、都市環境分野が設計した街全体で検証してみたいと思います。  
 
 
 ## 結論・感想 - 多田
 結論として、システムの有効性を確認することができました。  
-今後は、各分野との最終調整を行いながら、より現実的なシステムに改良を重ねたいと思います。  
+今後は、各分野との最終調整を行いながら、改良を重ね、より現実的なシステムにしたいと思います。  
+
 最後に各分野の成果をお見せします。  
+- こちらは、シミュレーションの様子です。  
+- 機械、電子、電気分野です。  
+- 最後に都市環境分野です。  
 
 以上です。ご清聴ありがとうございました。  
 fin
